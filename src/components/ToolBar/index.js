@@ -1,17 +1,25 @@
 
 import React, { useState } from "react";
 import classes from "./index.module.css";
+import {TOOL_ITEMS} from "../../constants/toolItem"
 // import styles from "./index.module.css"
 
-import { LuRectangleHorizontal } from "react-icons/lu";
-import { FaSlash, FaRegCircle, FaEraser, FaArrowRight, FaPaintBrush, FaDownload, FaFont, FaUndo, FaRedo } from "react-icons/fa";
+
 
 function ToolBar() {
     const [activeTool, setActiveTool] = useState("LINE");
     return (
         <div className={classes.container}>
-            <div className={`${classes.toolItem} ${activeTool === "LINE" ? classes.active : ""}`} onClick={() => setActiveTool("LINE")}><FaSlash /></div>
-            <div className={`${classes.toolItem} ${activeTool === "RECTANGLE" ? classes.active : ""}`} onClick={() => setActiveTool("RECTANGLE")}><LuRectangleHorizontal /></div>
+            {TOOL_ITEMS.map((tool) => {
+                const Icon = tool.icon;
+
+                return (
+                <div 
+                key={tool.id}
+                className={`${classes.toolItem} ${activeTool === tool.id ? classes.active : ""}`}
+                 onClick={() => setActiveTool(tool.id)}><Icon/>
+                 </div>)
+            })}
         </div>
     )
 }
