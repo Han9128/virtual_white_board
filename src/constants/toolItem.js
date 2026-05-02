@@ -60,3 +60,5 @@ export const TOOL_ITEMS = [
         icon:FaDownload
     },
 ]
+
+export const ARROW_LENGTH = 20;
