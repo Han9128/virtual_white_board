@@ -1,0 +1,28 @@
+
+
+.toolConfigBox{
+    height:100px;
+    width:200px;
+     border: 1px solid gray;
+    position:absolute;
+    left:1rem;
+    top:45%;
+}
+
+.selectOptionContainer{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+}
+
+.colors
+
+.colorsBox{
+    background-color:red;
+    width:30px;
+    height:30px;
+}
+
+
+
+

@@ -60,7 +60,6 @@ const handleMouseUp = ()=>{
     <canvas ref={canvasRef}>
         This is canvas area
       </canvas>
-      <h1>My Whiteboard app</h1>
       </div>
   );
 }
