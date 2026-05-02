@@ -1,4 +1,4 @@
-import {useEffect, useRef, useContext} from "react";
+import {useEffect, useLayoutEffect,useRef, useContext} from "react";
 import rough from "roughjs";
 import boardContext from "../../store/board-context"
 
@@ -24,7 +24,9 @@ function Board(){
     // context.fillRect(0,0,150,75);
   },[]);
 
-  useEffect(()=>{
+  // when we are just dealing with dom and want to run side effects with dom update synchronously then the best hook is useLayoutEffect,
+  // and for calling third party apis, communicating with network we use useEffect
+  useLayoutEffect(()=>{
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.save();
