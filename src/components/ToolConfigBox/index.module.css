@@ -1,26 +1,39 @@
 
 
 .toolConfigBox{
-    height:100px;
-    width:200px;
-     border: 1px solid gray;
-    position:absolute;
-    left:1rem;
-    top:45%;
+    @apply absolute top-1/2 left-5 px-3 py-2 border border-gray-400 rounded flex; 
+    /* transform:translateX(-50%); */
+    box-shadow: 1px 0 10px rgba(0,0,0,0.2);
+    flex-direction:column;
 }
 
 .selectOptionContainer{
     display:flex;
     flex-direction:column;
     justify-content:space-around;
+    margin-top:8px;
 }
 
-.colors
+.label{
+    margin-bottom:6px;
+}
 
+.colorsContainer{
+
+    display:flex;
+}
 .colorsBox{
-    background-color:red;
+    /* background-color:red; */
     width:30px;
     height:30px;
+    margin-left:4px;
+    border-radius: 4px;
+}
+
+.active{
+    padding:1px;
+    border:1px solid gray;
+    box-shadow: 0 0 0 1px #4a47b1;
 }
 
 

@@ -3,7 +3,9 @@ import {createContext} from "react"
 
 
 const toolConfigContext = createContext({
-    toolConfigs: {},
+    toolConfigState: {},
+    changeStrokeHandler: ()=>{},
+    changeFillHanlder: ()=>{},
 })
 
 export default toolConfigContext;

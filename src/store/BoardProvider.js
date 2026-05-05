@@ -2,10 +2,10 @@
 import boardContext from "./board-context";
 import { useReducer } from "react";
 import { TOOLS } from "../constants/toolItem"
-import rough from "roughjs/bin/rough"
+// import rough from "roughjs/bin/rough"
 import generateRoughEle from "../utils/generateRoughEle"
 
-const gen = rough.generator();
+// const gen = rough.generator();
 
 const boardReducer = (state, action) => {
     switch (action.type) {
@@ -17,7 +17,7 @@ const boardReducer = (state, action) => {
         }
         case 'DRAW_DOWN':
             {
-                const { clientX, clientY } = action.payload;
+                const { clientX, clientY,stroke,fill,size } = action.payload;
                 // const newElement = {
                 //     x1: clientX,
                 //     y1: clientY,
@@ -25,7 +25,7 @@ const boardReducer = (state, action) => {
                 //     y2: clientY,
                 //     roughElement: gen.line(clientX, clientY, clientX, clientY),
                 // }
-                const newElement = generateRoughEle(state.elements.length,clientX,clientY, clientX, clientY, state.activeToolItem);
+                const newElement = generateRoughEle(state.elements.length,clientX,clientY, clientX, clientY, state.activeToolItem,stroke,fill,size);
                 return {
                     ...state,
                     elements: [...state.elements, newElement]
@@ -35,7 +35,7 @@ const boardReducer = (state, action) => {
             {
                 // if (state.elements.length === 0) return state;
 
-                const { clientX, clientY } = action.payload;
+                const { clientX, clientY,stroke,fill,size } = action.payload;
                 // copying this way does shallow copy the objects inside array still points to original object
                 const updatedElements = [...state.elements]
                 // const updatedElements = structuredClone(state.elements);
@@ -54,7 +54,7 @@ const boardReducer = (state, action) => {
                 // const updatedElements = [...state.elements];
                 // updatedElements[idx] = updatedElement;
                 // console.log(updatedElements);
-                const updatedElement = generateRoughEle(idx,x1,y1,clientX,clientY,state.activeToolItem);
+                const updatedElement = generateRoughEle(idx,x1,y1,clientX,clientY,state.activeToolItem,stroke,fill,size);
                 updatedElements[idx] = updatedElement;
                 return {
                     ...state,
@@ -85,7 +85,7 @@ function BoardProvider({ children }) {
         })
     }
 
-    function boardMouseDownHandler(event) {
+    function boardMouseDownHandler(event,stroke,fill,size) {
         const clientX = event.clientX;
         const clientY = event.clientY;
         dispatchBoardState({
@@ -93,17 +93,23 @@ function BoardProvider({ children }) {
             payload: {
                 clientX,
                 clientY,
+                stroke,
+                fill,
+                size,
             }
         })
     }
 
-    function boardMouseMoveHandler(event) {
+    function boardMouseMoveHandler(event,stroke,fill,size) {
         const { clientX, clientY } = event;
         dispatchBoardState({
             type: 'DRAW_MOVE',
             payload: {
                 clientX,
-                clientY
+                clientY,
+                stroke,
+                fill,
+                size,
             }
         })
     }

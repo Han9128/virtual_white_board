@@ -4,7 +4,7 @@ import getArrowCoOrdinates from "../utils/math"
 
 const gen = rough.generator();
 
-const generateRoughEle = (idx, x1, y1, x2, y2, tool_type ) => {
+const generateRoughEle = (idx, x1, y1, x2, y2, tool_type,stroke,fill,size ) => {
 
     const newElement = {
         x1: x1,
@@ -15,7 +15,17 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type ) => {
     }
     const options ={
         seed: idx+1,
+        fillStyle:'solid',
     }
+
+    if(stroke){
+        options.stroke = stroke;
+    }if(fill){
+        options.fill = fill;
+    }if(size){
+        options.strokeWidth = size;
+    }
+
     // console.log(tool_type);
     // console.log(newElement);
     switch (tool_type) {

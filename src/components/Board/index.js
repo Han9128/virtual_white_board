@@ -1,13 +1,18 @@
 import {useEffect, useLayoutEffect,useRef, useContext} from "react";
 import rough from "roughjs";
-import boardContext from "../../store/board-context"
+import boardContext from "../../store/board-context";
+import toolConfigContext from "../../store/toolConfig-context";
 
 
 
 function Board(){
     const canvasRef = useRef();
     const isDrawing = useRef(false);
-    const {elements, boardMouseDownHandler,boardMouseMoveHandler} = useContext(boardContext);
+    const {activeToolItem,elements, boardMouseDownHandler,boardMouseMoveHandler} = useContext(boardContext);
+    const {toolConfigState} = useContext(toolConfigContext);
+    const stroke = toolConfigState[activeToolItem].color;
+    const fill = toolConfigState[activeToolItem].fill;
+    const size = toolConfigState[activeToolItem].stroke;
   useEffect(()=>{
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
@@ -43,12 +48,12 @@ function Board(){
 
 const handleMouseDown = (event)=>{
   isDrawing.current = true;
-  boardMouseDownHandler(event);
+  boardMouseDownHandler(event,stroke,fill,size);
 }
 
 const handleMouseMove = (event) =>{
   if(!isDrawing.current) return
-  boardMouseMoveHandler(event);
+  boardMouseMoveHandler(event,stroke,fill,size);
 }
 
 const handleMouseUp = ()=>{
