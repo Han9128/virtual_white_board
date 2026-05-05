@@ -2,6 +2,7 @@ import {useEffect, useLayoutEffect,useRef, useContext} from "react";
 import rough from "roughjs";
 import boardContext from "../../store/board-context";
 import toolConfigContext from "../../store/toolConfig-context";
+import {TOOLS} from "../../constants/toolItem";
 
 
 
@@ -38,7 +39,13 @@ function Board(){
     
     const roughCanvas = rough.canvas(canvas);
     elements.forEach((element)=>{
-      roughCanvas.draw(element.roughElement);
+      if(activeToolItem === TOOLS.BRUSH){
+        context.fillStyle = stroke
+        context.fill(element.path);
+        context.restore();
+      }else{
+        roughCanvas.draw(element.roughElement);
+      }
     })
 
     return ()=>{

@@ -39,6 +39,9 @@ const toolConfigReducer = (state, action) => {
 };
 
 const initialToolConfigState = {
+    [TOOLS.BRUSH]:{
+        color:COLORS.BLACK,
+    },
     [TOOLS.LINE]: {
         color: COLORS.BLACK,
         stroke: 1,
