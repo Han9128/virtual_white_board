@@ -1,13 +1,14 @@
 
 import classes from "./index.module.css";
 import toolConfigContext from "../../store/toolConfig-context";
-import boardContext from "../../store/board-context";
+import toolBarContext from "../../store/toolBar-context";
 import { COLORS, STROKE_TOOL_TYPE, FILL_TOOL_TYPE,SIZE_TOOL_TYPE } from "../../constants/toolItem"
 import { useContext } from "react";
+import {TOOL_CONFIG_BOX} from "../../constants/toolItem"
 
 function ToolConfigBox() {
     const { toolConfigState, changeStrokeColorHandler, changeFillColorHandler, changeSizeHandler } = useContext(toolConfigContext);
-    const { activeToolItem } = useContext(boardContext);
+    const { activeToolItem } = useContext(toolBarContext);
 
 
     const strokeColor = toolConfigState[activeToolItem]?.color;
@@ -16,7 +17,8 @@ function ToolConfigBox() {
     // console.log(activeToolItem);
     // console.log(strokeColor);
     return (
-        <div className={classes.toolConfigBox}>
+        <>
+        {TOOL_CONFIG_BOX.includes(activeToolItem) && <div className={classes.toolConfigBox}>
 
             {/* show stroke color picker */}
 
@@ -83,6 +85,7 @@ function ToolConfigBox() {
                 </div> */}
             </div>}
         </div>
+        }</>
     )
 }
 

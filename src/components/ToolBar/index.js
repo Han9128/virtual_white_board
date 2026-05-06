@@ -2,13 +2,13 @@
 import React, { useContext } from "react";
 import classes from "./index.module.css";
 import {TOOL_ITEMS} from "../../constants/toolItem"
-import boardContext from "../../store/board-context"
+import toolBarContext from "../../store/toolBar-context"
 // import styles from "./index.module.css"
 
 
 
 function ToolBar() {
-    const { activeToolItem, handleItemToolClick } = useContext(boardContext);
+    const { activeToolItem, handleItemToolClick } = useContext(toolBarContext);
     return (
         <div className={classes.container}>
             {TOOL_ITEMS.map((tool) => {

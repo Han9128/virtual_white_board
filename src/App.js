@@ -4,12 +4,14 @@ import ToolBar from "./components/ToolBar";
 import BoardProvider from "./store/BoardProvider";
 import ToolConfigProvider from "./store/ToolConfigProvider"
 import ToolConfigBox from "./components/ToolConfigBox"
+import ToolBarProivder from "./store/ToolBarProvider"
 
 function App() {
   // useRef is used to
   
 
   return (
+    <ToolBarProivder>
     <BoardProvider>
     <ToolConfigProvider>
     <div className="App">
@@ -19,6 +21,7 @@ function App() {
     </div>
     </ToolConfigProvider>
     </BoardProvider>
+    </ToolBarProivder>
   );
 }
 

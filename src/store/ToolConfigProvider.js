@@ -1,5 +1,5 @@
 import toolConfigContext from "./toolConfig-context";
-import boardContext from "./board-context"
+import toolBarContext from "./toolBar-context"
 import { useReducer, useContext } from "react";
 import { TOOLS } from "../constants/toolItem";
 import { COLORS } from "../constants/toolItem";
@@ -59,13 +59,17 @@ const initialToolConfigState = {
     [TOOLS.ARROW_RIGHT]: {
         color: COLORS.BLACK,
         stroke: 1,
-    }
+    },
+    // [TOOLS.ERASER]:{
+    //     // color: "",
+    //     // stroke: 0,
+    // }
 };
 
 function ToolConfigProvider({ children }) {
     const [toolConfigState, dispatchToolConfigState] = useReducer(toolConfigReducer, initialToolConfigState);
 
-    const { activeToolItem } = useContext(boardContext);
+    const { activeToolItem } = useContext(toolBarContext);
 
     const changeStrokeColorHandler = (strokeColor) => {
         // console.log("color is clicked");

@@ -1,23 +1,24 @@
 
 import boardContext from "./board-context";
-import { useReducer } from "react";
+import { useReducer, useContext } from "react";
 import { TOOLS } from "../constants/toolItem"
 // import rough from "roughjs/bin/rough"
 import generateRoughEle from "../utils/generateRoughEle"
 import getStroke from "perfect-freehand";
 import { getSvgPathFromStroke } from "../utils/generateRoughEle"
+import toolBarContext from "./toolBar-context";
 
 
 // const gen = rough.generator();
 
 const boardReducer = (state, action) => {
     switch (action.type) {
-        case "CHANGE_TOOL": {
-            return {
-                ...state,
-                activeToolItem: action.payload.tool
-            }
-        }
+        // case "CHANGE_TOOL": {
+        //     return {
+        //         ...state,
+        //         activeToolItem: action.payload.tool
+        //     }
+        // }
         case 'DRAW_DOWN':
             {
                 // if(action.payload.tool === TOOLS.BRUSH){
@@ -29,7 +30,7 @@ const boardReducer = (state, action) => {
                 //     }
                 // }else{
 
-                const { clientX, clientY, stroke, fill, size } = action.payload;
+                const { clientX, clientY, stroke, fill, size,tool } = action.payload;
                 // const newElement = {
                 //     x1: clientX,
                 //     y1: clientY,
@@ -37,7 +38,8 @@ const boardReducer = (state, action) => {
                 //     y2: clientY,
                 //     roughElement: gen.line(clientX, clientY, clientX, clientY),
                 // }
-                const newElement = generateRoughEle(state.elements.length, clientX, clientY, clientX, clientY, state.activeToolItem, stroke, fill, size);
+                const newElement = generateRoughEle(state.elements.length, clientX, clientY, clientX, clientY, tool, stroke, fill, size);
+                console.log(`in reducer ${newElement}`);
                 return {
                     ...state,
                     elements: [...state.elements, newElement]
@@ -48,7 +50,7 @@ const boardReducer = (state, action) => {
             {
                 // if (state.elements.length === 0) return state;
 
-                const { clientX, clientY, stroke, fill, size } = action.payload;
+                const { clientX, clientY, stroke, fill, size,tool } = action.payload;
                 // copying this way does shallow copy the objects inside array still points to original object
                 const updatedElements = [...state.elements]
                 // const updatedElements = structuredClone(state.elements);
@@ -78,12 +80,25 @@ const boardReducer = (state, action) => {
                 }
                 else {
 
-                    const updatedElement = generateRoughEle(idx, x1, y1, clientX, clientY, state.activeToolItem, stroke, fill, size);
+                    const updatedElement = generateRoughEle(idx, x1, y1, clientX, clientY, tool, stroke, fill, size);
                     updatedElements[idx] = updatedElement;
                     return {
                         ...state,
                         elements: updatedElements
                     }
+                }
+            }
+        case 'ERASE':
+            {
+                const { clientX, clientY,tool } = action.payload;
+                const newElements = [...state.elements];
+                newElements.filter((element)=>{
+                    return false;
+                })
+
+                return {
+                    ...state,
+                    elements:newElements,
                 }
             }
         default:
@@ -92,63 +107,91 @@ const boardReducer = (state, action) => {
 }
 
 const initialBoardState = {
-    activeToolItem: TOOLS.LINE,
     elements: [],
 }
 
 function BoardProvider({ children }) {
     const [boardState, dispatchBoardState] = useReducer(boardReducer, initialBoardState);
+    const { activeToolItem } = useContext(toolBarContext);
+
 
     // const [activeToolItem, setActiveToolItem] = useState(TOOLS.LINE);
 
-    function handleItemToolClick(tool) {
-        dispatchBoardState({
-            type: 'CHANGE_TOOL',
-            payload: {
-                tool,
-            }
-        })
-    }
+    // function handleItemToolClick(tool) {
+    //     console.log(tool);
+    //     dispatchBoardState({
+    //         type: 'CHANGE_TOOL',
+    //         payload: {
+    //             tool,
+    //         }
+    //     })
+    // }
 
-    function boardMouseDownHandler(event, stroke, fill, size) {
+    function boardMouseDownHandler(event, toolConfigState) {
         const clientX = event.clientX;
         const clientY = event.clientY;
-        const tool = boardState.activeToolItem;
-        // console.log(tool);
-        dispatchBoardState({
-            type: 'DRAW_DOWN',
-            payload: {
-                tool,
-                clientX,
-                clientY,
-                stroke,
-                fill,
-                size,
-            }
-        })
+        const tool = activeToolItem;
+        console.log(tool);
+        console.log(TOOLS.ERASER);
+        if(tool === TOOLS.ERASER){
+            console.log("if part");
+            dispatchBoardState({
+                type:'ERASE',
+                payload:{
+                    tool, 
+                    clientX,
+                    clientY,
+                }
+            })
+        }else{
+            console.log("else part");
+            
+            dispatchBoardState({
+                type: 'DRAW_DOWN',
+                payload: {
+                    tool,
+                    clientX,
+                    clientY,
+                    stroke: toolConfigState[activeToolItem].color,
+                    fill: toolConfigState[activeToolItem].fill,
+                    size: toolConfigState[activeToolItem].stroke,
+                }
+            })
+        }
     }
 
-    function boardMouseMoveHandler(event, stroke, fill, size) {
+    function boardMouseMoveHandler(event, toolConfigState) {
         const { clientX, clientY } = event;
-        const tool = boardState.activeToolItem;
+        const tool = activeToolItem;
         // console.log(`in mouse move ${tool}`);
+        if(tool === TOOLS.ERASER){
+            console.log("if part");
+            dispatchBoardState({
+                type:'ERASE',
+                payload:{
+                    tool, 
+                    clientX,
+                    clientY,
+                }
+            })
+
+            return;
+        }
         dispatchBoardState({
             type: 'DRAW_MOVE',
             payload: {
                 tool,
                 clientX,
                 clientY,
-                stroke,
-                fill,
-                size,
+                stroke: toolConfigState[activeToolItem].color,
+                fill: toolConfigState[activeToolItem].fill,
+                size: toolConfigState[activeToolItem].stroke,
             }
         })
     }
 
     const boardContextValues = {
-        activeToolItem: boardState.activeToolItem,
         elements: boardState.elements,
-        handleItemToolClick,
         boardMouseDownHandler,
         boardMouseMoveHandler,
     }

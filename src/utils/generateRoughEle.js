@@ -14,6 +14,7 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         y2: y2,
         type:tool_type,
         color:stroke,
+        size:size,
 
     }
     const options = {

@@ -9,11 +9,11 @@ import {TOOLS} from "../../constants/toolItem";
 function Board(){
     const canvasRef = useRef();
     const isDrawing = useRef(false);
-    const {activeToolItem,elements, boardMouseDownHandler,boardMouseMoveHandler} = useContext(boardContext);
+    
+    const {elements, boardMouseDownHandler,boardMouseMoveHandler} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
-    const stroke = toolConfigState[activeToolItem].color;
-    const fill = toolConfigState[activeToolItem].fill;
-    const size = toolConfigState[activeToolItem].stroke;
+    console.log(elements);
+    
   useEffect(()=>{
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
@@ -55,12 +55,12 @@ function Board(){
 
 const handleMouseDown = (event)=>{
   isDrawing.current = true;
-  boardMouseDownHandler(event,stroke,fill,size);
+  boardMouseDownHandler(event, toolConfigState);
 }
 
 const handleMouseMove = (event) =>{
   if(!isDrawing.current) return
-  boardMouseMoveHandler(event,stroke,fill,size);
+  boardMouseMoveHandler(event, toolConfigState);
 }
 
 const handleMouseUp = ()=>{
