@@ -39,8 +39,8 @@ function Board(){
     
     const roughCanvas = rough.canvas(canvas);
     elements.forEach((element)=>{
-      if(activeToolItem === TOOLS.BRUSH){
-        context.fillStyle = stroke
+      if(element.type === TOOLS.BRUSH){
+        context.fillStyle = element.color
         context.fill(element.path);
         context.restore();
       }else{

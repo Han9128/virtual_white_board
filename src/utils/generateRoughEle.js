@@ -12,6 +12,8 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         y1: y1,
         x2: x2,
         y2: y2,
+        type:tool_type,
+        color:stroke,
 
     }
     const options = {
@@ -34,6 +36,8 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
             const brushElement = {
                 points: [{ x: x1, y: y1 }],
                 path: new Path2D(getSvgPathFromStroke(getStroke([{ x: x1, y: y1 }]))),
+                type:tool_type,
+                color:stroke,
             }
 
             return brushElement;

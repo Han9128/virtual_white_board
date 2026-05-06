@@ -70,6 +70,7 @@ const boardReducer = (state, action) => {
                 if (action.payload.tool === TOOLS.BRUSH) {
                     updatedElements[idx].points = [...updatedElements[idx].points, { x: clientX, y: clientY }];
                     updatedElements[idx].path = new Path2D(getSvgPathFromStroke(getStroke(updatedElements[idx].points)));
+                    // console.log(updatedElements);
                     return {
                         ...state,
                         elements: updatedElements
@@ -113,7 +114,7 @@ function BoardProvider({ children }) {
         const clientX = event.clientX;
         const clientY = event.clientY;
         const tool = boardState.activeToolItem;
-        console.log(tool);
+        // console.log(tool);
         dispatchBoardState({
             type: 'DRAW_DOWN',
             payload: {
@@ -130,7 +131,7 @@ function BoardProvider({ children }) {
     function boardMouseMoveHandler(event, stroke, fill, size) {
         const { clientX, clientY } = event;
         const tool = boardState.activeToolItem;
-        console.log(`in mouse move ${tool}`);
+        // console.log(`in mouse move ${tool}`);
         dispatchBoardState({
             type: 'DRAW_MOVE',
             payload: {
