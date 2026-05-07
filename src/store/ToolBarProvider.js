@@ -4,7 +4,7 @@ import {TOOLS} from "../constants/toolItem";
 import {useState} from 'react';
 
 function ToolBarProvider({children}){
-    const [activeToolItem, setTool] = useState(TOOLS.LINE);
+    const [activeToolItem, setTool] = useState(TOOLS.BRUSH);
 
     const handleItemToolClick = (tool)=>{
         setTool(tool);

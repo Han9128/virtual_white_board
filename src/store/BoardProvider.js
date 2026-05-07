@@ -5,7 +5,7 @@ import { TOOLS } from "../constants/toolItem"
 // import rough from "roughjs/bin/rough"
 import generateRoughEle from "../utils/generateRoughEle"
 import getStroke from "perfect-freehand";
-import { getSvgPathFromStroke } from "../utils/generateRoughEle"
+import { getSvgPathFromStroke, isNearPointElement} from "../utils/generateRoughEle"
 import toolBarContext from "./toolBar-context";
 
 
@@ -39,7 +39,7 @@ const boardReducer = (state, action) => {
                 //     roughElement: gen.line(clientX, clientY, clientX, clientY),
                 // }
                 const newElement = generateRoughEle(state.elements.length, clientX, clientY, clientX, clientY, tool, stroke, fill, size);
-                console.log(`in reducer ${newElement}`);
+                // console.log(`in reducer ${newElement}`);
                 return {
                     ...state,
                     elements: [...state.elements, newElement]
@@ -91,11 +91,10 @@ const boardReducer = (state, action) => {
         case 'ERASE':
             {
                 const { clientX, clientY,tool } = action.payload;
-                const newElements = [...state.elements];
-                newElements.filter((element)=>{
-                    return false;
+                const newElements = state.elements.filter((element)=>{
+                    return !isNearPointElement(element,clientX,clientY,tool);
                 })
-
+                // console.log(newElements);
                 return {
                     ...state,
                     elements:newElements,
@@ -131,10 +130,10 @@ function BoardProvider({ children }) {
         const clientX = event.clientX;
         const clientY = event.clientY;
         const tool = activeToolItem;
-        console.log(tool);
-        console.log(TOOLS.ERASER);
+        // console.log(tool);
+        // console.log(TOOLS.ERASER);
         if(tool === TOOLS.ERASER){
-            console.log("if part");
+            // console.log("if part");
             dispatchBoardState({
                 type:'ERASE',
                 payload:{
@@ -144,7 +143,7 @@ function BoardProvider({ children }) {
                 }
             })
         }else{
-            console.log("else part");
+            // console.log("else part");
             
             dispatchBoardState({
                 type: 'DRAW_DOWN',
@@ -165,7 +164,7 @@ function BoardProvider({ children }) {
         const tool = activeToolItem;
         // console.log(`in mouse move ${tool}`);
         if(tool === TOOLS.ERASER){
-            console.log("if part");
+            // console.log("if part");
             dispatchBoardState({
                 type:'ERASE',
                 payload:{

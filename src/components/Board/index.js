@@ -12,7 +12,7 @@ function Board(){
     
     const {elements, boardMouseDownHandler,boardMouseMoveHandler} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
-    console.log(elements);
+    // console.log(elements);
     
   useEffect(()=>{
     const canvas = canvasRef.current;
@@ -69,7 +69,7 @@ const handleMouseUp = ()=>{
 
   return (
     <div className="board" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
-    <canvas ref={canvasRef}>
+    <canvas id="canvas" ref={canvasRef}>
         This is canvas area
       </canvas>
       </div>

@@ -84,3 +84,6 @@ export const BOARD_ACTIONS = {
     DRAWING: "DRAW",
     ERASING: "ERASE",
 }
+
+
+export const ERASE_THRESHOLD = 0.1;

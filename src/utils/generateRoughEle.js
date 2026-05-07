@@ -1,7 +1,8 @@
 import { TOOLS } from "../constants/toolItem"
 import rough from "roughjs/bin/rough"
-import getArrowCoOrdinates from "../utils/math"
+import getArrowCoOrdinates, { distance } from "../utils/math"
 import getStroke from "perfect-freehand";
+import { ERASE_THRESHOLD } from "../constants/toolItem"
 
 const gen = rough.generator();
 
@@ -12,9 +13,9 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         y1: y1,
         x2: x2,
         y2: y2,
-        type:tool_type,
-        color:stroke,
-        size:size,
+        type: tool_type,
+        color: stroke,
+        size: size,
 
     }
     const options = {
@@ -37,8 +38,8 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
             const brushElement = {
                 points: [{ x: x1, y: y1 }],
                 path: new Path2D(getSvgPathFromStroke(getStroke([{ x: x1, y: y1 }]))),
-                type:tool_type,
-                color:stroke,
+                type: tool_type,
+                color: stroke,
             }
 
             return brushElement;
@@ -79,6 +80,58 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
             break;
     }
 
+}
+
+
+
+export function isNearPointElement(element, x, y, tool) {
+    switch (element.type) {
+        case TOOLS.LINE:
+        case TOOLS.ARROW_RIGHT:
+            {
+                const { x1, y1, x2, y2 } = element;
+                const d = distance(x1, x2, y1, y2);
+                const d1 = distance(x1, x, y1, y);
+                const d2 = distance(x2, x, y2, y);
+                return Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+            }
+
+        case TOOLS.RECTANGLE:
+        case TOOLS.CIRCLE:
+            {
+                // console.log("rectangel")
+                const {x1,y1,x2,y2} = element;
+                // console.log(element);
+                // console.log(x1,x2,y1,y2);
+                const [x3,y3] = [x2,y1];
+                const [x4,y4] = [x1,y2];
+                // console.log(x3,y3,x4,y4);
+                let d = distance(x1,x3,y1,y3);
+                let d1 = distance(x1,x,y1,y);
+                let d2 = distance(x3,x,y3,y);
+                const isClose1 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+                d = distance(x3,x2,y3,y2);
+                d1 = distance(x2,x,y2,y);
+                const isClose2 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+                d = distance(x2,x4,y2,y4);
+                d2 = distance(x4,x,y4,y);
+                const isClose3 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+                d = distance(x1,x4,y1,y4);
+                d1 = distance(x1,x,y1,y);
+                const isClose4 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+
+                return (isClose1 || isClose2 || isClose3|| isClose4);
+            }
+        case TOOLS.BRUSH:
+            {
+                const {path} = element;
+                const context = document.getElementById("canvas").getContext("2d");
+                return context.isPointInPath(path,x,y);
+            }
+
+        default:
+            break;
+    }
 }
 
 export function getSvgPathFromStroke(stroke) {
