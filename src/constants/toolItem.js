@@ -7,7 +7,7 @@ export const TOOLS = {
     RECTANGLE:"rectangle",
     CIRCLE: "circle",
     ARROW_RIGHT: "arrow_right",
-    FONT: "font",
+    TEXT: "font",
     ERASER:"eraser",
     UNDO:"undo",
     REDO:"redo",
@@ -37,7 +37,7 @@ export const TOOL_ITEMS = [
         icon:FaArrowRight
     },
     {
-        id:TOOLS.FONT,
+        id:TOOLS.TEXT,
         icon:FaFont
     },
     {
@@ -78,7 +78,7 @@ export const STROKE_TOOL_TYPE = [TOOLS.BRUSH,TOOLS.LINE,TOOLS.RECTANGLE,TOOLS.CI
 export const FILL_TOOL_TYPE = [TOOLS.RECTANGLE,TOOLS.CIRCLE];
 export const SIZE_TOOL_TYPE = [TOOLS.LINE,TOOLS.RECTANGLE,TOOLS.CIRCLE,TOOLS.ARROW_RIGHT];
 
-export const TOOL_CONFIG_BOX = [TOOLS.BRUSH,TOOLS.LINE,TOOLS.RECTANGLE,TOOLS.CIRCLE,TOOLS.ARROW_RIGHT,TOOLS.FONT];
+export const TOOL_CONFIG_BOX = [TOOLS.BRUSH,TOOLS.LINE,TOOLS.RECTANGLE,TOOLS.CIRCLE,TOOLS.ARROW_RIGHT];
 
 export const BOARD_ACTIONS = {
     DRAWING: "DRAW",

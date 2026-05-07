@@ -76,6 +76,11 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
             newElement.roughElement = gen.linearPath(points, options)
             return newElement;
         }
+        case TOOLS.TEXT:
+            {
+                newElement.text = "";
+                return newElement;
+            }
         default:
             break;
     }
