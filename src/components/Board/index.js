@@ -4,13 +4,14 @@ import boardContext from "../../store/board-context";
 import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
 import {TOOLS} from "../../constants/toolItem";
+import classes from "./index.module.css"
 
 
 
 function Board(){
     const canvasRef = useRef();
     const isDrawing = useRef(false);
-    const [isWriting, setIsWriting] = useState(false);
+    const isWriting = useRef(false);
     
     const {elements, boardMouseDownHandler,boardMouseMoveHandler} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
@@ -42,6 +43,7 @@ function Board(){
     
     const roughCanvas = rough.canvas(canvas);
     elements.forEach((element)=>{
+      console.log('Element type:', element.type, 'TOOLS.TEXT:', TOOLS.TEXT, 'Match:', element.type === TOOLS.TEXT);
       if(element.type === TOOLS.BRUSH){
         context.fillStyle = element.color
         context.fill(element.path);
@@ -66,11 +68,15 @@ function Board(){
 
 const handleMouseDown = (event)=>{
   if(activeToolItem === TOOLS.TEXT){
-    console.log('inside text tool');
-    setIsWriting(true);
+    // console.log(activeToolItem);
+    console.log(TOOLS.TEXT);
+    // isWriting.current = true;
+    boardMouseDownHandler(event, toolConfigState, isWriting);
+    isWriting.current = true;
+    // console.log(elements);
   }else{
     isDrawing.current = true;
-    boardMouseDownHandler(event, toolConfigState);
+    boardMouseDownHandler(event, toolConfigState,isWriting);
   }
 }
 
@@ -80,22 +86,24 @@ const handleMouseMove = (event) =>{
 }
 
 const handleMouseUp = ()=>{
+  isWriting.current=false;
   isDrawing.current = false;
 }
 
 console.log(elements);
   return (
     <>
-    {isWriting && (<textarea 
+    {isWriting.current && (<textarea 
+    className={classes.textElementBox}
     type="text" 
     style={{
-      // top: elements[elements.length-1].y1,
-      // left: elements[elements.length-1].x1,
-      // fontSize: `${elements[elements.length-1].stroke}px`,
-      // color: elements[elements.length-1].color,
+      top: elements[elements.length-1].y1,
+      left: elements[elements.length-1].x1,
+      fontSize: `${elements[elements.length-1].stroke}px`,
+      color: elements[elements.length-1].color,
     }}
     >
-      this is text area;
+      {/* this is text area; */}
       </textarea>)}
     <div className="board" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
     <canvas id="canvas" ref={canvasRef}>

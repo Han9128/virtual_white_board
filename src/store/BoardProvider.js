@@ -100,6 +100,16 @@ const boardReducer = (state, action) => {
                     elements:newElements,
                 }
             }
+        case 'WRITE':
+            {
+                const {clientX,clientY,color,stroke,fill, tool} = action.payload;
+                const newElement = generateRoughEle(state.elements.length,clientX,clientY,clientX,clientY,tool,color,fill,stroke);
+                console.log(`newElement: ${newElement.y1}`)
+                return {
+                    ...state,
+                    elements: [...state.elements, newElement],
+                }
+            }
         default:
             return state;
     }
@@ -126,7 +136,9 @@ function BoardProvider({ children }) {
     //     })
     // }
 
-    function boardMouseDownHandler(event, toolConfigState) {
+    function boardMouseDownHandler(event, toolConfigState, isWriting) {
+        if(isWriting.current) return;
+        isWriting.current=true;
         const clientX = event.clientX;
         const clientY = event.clientY;
         const tool = activeToolItem;
@@ -142,7 +154,22 @@ function BoardProvider({ children }) {
                     clientY,
                 }
             })
-        }else{
+        }else if(tool===TOOLS.TEXT){
+        //     if(isWriting.current) return;
+        // isWriting.current=true;
+             dispatchBoardState({
+                type: 'WRITE',
+                payload: {
+                    tool,
+                    clientX,
+                    clientY,
+                    stroke: toolConfigState[activeToolItem].color,
+                    fill: toolConfigState[activeToolItem].fill,
+                    size: toolConfigState[activeToolItem].stroke,
+                }
+            })
+        }
+        else{
             // console.log("else part");
             
             dispatchBoardState({
@@ -162,6 +189,7 @@ function BoardProvider({ children }) {
     function boardMouseMoveHandler(event, toolConfigState) {
         const { clientX, clientY } = event;
         const tool = activeToolItem;
+        if(tool===TOOLS.TEXT) return;
         // console.log(`in mouse move ${tool}`);
         if(tool === TOOLS.ERASER){
             // console.log("if part");

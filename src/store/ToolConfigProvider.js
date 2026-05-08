@@ -60,10 +60,10 @@ const initialToolConfigState = {
         color: COLORS.BLACK,
         stroke: 1,
     },
-    // [TOOLS.ERASER]:{
-    //     // color: "",
-    //     // stroke: 0,
-    // }
+    [TOOLS.TEXT]:{
+        color: COLORS.BLACK,
+        stroke: 1,
+    }
 };
 
 function ToolConfigProvider({ children }) {

@@ -45,6 +45,7 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
             return brushElement;
         }
         case TOOLS.LINE: {
+            console.log(`in line: ${newElement.type}`)
             newElement.roughElement = gen.line(x1, y1, x2, y2, options);
             return newElement;
         }
@@ -78,7 +79,9 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         }
         case TOOLS.TEXT:
             {
-                newElement.text = "";
+                console.log(`in text: ${newElement}`);
+                newElement.text = "were";
+                console.log(`text: ${newElement.y1}`);
                 return newElement;
             }
         default:
