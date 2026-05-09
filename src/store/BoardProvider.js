@@ -13,22 +13,8 @@ import toolBarContext from "./toolBar-context";
 
 const boardReducer = (state, action) => {
     switch (action.type) {
-        // case "CHANGE_TOOL": {
-        //     return {
-        //         ...state,
-        //         activeToolItem: action.payload.tool
-        //     }
-        // }
         case 'DRAW_DOWN':
             {
-                // if(action.payload.tool === TOOLS.BRUSH){
-                //     const { clientX, clientY,stroke} = action.payload;
-                //     const brushElement = generateRoughEle(state.elements.length,clientX,clientY, state.activeToolItem,stroke);
-                //     return {
-                //         ...state,
-                //         elements:[...state.elements, brushElement]
-                //     }
-                // }else{
 
                 const { clientX, clientY, stroke, fill, size,tool } = action.payload;
                 // const newElement = {
@@ -70,8 +56,12 @@ const boardReducer = (state, action) => {
                 // updatedElements[idx] = updatedElement;
                 // console.log(updatedElements);
                 if (action.payload.tool === TOOLS.BRUSH) {
-                    updatedElements[idx].points = [...updatedElements[idx].points, { x: clientX, y: clientY }];
-                    updatedElements[idx].path = new Path2D(getSvgPathFromStroke(getStroke(updatedElements[idx].points)));
+                    // console.log('mouse move fired');
+                    // console.log(updatedElements[idx].points);
+                    if(updatedElements[idx].points){
+                        updatedElements[idx].points = [...updatedElements[idx].points, { x: clientX, y: clientY }];
+                        updatedElements[idx].path = new Path2D(getSvgPathFromStroke(getStroke(updatedElements[idx].points)));
+                    }
                     // console.log(updatedElements);
                     return {
                         ...state,
@@ -102,12 +92,24 @@ const boardReducer = (state, action) => {
             }
         case 'WRITE':
             {
-                const {clientX,clientY,color,stroke,fill, tool} = action.payload;
-                const newElement = generateRoughEle(state.elements.length,clientX,clientY,clientX,clientY,tool,color,fill,stroke);
-                console.log(`newElement: ${newElement.y1}`)
+                const {clientX,clientY,stroke,fill,size, tool} = action.payload;
+                const newElement = generateRoughEle(state.elements.length,clientX,clientY,clientX,clientY,tool,stroke,fill,size);
+                // console.log(`newElement: ${newElement.stroke}`)
                 return {
                     ...state,
                     elements: [...state.elements, newElement],
+                }
+            }
+        
+        case 'CHANGE_TEXT':
+            {
+                const {text} = action.payload;
+                const idx = state.elements.length-1;
+                const updatedElements = [...state.elements];
+                updatedElements[idx].text = text;
+                return {
+                    ...state,
+                    elements:updatedElements,
                 }
             }
         default:
@@ -137,8 +139,8 @@ function BoardProvider({ children }) {
     // }
 
     function boardMouseDownHandler(event, toolConfigState, isWriting) {
-        if(isWriting.current) return;
-        isWriting.current=true;
+        if(isWriting) return;
+        // isWriting=true;
         const clientX = event.clientX;
         const clientY = event.clientY;
         const tool = activeToolItem;
@@ -204,6 +206,7 @@ function BoardProvider({ children }) {
 
             return;
         }
+
         dispatchBoardState({
             type: 'DRAW_MOVE',
             payload: {
@@ -217,10 +220,20 @@ function BoardProvider({ children }) {
         })
     }
 
+    function textAreaBlurHandler(value){
+        dispatchBoardState({
+            type: 'CHANGE_TEXT',
+            payload:{
+                text:value,
+            }
+        })
+    }
+
     const boardContextValues = {
         elements: boardState.elements,
         boardMouseDownHandler,
         boardMouseMoveHandler,
+        textAreaBlurHandler,
     }
 
     return (

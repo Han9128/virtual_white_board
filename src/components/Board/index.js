@@ -11,9 +11,11 @@ import classes from "./index.module.css"
 function Board(){
     const canvasRef = useRef();
     const isDrawing = useRef(false);
-    const isWriting = useRef(false);
+    // const isWriting = useRef(false);
+    const [isWriting, setIsWriting] = useState(false);
+    const textAreaRef = useRef();
     
-    const {elements, boardMouseDownHandler,boardMouseMoveHandler} = useContext(boardContext);
+    const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
     const {activeToolItem}  = useContext(toolBarContext);
     // console.log(elements);
@@ -43,13 +45,16 @@ function Board(){
     
     const roughCanvas = rough.canvas(canvas);
     elements.forEach((element)=>{
-      console.log('Element type:', element.type, 'TOOLS.TEXT:', TOOLS.TEXT, 'Match:', element.type === TOOLS.TEXT);
       if(element.type === TOOLS.BRUSH){
         context.fillStyle = element.color
         context.fill(element.path);
         context.restore();
       }else if(element.type === TOOLS.TEXT){
-        console.log('something');
+        context.textBaseline = "top";
+        context.font = `${element.size}px Caveat`;
+        context.fillStyle = element.color;
+        context.fillText(element.text,element.x1,element.y1);
+        context.restore();
       }
       else{
         roughCanvas.draw(element.roughElement);
@@ -61,6 +66,15 @@ function Board(){
     }
   }, [elements])
 
+  useEffect(()=>{
+    const textArea = textAreaRef.current;
+    if(isWriting){
+    setTimeout(()=>{
+        textArea.focus();
+      },0)
+    }
+  },[isWriting])
+
 
   // useEffect(()=>{
   //   isWriting.cu
@@ -69,10 +83,11 @@ function Board(){
 const handleMouseDown = (event)=>{
   if(activeToolItem === TOOLS.TEXT){
     // console.log(activeToolItem);
-    console.log(TOOLS.TEXT);
+    // console.log(TOOLS.TEXT);
     // isWriting.current = true;
+    setIsWriting(true);
     boardMouseDownHandler(event, toolConfigState, isWriting);
-    isWriting.current = true;
+    
     // console.log(elements);
   }else{
     isDrawing.current = true;
@@ -86,22 +101,27 @@ const handleMouseMove = (event) =>{
 }
 
 const handleMouseUp = ()=>{
-  isWriting.current=false;
+  // isWriting.current=false;
+  setIsWriting(false);
   isDrawing.current = false;
+  // console.log(isDrawing.current);
+  // console.log(isWriting.current);
 }
 
-console.log(elements);
   return (
     <>
-    {isWriting.current && (<textarea 
+    {isWriting && (<textarea 
     className={classes.textElementBox}
     type="text" 
+    ref={textAreaRef}
     style={{
       top: elements[elements.length-1].y1,
       left: elements[elements.length-1].x1,
-      fontSize: `${elements[elements.length-1].stroke}px`,
+      fontSize: `${elements[elements.length-1].size}px`,
       color: elements[elements.length-1].color,
     }}
+
+    onBlur = {(event)=>{textAreaBlurHandler(event.target.value)}}
     >
       {/* this is text area; */}
       </textarea>)}

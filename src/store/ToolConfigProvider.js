@@ -62,7 +62,7 @@ const initialToolConfigState = {
     },
     [TOOLS.TEXT]:{
         color: COLORS.BLACK,
-        stroke: 1,
+        stroke: 32,
     }
 };
 

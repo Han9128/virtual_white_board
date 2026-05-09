@@ -2,7 +2,7 @@
 import classes from "./index.module.css";
 import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
-import { COLORS, STROKE_TOOL_TYPE, FILL_TOOL_TYPE,SIZE_TOOL_TYPE } from "../../constants/toolItem"
+import { COLORS, STROKE_TOOL_TYPE, FILL_TOOL_TYPE,SIZE_TOOL_TYPE, TOOLS } from "../../constants/toolItem"
 import { useContext } from "react";
 import {TOOL_CONFIG_BOX} from "../../constants/toolItem"
 
@@ -65,9 +65,9 @@ function ToolConfigBox() {
             </div>}
             {SIZE_TOOL_TYPE.includes(activeToolItem) && <div className={classes.selectOptionContainer}>
                 <div className={classes.label}>
-                    Brush Size
+                    {activeToolItem===TOOLS.TEXT? "Font Size":"Brush Size"}
                 </div>  
-                <input type='range' min='0' max='10' step={1} value={size} 
+                <input type='range' min={activeToolItem===TOOLS.TEXT?12:1} max={activeToolItem===TOOLS.TEXT?64:10} step={1} value={size} 
                   onChange = {(event)=>changeSizeHandler(event.target.value)}
                 />
                 {/* <div className={classes.colorsContainer}>
