@@ -44,8 +44,10 @@ export const TOOL_ITEMS = [
         id:TOOLS.ERASER,
         icon:FaEraser
     },
+]
 
-    {
+export const FEATURES = [
+     {
         id:TOOLS.UNDO,
         icon:FaUndo
     },

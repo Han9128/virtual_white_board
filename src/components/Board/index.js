@@ -15,7 +15,7 @@ function Board(){
     const [isWriting, setIsWriting] = useState(false);
     const textAreaRef = useRef();
     
-    const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler} = useContext(boardContext);
+    const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler,boardMouseUpHandler} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
     const {activeToolItem}  = useContext(toolBarContext);
     // console.log(elements);
@@ -81,6 +81,7 @@ function Board(){
   // },[isWriting])
 
 const handleMouseDown = (event)=>{
+  if(activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
   if(activeToolItem === TOOLS.TEXT){
     // console.log(activeToolItem);
     // console.log(TOOLS.TEXT);
@@ -103,7 +104,11 @@ const handleMouseMove = (event) =>{
 const handleMouseUp = ()=>{
   // isWriting.current=false;
   setIsWriting(false);
-  isDrawing.current = false;
+  if(isDrawing.current){
+    boardMouseUpHandler();
+    isDrawing.current = false;
+  }
+  
   // console.log(isDrawing.current);
   // console.log(isWriting.current);
 }
