@@ -287,6 +287,15 @@ function BoardProvider({ children }) {
         })
     }
 
+    function downloadHandler(){
+        const canvas = document.getElementById('canvas');
+        const data = canvas.toDataURL("image/png");
+        const anchor = document.createElement("a");
+        anchor.href = data;
+        anchor.download = "board.png";
+        anchor.click();
+    }
+
     const boardContextValues = {
         elements: boardState.elements,
         history: boardState.history,
@@ -296,6 +305,7 @@ function BoardProvider({ children }) {
         boardMouseUpHandler,
         undoHandler,
         redoHandler,
+        downloadHandler,
     }
 
     return (

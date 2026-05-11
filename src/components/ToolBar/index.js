@@ -11,7 +11,7 @@ import boardContext from "../../store/board-context"
 
 function ToolBar() {
     const { activeToolItem, handleItemToolClick } = useContext(toolBarContext);
-    const {undoHandler,redoHandler} = useContext(boardContext);
+    const {undoHandler,redoHandler, downloadHandler} = useContext(boardContext);
 
     function handleClick(feat){
         handleItemToolClick(feat)
@@ -27,6 +27,11 @@ function ToolBar() {
                     redoHandler();
                     break;
                 }
+            
+            case TOOLS.DOWNLOAD:{
+                downloadHandler();
+                break;
+            }
             
             default:
                 throw new Error(`${feat} not recognized`)
