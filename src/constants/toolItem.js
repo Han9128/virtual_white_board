@@ -73,7 +73,7 @@ export const COLORS = {
     BLUE: '#0000ff',
     ORANGE: '#ffa500',
     YELLOW: '#ffff00',
-    WHITE: '#ffffff'
+    // WHITE: '#ffffff'
 }
 
 export const STROKE_TOOL_TYPE = [TOOLS.BRUSH,TOOLS.LINE,TOOLS.RECTANGLE,TOOLS.CIRCLE,TOOLS.ARROW_RIGHT, TOOLS.TEXT];

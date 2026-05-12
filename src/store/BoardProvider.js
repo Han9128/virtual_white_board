@@ -110,7 +110,7 @@ const boardReducer = (state, action) => {
                 return {
                     ...state,
                     elements: newElements,
-                    history:newHistory,
+                    history:somethingErased?newHistory:state.history,
                     index:newIndex,
 
                 }

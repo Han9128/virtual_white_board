@@ -19,8 +19,8 @@
 }
 
 .colorsContainer{
-
     display:flex;
+    align-items:center;
 }
 .colorsBox{
     /* background-color:red; */
@@ -35,6 +35,45 @@
     border:1px solid gray;
     box-shadow: 0 0 0 1px #4a47b1;
 }
+
+
+
+.noFill{
+    width:30px;
+    height:30px;
+    margin-left:4px;
+    border-radius: 4px;
+    /* padding:0.8px; */
+    border:0.5px solid gray;
+    /* box-shadow: 0 0 0 1px #4a47b1; */
+    background: linear-gradient(
+    to bottom right,
+    transparent calc(50% - 0.5px),
+    red calc(50% - 0.5px),
+    red calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+),
+ linear-gradient(
+        to bottom left,
+        transparent calc(50% - 0.5px),
+        red calc(50% - 0.5px),
+        red calc(50% + 0.5px),
+        transparent calc(50% + 0.5px)
+    );
+
+}
+
+.colorPicker{
+    width:40px;
+    height:40px;
+    margin-left:4px;
+    margin-right:12px;
+    border-radius: 4px;
+    border:1px solid gray;
+    box-shadow: 0 0 0 1px #4a47b1;
+}
+
+
 
 
 

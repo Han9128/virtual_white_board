@@ -24,9 +24,19 @@ function ToolConfigBox() {
 
             {STROKE_TOOL_TYPE.includes(activeToolItem) && <div className={classes.selectOptionContainer}>
                 <div className={classes.label}>
-                    Stroke
+                    Stroke Color
                 </div>
                 <div className={classes.colorsContainer}>
+                    <div>
+                        <input 
+                        className={classes.colorPicker}
+                        type="color"
+                        value={strokeColor}
+                        onChange={(e)=>changeStrokeColorHandler(e.target.value)}
+                        >
+
+                        </input>
+                    </div>
                     {Object.keys(COLORS).map((k) => {
                         return (
                             <div
@@ -49,6 +59,24 @@ function ToolConfigBox() {
                     Fill
                 </div>
                 <div className={classes.colorsContainer}>
+                    {fillColor===null? <div className={`${classes.noFill} ${classes.colorPicker}`}
+                        onClick={()=>changeFillColorHandler(null)}>
+                        
+                    </div>:<div>
+                        <input 
+                        className={classes.colorPicker}
+                        type="color"
+                        value={fillColor}
+                        onChange={(e)=>changeFillColorHandler(e.target.value)}
+                        >
+                        </input>
+                    </div>}
+                    
+
+                     <div className={classes.noFill}
+                        onClick={()=>changeFillColorHandler(null)}>
+                        
+                    </div>
                     {Object.keys(COLORS).map((k) => {
                         return (
                             <div
