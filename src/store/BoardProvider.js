@@ -18,13 +18,6 @@ const boardReducer = (state, action) => {
 
                 const { clientX, clientY, stroke, fill, size, tool } = action.payload;
 
-                // const newElement = {
-                //     x1: clientX,
-                //     y1: clientY,
-                //     x2: clientX,
-                //     y2: clientY,
-                //     roughElement: gen.line(clientX, clientY, clientX, clientY),
-                // }
                 const newElement = generateRoughEle(state.elements.length, clientX, clientY, clientX, clientY, tool, stroke, fill, size);
                 // console.log(`in reducer ${newElement}`);
                 return {
@@ -36,7 +29,7 @@ const boardReducer = (state, action) => {
         case 'DRAW_MOVE':
             {
                 // if (state.elements.length === 0) return state;
-                
+
 
                 const { clientX, clientY, stroke, fill, size, tool } = action.payload;
                 // copying this way does shallow copy the objects inside array still points to original object
@@ -74,7 +67,7 @@ const boardReducer = (state, action) => {
 
                     const updatedElement = generateRoughEle(idx, x1, y1, clientX, clientY, tool, stroke, fill, size);
                     updatedElements[idx] = updatedElement;
-                   
+
                     return {
                         ...state,
                         elements: updatedElements,
@@ -84,26 +77,42 @@ const boardReducer = (state, action) => {
 
         case 'MOUSE_UP':
             {
+                if(action.payload.tool===TOOLS.ERASER) return state;
                 const elementsCopy = [...state.elements];
-                const newHistory = state.history.slice(0,state.index+1);
+                const newHistory = state.history.slice(0, state.index + 1);
                 newHistory.push(elementsCopy);
                 return {
                     ...state,
-                    history:newHistory,
-                    index:state.index+1,
+                    history: newHistory,
+                    index: state.index + 1,
                 }
             }
         case 'ERASE':
             {
                 const { clientX, clientY, tool } = action.payload;
-                
+
                 const newElements = state.elements.filter((element) => {
-                    return !isNearPointElement(element, clientX, clientY, tool)
+                    if (isNearPointElement(element, clientX, clientY, tool)) {
+
+                        return false;
+                    }
+
+                    return true;
                 })
                 // console.log(newElements);
+                const newHistory = state.history.slice(0, state.index + 1);
+                let newIndex = state.index;
+                const somethingErased = newElements.length < state.elements.length;
+                if (somethingErased) {
+                    newHistory.push(newElements);
+                    newIndex += 1;
+                }
                 return {
                     ...state,
                     elements: newElements,
+                    history:newHistory,
+                    index:newIndex,
+
                 }
             }
         case 'WRITE':
@@ -123,7 +132,7 @@ const boardReducer = (state, action) => {
                 const idx = state.elements.length - 1;
                 const updatedElements = [...state.elements];
                 updatedElements[idx].text = text;
-                
+
                 return {
                     ...state,
                     elements: updatedElements,
@@ -132,21 +141,21 @@ const boardReducer = (state, action) => {
 
         case 'UNDO':
             {
-                if(state.index<=0) return state;
+                if (state.index <= 0) return state;
                 return {
                     ...state,
-                    elements: state.history[state.index-1],
-                    index:state.index-1,
+                    elements: state.history[state.index - 1],
+                    index: state.index - 1,
                 }
             }
 
         case 'REDO':
             {
-                if(state.index >= state.history.length-1) return state;
+                if (state.index >= state.history.length - 1) return state;
                 return {
                     ...state,
-                    elements: state.history[state.index+1],
-                    index:state.index+1,
+                    elements: state.history[state.index + 1],
+                    index: state.index + 1,
                 }
             }
         default:
@@ -157,7 +166,7 @@ const boardReducer = (state, action) => {
 const initialBoardState = {
     elements: [],
     history: [[]],
-    index:0,
+    index: 0,
 }
 
 function BoardProvider({ children }) {
@@ -165,26 +174,15 @@ function BoardProvider({ children }) {
     const { activeToolItem } = useContext(toolBarContext);
 
 
-    // const [activeToolItem, setActiveToolItem] = useState(TOOLS.LINE);
-
-    // function handleItemToolClick(tool) {
-    //     console.log(tool);
-    //     dispatchBoardState({
-    //         type: 'CHANGE_TOOL',
-    //         payload: {
-    //             tool,
-    //         }
-    //     })
-    // }
 
     function boardMouseDownHandler(event, toolConfigState, isWriting) {
-        
+
         if (isWriting) return;
         const clientX = event.clientX;
         const clientY = event.clientY;
         const tool = activeToolItem;
-        
-        if (tool===TOOLS.UNDO || tool===TOOLS.REDO || tool===TOOLS.DOWNLOAD) return;
+
+        if (tool === TOOLS.UNDO || tool === TOOLS.REDO || tool === TOOLS.DOWNLOAD) return;
 
         if (tool === TOOLS.ERASER) {
             // console.log("if part");
@@ -231,7 +229,7 @@ function BoardProvider({ children }) {
     function boardMouseMoveHandler(event, toolConfigState) {
         const { clientX, clientY } = event;
         const tool = activeToolItem;
-        if (tool === TOOLS.TEXT || tool===TOOLS.UNDO || tool===TOOLS.REDO || tool===TOOLS.DOWNLOAD) return;
+        if (tool === TOOLS.TEXT || tool === TOOLS.UNDO || tool === TOOLS.REDO || tool === TOOLS.DOWNLOAD) return;
         // console.log(`in mouse move ${tool}`);
         if (tool === TOOLS.ERASER) {
             // console.log("if part");
@@ -260,9 +258,12 @@ function BoardProvider({ children }) {
         })
     }
 
-    function boardMouseUpHandler(){
+    function boardMouseUpHandler() {
         dispatchBoardState({
             type: 'MOUSE_UP',
+            payload:{
+                tool:activeToolItem,
+            }
         })
     }
 
@@ -287,7 +288,7 @@ function BoardProvider({ children }) {
         })
     }
 
-    function downloadHandler(){
+    function downloadHandler() {
         const canvas = document.getElementById('canvas');
         const data = canvas.toDataURL("image/png");
         const anchor = document.createElement("a");

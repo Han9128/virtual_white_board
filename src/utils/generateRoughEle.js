@@ -107,33 +107,66 @@ export function isNearPointElement(element, x, y, tool) {
         case TOOLS.CIRCLE:
             {
                 // console.log("rectangel")
-                const {x1,y1,x2,y2} = element;
+                const { x1, y1, x2, y2 } = element;
                 // console.log(element);
                 // console.log(x1,x2,y1,y2);
-                const [x3,y3] = [x2,y1];
-                const [x4,y4] = [x1,y2];
+                const [x3, y3] = [x2, y1];
+                const [x4, y4] = [x1, y2];
                 // console.log(x3,y3,x4,y4);
-                let d = distance(x1,x3,y1,y3);
-                let d1 = distance(x1,x,y1,y);
-                let d2 = distance(x3,x,y3,y);
+                let d = distance(x1, x3, y1, y3);
+                let d1 = distance(x1, x, y1, y);
+                let d2 = distance(x3, x, y3, y);
                 const isClose1 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
-                d = distance(x3,x2,y3,y2);
-                d1 = distance(x2,x,y2,y);
+                d = distance(x3, x2, y3, y2);
+                d1 = distance(x2, x, y2, y);
                 const isClose2 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
-                d = distance(x2,x4,y2,y4);
-                d2 = distance(x4,x,y4,y);
+                d = distance(x2, x4, y2, y4);
+                d2 = distance(x4, x, y4, y);
                 const isClose3 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
-                d = distance(x1,x4,y1,y4);
-                d1 = distance(x1,x,y1,y);
+                d = distance(x1, x4, y1, y4);
+                d1 = distance(x1, x, y1, y);
                 const isClose4 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
 
-                return (isClose1 || isClose2 || isClose3|| isClose4);
+                return (isClose1 || isClose2 || isClose3 || isClose4);
             }
         case TOOLS.BRUSH:
             {
-                const {path} = element;
+                const { path } = element;
                 const context = document.getElementById("canvas").getContext("2d");
-                return context.isPointInPath(path,x,y);
+                return context.isPointInPath(path, x, y);
+            }
+
+        case TOOLS.TEXT:
+            {
+                const context = document.getElementById("canvas").getContext("2d");
+                context.font = `${element.size}px Caveat`;
+                context.fillStyle = element.color;
+                const textWidth = context.measureText(element.text).width;
+                const textHeight = parseInt(element.size);
+                context.restore();
+
+                const { x1, y1} = element;
+                // console.log(element);
+                // console.log(x1,x2,y1,y2);
+                const [x2,y2] = [x1+textWidth,y1-textHeight];
+                const [x3, y3] = [x2, y1];
+                const [x4, y4] = [x1, y2];
+                // console.log(x3,y3,x4,y4);
+                let d = distance(x1, x3, y1, y3);
+                let d1 = distance(x1, x, y1, y);
+                let d2 = distance(x3, x, y3, y);
+                const isClose1 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+                d = distance(x3, x2, y3, y2);
+                d1 = distance(x2, x, y2, y);
+                const isClose2 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+                d = distance(x2, x4, y2, y4);
+                d2 = distance(x4, x, y4, y);
+                const isClose3 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+                d = distance(x1, x4, y1, y4);
+                d1 = distance(x1, x, y1, y);
+                const isClose4 = Math.abs(d1 + d2 - d) < ERASE_THRESHOLD;
+
+                return (isClose1 || isClose2 || isClose3 || isClose4);
             }
 
         default:
