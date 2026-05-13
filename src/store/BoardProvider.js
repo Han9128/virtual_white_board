@@ -1,6 +1,6 @@
 
 import boardContext from "./board-context";
-import { useReducer, useContext } from "react";
+import { useReducer, useContext,useCallback } from "react";
 import { TOOLS } from "../constants/toolItem"
 // import rough from "roughjs/bin/rough"
 import generateRoughEle from "../utils/generateRoughEle"
@@ -277,16 +277,17 @@ function BoardProvider({ children }) {
         boardMouseUpHandler();
     }
 
-    function undoHandler() {
+   const undoHandler = useCallback(function () {
         dispatchBoardState({
             type: 'UNDO',
         })
-    }
-    function redoHandler() {
+    },[])
+
+   const redoHandler = useCallback(function () {
         dispatchBoardState({
             type: 'REDO',
         })
-    }
+    },[]);
 
     function downloadHandler() {
         const canvas = document.getElementById('canvas');

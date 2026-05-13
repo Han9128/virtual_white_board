@@ -15,7 +15,7 @@ function Board(){
     const [isWriting, setIsWriting] = useState(false);
     const textAreaRef = useRef();
     
-    const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler,boardMouseUpHandler} = useContext(boardContext);
+    const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler,boardMouseUpHandler, undoHandler, redoHandler} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
     const {activeToolItem}  = useContext(toolBarContext);
     // console.log(elements);
@@ -76,9 +76,18 @@ function Board(){
   },[isWriting])
 
 
-  // useEffect(()=>{
-  //   isWriting.cu
-  // },[isWriting])
+  useEffect(()=>{
+    
+    const handleKeyDown = (e)=>{
+      if(e.ctrlKey && e.key === 'z'){
+        undoHandler();
+      }else if(e.ctrlKey && e.key === 'y'){
+        redoHandler();
+      }
+    }
+    window.addEventListener('keydown',handleKeyDown);
+    return ()=>window.removeEventListener('keydown',handleKeyDown);
+  },[undoHandler,redoHandler])
 
 const handleMouseDown = (event)=>{
   if(activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
