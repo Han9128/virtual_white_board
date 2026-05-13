@@ -1,8 +1,8 @@
-import { TOOLS } from "../constants/toolItem"
+import { TOOLS } from "../constants/constants"
 import rough from "roughjs/bin/rough"
 import getArrowCoOrdinates, { distance } from "../utils/math"
 import getStroke from "perfect-freehand";
-import { ERASE_THRESHOLD } from "../constants/toolItem"
+import { ERASE_THRESHOLD } from "../constants/constants"
 
 const gen = rough.generator();
 

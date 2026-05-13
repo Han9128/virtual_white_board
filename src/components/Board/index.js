@@ -3,7 +3,7 @@ import rough from "roughjs";
 import boardContext from "../../store/board-context";
 import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
-import {TOOLS} from "../../constants/toolItem";
+import {TOOLS} from "../../constants/constants";
 import classes from "./index.module.css"
 
 

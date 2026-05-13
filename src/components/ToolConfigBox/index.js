@@ -2,9 +2,9 @@
 import classes from "./index.module.css";
 import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
-import { COLORS, STROKE_TOOL_TYPE, FILL_TOOL_TYPE,SIZE_TOOL_TYPE, TOOLS } from "../../constants/toolItem"
+import { COLORS, STROKE_TOOL_TYPE, FILL_TOOL_TYPE,SIZE_TOOL_TYPE, TOOLS } from "../../constants/constants"
 import { useContext } from "react";
-import {TOOL_CONFIG_BOX} from "../../constants/toolItem"
+import {TOOL_CONFIG_BOX} from "../../constants/constants"
 
 function ToolConfigBox() {
     const { toolConfigState, changeStrokeColorHandler, changeFillColorHandler, changeSizeHandler } = useContext(toolConfigContext);

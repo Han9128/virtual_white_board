@@ -1,8 +1,8 @@
 import toolConfigContext from "./toolConfig-context";
 import toolBarContext from "./toolBar-context"
 import { useReducer, useContext } from "react";
-import { TOOLS } from "../constants/toolItem";
-import { COLORS } from "../constants/toolItem";
+import { TOOLS } from "../constants/constants";
+import { COLORS } from "../constants/constants";
 
 
 

@@ -1,5 +1,5 @@
 
-import {ARROW_LENGTH} from "../constants/toolItem"
+import {ARROW_LENGTH} from "../constants/constants"
 
 const getArrowCoOrdinates = (x1,y1,x2,y2) => {
     const theta = Math.atan2(y2-y1,x2-x1);

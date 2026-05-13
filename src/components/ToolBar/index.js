@@ -1,7 +1,7 @@
 
 import React, { useContext } from "react";
 import classes from "./index.module.css";
-import {TOOL_ITEMS, FEATURES, TOOLS} from "../../constants/toolItem"
+import {TOOL_ITEMS, FEATURES, TOOLS} from "../../constants/constants"
 import toolBarContext from "../../store/toolBar-context";
 import boardContext from "../../store/board-context"
 
