@@ -1,70 +1,128 @@
-# Getting Started with Create React App
+# Virtual Whiteboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A feature-rich virtual whiteboard built with React as a hands-on learning project. Draw, write, erase, and export your work — all in the browser.
 
-## Available Scripts
+**Live Demo:** [virtual-white-board-seven.vercel.app](https://virtual-white-board-seven.vercel.app/)
+**Repository:** [github.com/Han9128/virtual_white_board](https://github.com/Han9128/virtual_white_board)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### Drawing Tools
+- **Brush** — freehand drawing with smooth strokes
+- **Line** — straight lines
+- **Rectangle** — rectangles and squares
+- **Circle** — ellipses and circles
+- **Arrow** — directional arrows
+- **Text** — clickable text input anywhere on the canvas
+- **Eraser** — erase individual elements by clicking or dragging
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Tool Configuration
+- **Stroke color** — pick from presets or use the color picker
+- **Fill color** — for shapes, with a no-fill option
+- **Size** — adjustable stroke width and font size
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### History
+- **Undo** — `Ctrl + Z` or toolbar button
+- **Redo** — `Ctrl + Y` or toolbar button
+- Each action (draw, erase, text) is individually undoable
+- Erasing multiple elements in one stroke creates separate undo steps
 
-### `npm test`
+### Export
+- **Download** — saves the canvas as a PNG image
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Library | Purpose |
+|---|---|
+| [React](https://react.dev/) | UI framework |
+| [Rough.js](https://roughjs.com/) | Sketchy/hand-drawn style shapes |
+| [Perfect Freehand](https://github.com/steveruizok/perfect-freehand) | Smooth brush strokes |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first styling |
+| [React Icons](https://react-icons.github.io/react-icons/) | Toolbar icons |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+### Prerequisites
+- Node.js (v16 or higher)
+- npm
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Clone the repository
+git clone https://github.com/Han9128/virtual_white_board
+cd virtual_white_board
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Install dependencies
+npm install
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Start the development server
+npm start
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Build for Production
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run build
+```
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Project Structure
 
-### Analyzing the Bundle Size
+```
+src/
+├── components/
+│   ├── Board/          # Canvas rendering and mouse event handling
+│   ├── ToolBar/        # Tool selection sidebar
+│   └── ToolConfigBox/  # Stroke, fill, and size controls
+├── store/
+│   ├── BoardProvider.js      # Drawing state, history, undo/redo
+│   ├── ToolBarProvider.js    # Active tool state
+│   └── ToolConfigProvider.js # Per-tool color and size config
+├── constants/
+│   └── constants.js    # Tool definitions, color palette, type lists
+└── utils/
+    ├── generateRoughEle.js   # Creates rough.js elements by tool type
+    └── math.js               # Arrow coordinate calculations
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Architecture
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+State is managed with **React Context + useReducer** across three providers:
 
-### Advanced Configuration
+- **BoardProvider** — owns the `elements` array, drawing history, and all canvas actions
+- **ToolBarProvider** — tracks which tool is currently selected
+- **ToolConfigProvider** — stores per-tool configuration (color, fill, size)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The `Board` component renders everything onto an HTML `<canvas>` using `useLayoutEffect` to redraw synchronously whenever `elements` changes.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Keyboard Shortcuts
 
-### `npm run build` fails to minify
+| Shortcut | Action |
+|---|---|
+| `Ctrl + Z` | Undo |
+| `Ctrl + Y` | Redo |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## Learning Notes
+
+This project was built as a React learning exercise. Concepts explored and documented in [learning.md](learning.md):
+
+- `useRef` — accessing DOM elements directly
+- `useEffect` / `useLayoutEffect` — side effects and canvas rendering
+- `useReducer` — managing complex state with actions
+- `useContext` — sharing state across components without prop drilling
+- `useCallback` — memoizing functions to prevent unnecessary re-renders
+- Immutable state updates — avoiding direct mutation in reducers
