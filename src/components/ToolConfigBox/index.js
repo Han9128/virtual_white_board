@@ -14,8 +14,6 @@ function ToolConfigBox() {
     const strokeColor = toolConfigState[activeToolItem]?.color;
     const fillColor = toolConfigState[activeToolItem]?.fill;
     const size = toolConfigState[activeToolItem]?.stroke;
-    // console.log(activeToolItem);
-    // console.log(strokeColor);
     return (
         <>
         {TOOL_CONFIG_BOX.includes(activeToolItem) && <div className={classes.toolConfigBox}>
@@ -98,19 +96,6 @@ function ToolConfigBox() {
                 <input type='range' min={activeToolItem===TOOLS.TEXT?12:1} max={activeToolItem===TOOLS.TEXT?64:10} step={1} value={size} 
                   onChange = {(event)=>changeSizeHandler(event.target.value)}
                 />
-                {/* <div className={classes.colorsContainer}>
-                    {Object.keys(COLORS).map((k) => {
-                        return (
-                            <div
-                                className={`${classes.colorsBox} ${fillColor === COLORS[k] && classes.active}`}
-                                style={{ backgroundColor: COLORS[k] }}
-                                onClick={() => changeFillColorHandler(COLORS[k])}
-                            >
-
-                            </div>
-                        )
-                    })}
-                </div> */}
             </div>}
         </div>
         }</>

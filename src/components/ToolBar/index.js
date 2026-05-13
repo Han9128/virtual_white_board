@@ -5,7 +5,6 @@ import {TOOL_ITEMS, FEATURES, TOOLS} from "../../constants/toolItem"
 import toolBarContext from "../../store/toolBar-context";
 import boardContext from "../../store/board-context"
 
-// import styles from "./index.module.css"
 
 
 

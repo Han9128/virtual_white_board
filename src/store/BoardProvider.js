@@ -2,14 +2,12 @@
 import boardContext from "./board-context";
 import { useReducer, useContext,useCallback } from "react";
 import { TOOLS } from "../constants/toolItem"
-// import rough from "roughjs/bin/rough"
 import generateRoughEle from "../utils/generateRoughEle"
 import getStroke from "perfect-freehand";
 import { getSvgPathFromStroke, isNearPointElement } from "../utils/generateRoughEle"
 import toolBarContext from "./toolBar-context";
 
 
-// const gen = rough.generator();
 
 const boardReducer = (state, action) => {
     switch (action.type) {
@@ -19,7 +17,6 @@ const boardReducer = (state, action) => {
                 const { clientX, clientY, stroke, fill, size, tool } = action.payload;
 
                 const newElement = generateRoughEle(state.elements.length, clientX, clientY, clientX, clientY, tool, stroke, fill, size);
-                // console.log(`in reducer ${newElement}`);
                 return {
                     ...state,
                     elements: [...state.elements, newElement]
@@ -28,36 +25,19 @@ const boardReducer = (state, action) => {
             }
         case 'DRAW_MOVE':
             {
-                // if (state.elements.length === 0) return state;
 
 
                 const { clientX, clientY, stroke, fill, size, tool } = action.payload;
                 // copying this way does shallow copy the objects inside array still points to original object
                 const updatedElements = [...state.elements]
-                // const updatedElements = structuredClone(state.elements);
                 const idx = state.elements.length - 1;
-                // updatedElements[idx].x2 = clientX;
-                // updatedElements[idx].y2 = clientY;
                 const { x1, y1 } = updatedElements[idx];
 
-                // updatedElements[idx].roughElement = gen.line(updatedElements[idx].x1, updatedElements[idx].y1, clientX, clientY);
-                // const updatedElement = {
-                //     ...state.elements[idx],
-                //     x2: clientX,
-                //     y2: clientY,
-                //     roughElement: gen.line(state.elements[idx].x1, state.elements[idx].y1, clientX, clientY)
-                // };
-                // const updatedElements = [...state.elements];
-                // updatedElements[idx] = updatedElement;
-                // console.log(updatedElements);
                 if (action.payload.tool === TOOLS.BRUSH) {
-                    // console.log('mouse move fired');
-                    // console.log(updatedElements[idx].points);
                     if (updatedElements[idx].points) {
                         updatedElements[idx].points = [...updatedElements[idx].points, { x: clientX, y: clientY }];
                         updatedElements[idx].path = new Path2D(getSvgPathFromStroke(getStroke(updatedElements[idx].points)));
                     }
-                    // console.log(updatedElements);
                     return {
                         ...state,
                         elements: updatedElements,
@@ -99,7 +79,6 @@ const boardReducer = (state, action) => {
 
                     return true;
                 })
-                // console.log(newElements);
                 const newHistory = state.history.slice(0, state.index + 1);
                 let newIndex = state.index;
                 const somethingErased = newElements.length < state.elements.length;
@@ -119,7 +98,6 @@ const boardReducer = (state, action) => {
             {
                 const { clientX, clientY, stroke, fill, size, tool } = action.payload;
                 const newElement = generateRoughEle(state.elements.length, clientX, clientY, clientX, clientY, tool, stroke, fill, size);
-                // console.log(`newElement: ${newElement.stroke}`)
                 return {
                     ...state,
                     elements: [...state.elements, newElement],
@@ -185,7 +163,6 @@ function BoardProvider({ children }) {
         if (tool === TOOLS.UNDO || tool === TOOLS.REDO || tool === TOOLS.DOWNLOAD) return;
 
         if (tool === TOOLS.ERASER) {
-            // console.log("if part");
             dispatchBoardState({
                 type: 'ERASE',
                 payload: {
@@ -195,8 +172,6 @@ function BoardProvider({ children }) {
                 }
             })
         } else if (tool === TOOLS.TEXT) {
-            //     if(isWriting.current) return;
-            // isWriting.current=true;
             dispatchBoardState({
                 type: 'WRITE',
                 payload: {
@@ -210,7 +185,6 @@ function BoardProvider({ children }) {
             })
         }
         else {
-            // console.log("else part");
 
             dispatchBoardState({
                 type: 'DRAW_DOWN',
@@ -230,9 +204,7 @@ function BoardProvider({ children }) {
         const { clientX, clientY } = event;
         const tool = activeToolItem;
         if (tool === TOOLS.TEXT || tool === TOOLS.UNDO || tool === TOOLS.REDO || tool === TOOLS.DOWNLOAD) return;
-        // console.log(`in mouse move ${tool}`);
         if (tool === TOOLS.ERASER) {
-            // console.log("if part");
             dispatchBoardState({
                 type: 'ERASE',
                 payload: {

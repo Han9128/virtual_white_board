@@ -2,7 +2,6 @@
 
 .toolConfigBox{
     @apply absolute top-1/2 left-5 px-3 py-2 border border-gray-400 rounded flex; 
-    /* transform:translateX(-50%); */
     box-shadow: 1px 0 10px rgba(0,0,0,0.2);
     flex-direction:column;
 }
@@ -23,7 +22,6 @@
     align-items:center;
 }
 .colorsBox{
-    /* background-color:red; */
     width:30px;
     height:30px;
     margin-left:4px;
@@ -43,9 +41,7 @@
     height:30px;
     margin-left:4px;
     border-radius: 4px;
-    /* padding:0.8px; */
     border:0.5px solid gray;
-    /* box-shadow: 0 0 0 1px #4a47b1; */
     background: linear-gradient(
     to bottom right,
     transparent calc(50% - 0.5px),

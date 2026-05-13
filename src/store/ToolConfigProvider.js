@@ -72,9 +72,7 @@ function ToolConfigProvider({ children }) {
     const { activeToolItem } = useContext(toolBarContext);
 
     const changeStrokeColorHandler = (strokeColor) => {
-        // console.log("color is clicked");
         const tool = activeToolItem;
-        // console.log(`in changeHandler ${strokeColor}`)
         dispatchToolConfigState({
             type: "CHANGE_STROKE",
             payload: {
@@ -84,9 +82,7 @@ function ToolConfigProvider({ children }) {
         })
     }
     const changeFillColorHandler = (fillColor) => {
-        // console.log("color is clicked");
         const tool = activeToolItem;
-        // console.log(`in changeHandler ${strokeColor}`)
         dispatchToolConfigState({
             type: "CHANGE_FILL",
             payload: {
@@ -96,9 +92,7 @@ function ToolConfigProvider({ children }) {
         })
     }
     const changeSizeHandler = (size) => {
-        // console.log("color is clicked");
         const tool = activeToolItem;
-        // console.log(`in changeHandler ${strokeColor}`)
         dispatchToolConfigState({
             type: "CHANGE_SIZE",
             payload: {

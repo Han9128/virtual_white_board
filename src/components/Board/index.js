@@ -11,29 +11,18 @@ import classes from "./index.module.css"
 function Board(){
     const canvasRef = useRef();
     const isDrawing = useRef(false);
-    // const isWriting = useRef(false);
     const [isWriting, setIsWriting] = useState(false);
     const textAreaRef = useRef();
     
     const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler,boardMouseUpHandler, undoHandler, redoHandler} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
     const {activeToolItem}  = useContext(toolBarContext);
-    // console.log(elements);
     
   useEffect(()=>{
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // const roughCanvas = rough.canvas(canvas);
-    // const generator = roughCanvas.generator;
-    // const rect1 = generator.rectangle(10,10,100,100);
-    // const rect2 = generator.rectangle(60,60,100,100);
-    // // const context = canvas.getContext("2d");
-    // roughCanvas.draw(rect1);
-    // roughCanvas.draw(rect2);
-    // // context.fillStyle = "#FF0000";
-    // context.fillRect(0,0,150,75);
   },[]);
 
   // when we are just dealing with dom and want to run side effects with dom update synchronously then the best hook is useLayoutEffect,
@@ -92,13 +81,9 @@ function Board(){
 const handleMouseDown = (event)=>{
   if(activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
   if(activeToolItem === TOOLS.TEXT){
-    // console.log(activeToolItem);
-    // console.log(TOOLS.TEXT);
-    // isWriting.current = true;
     setIsWriting(true);
     boardMouseDownHandler(event, toolConfigState, isWriting);
     
-    // console.log(elements);
   }else{
     isDrawing.current = true;
     boardMouseDownHandler(event, toolConfigState,isWriting);
@@ -111,15 +96,12 @@ const handleMouseMove = (event) =>{
 }
 
 const handleMouseUp = ()=>{
-  // isWriting.current=false;
   setIsWriting(false);
   if(isDrawing.current){
     boardMouseUpHandler();
     isDrawing.current = false;
   }
   
-  // console.log(isDrawing.current);
-  // console.log(isWriting.current);
 }
 
   return (
@@ -137,7 +119,6 @@ const handleMouseUp = ()=>{
 
     onBlur = {(event)=>{textAreaBlurHandler(event.target.value)}}
     >
-      {/* this is text area; */}
       </textarea>)}
     <div className="board" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
     <canvas id="canvas" ref={canvasRef}>

@@ -31,8 +31,6 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         options.strokeWidth = size;
     }
 
-    // console.log(tool_type);
-    // console.log(newElement);
     switch (tool_type) {
         case TOOLS.BRUSH: {
             const brushElement = {
@@ -57,8 +55,6 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         case TOOLS.CIRCLE: {
             const cx = (x1 + x2) / 2;
             const cy = (y1 + y2) / 2;
-            // const diameter = Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
-            // for ellipse
             const width = x2 - x1;
             const height = y2 - y1;
             newElement.roughElement = gen.ellipse(cx, cy, width, height, options)
@@ -78,9 +74,7 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         }
         case TOOLS.TEXT:
             {
-                // console.log(`in text: ${newElement}`);
                 newElement.text = "";
-                // console.log(`text: ${newElement.y1}`);
                 return newElement;
             }
         default:
@@ -106,13 +100,9 @@ export function isNearPointElement(element, x, y, tool) {
         case TOOLS.RECTANGLE:
         case TOOLS.CIRCLE:
             {
-                // console.log("rectangel")
                 const { x1, y1, x2, y2 } = element;
-                // console.log(element);
-                // console.log(x1,x2,y1,y2);
                 const [x3, y3] = [x2, y1];
                 const [x4, y4] = [x1, y2];
-                // console.log(x3,y3,x4,y4);
                 let d = distance(x1, x3, y1, y3);
                 let d1 = distance(x1, x, y1, y);
                 let d2 = distance(x3, x, y3, y);
@@ -146,12 +136,9 @@ export function isNearPointElement(element, x, y, tool) {
                 context.restore();
 
                 const { x1, y1} = element;
-                // console.log(element);
-                // console.log(x1,x2,y1,y2);
                 const [x2,y2] = [x1+textWidth,y1-textHeight];
                 const [x3, y3] = [x2, y1];
                 const [x4, y4] = [x1, y2];
-                // console.log(x3,y3,x4,y4);
                 let d = distance(x1, x3, y1, y3);
                 let d1 = distance(x1, x, y1, y);
                 let d2 = distance(x3, x, y3, y);
