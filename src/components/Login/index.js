@@ -1,38 +1,47 @@
 
-import React from "react";
+import React, { useState } from "react";
 import authContext from "../../store/auth-context";
-import {useContext, useEffect} from "react";
-import {BASE_URL} from '../../constants'
+import classes from "./index.module.css";
+import {useContext} from "react";
 
 
 function Login(){
-    const {isLoggedIn, handleLoginClick} = useContext(authContext);
-
-    useEffect(()=>{
-        try{
-            const token = localstorage.getItem(token);
-            const res = await fetch(`${BASE_URL}/login`, {
-                method:'POST',
-                body:JSON.stringify(payload),
-                headers:{
-                    'Content-Type':'application/json'
-                }
-            })
-
-            if(!res.ok){
-                throw new Error(`Error in log in, status ${res.status}`);
-            }
-
-            const token = res.token;
-            localstorage.setItem(token)
-        }catch(err){
-            throw new Error(`Error during POST`, err.message)
+    const {login} = useContext(authContext);
+    const [email,setEmail] = useState("");
+    const [password, setPassword] = useState("")
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // prevents refreshing the page on submitting the form
+        const payload = {
+            email,
+            password
         }
-    })
+
+        await login(payload)
+    }
 
     return (
-        <div className={classes.login}>
-            {/* write code for login take input of email and password */}
+        <div className={classes.login-background}>
+            <div className={classes.login-container}>
+                <form onSubmit={(e)=>handleSubmit(e)}>
+                <div className={classes.login-field-box}>
+                <label>userName:</label>
+                <input 
+                name="email" 
+                id="userName" 
+                className={`${classes.username} ${classes.login-input}`}
+                onChange={(e)=>setEmail(e.target.value)}
+                  />
+                <label>password:</label>
+                <input 
+                name="password" 
+                id="password" 
+                className={`${classes.username} ${classes.login-input}`}
+                onChange={(e)=>setPassword(e.target.value)}
+                 />
+                </div>
+                <button type="submit" className={classes.login-btn}>Login</button>
+                </form>
+            </div>
         </div>
     )
 }
