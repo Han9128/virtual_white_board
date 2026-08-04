@@ -13,7 +13,7 @@ function ToolBar() {
     const {undoHandler,redoHandler, downloadHandler} = useContext(boardContext);
 
     function handleClick(feat){
-        handleItemToolClick(feat)
+        // handleItemToolClick(feat)
         switch(feat){
             case TOOLS.UNDO:
                 {

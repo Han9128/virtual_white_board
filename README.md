@@ -127,3 +127,4 @@ This project was built as a React learning exercise. Concepts explored and docum
 - `useContext` — sharing state across components without prop drilling
 - `useCallback` — memoizing functions to prevent unnecessary re-renders
 - Immutable state updates — avoiding direct mutation in reducers
+

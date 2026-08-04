@@ -8,7 +8,6 @@ import ToolBarProivder from "./store/ToolBarProvider"
 
 function App() {
   // useRef is used to
-  
 
   return (
     <ToolBarProivder>
