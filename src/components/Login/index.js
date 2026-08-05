@@ -15,33 +15,45 @@ function Login(){
             email,
             password
         }
+        try{
 
-        await login(payload)
+            await login(payload)
+        } catch(err){
+            console.log(err.message);
+        }
     }
 
     return (
-        <div className={classes.login-background}>
-            <div className={classes.login-container}>
+        <div className={classes.loginBackground}>
+            <div className={classes.loginContainer}>
                 <form onSubmit={(e)=>handleSubmit(e)}>
-                <div className={classes.login-field-box}>
-                <label>userName:</label>
+                <div className={classes.loginFieldBox}>
+                <label for="email">email:</label>
+                <br />
                 <input 
+                type="email"
                 name="email" 
                 id="userName" 
-                className={`${classes.username} ${classes.login-input}`}
+                className={`${classes.username} ${classes.loginInput}`}
                 onChange={(e)=>setEmail(e.target.value)}
                   />
-                <label>password:</label>
+                  <br />
+                <label for="password">password:</label>
+                <br/>
                 <input 
+                type="password"
                 name="password" 
                 id="password" 
-                className={`${classes.username} ${classes.login-input}`}
+                className={`${classes.username} ${classes.loginInput}`}
                 onChange={(e)=>setPassword(e.target.value)}
                  />
+                 <br />
                 </div>
-                <button type="submit" className={classes.login-btn}>Login</button>
+                <button type="submit" className={classes.loginBtn}>Login</button>
                 </form>
             </div>
         </div>
     )
 }
+
+export default Login;

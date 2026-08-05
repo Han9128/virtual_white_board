@@ -10,12 +10,10 @@ function AuthProvider({children}) {
     const [userData, setUserData] = useState({});
 
     const login = async (payload) => {
-
         const data = await authenticateLogin(payload);
-        
         setUserData(data);
         setIsLogin(true);
-        localStorage.setItem("token",data.token);
+        localStorage.setItem("token",data);
     }
 
     const authContextValues = {
