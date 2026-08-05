@@ -11,6 +11,9 @@ import Login from "./components/Login/index"
 function App() {
   // useRef is used to
   const {isLoggedIn} = useContext(authContext)
+
+  
+
   // we cant keep auth Provider here because we are consume aut context here so provider must wrap the app
   return (
   

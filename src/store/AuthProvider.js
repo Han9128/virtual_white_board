@@ -1,19 +1,38 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import authContext from "./auth-context";
-import {authenticateLogin} from "../services/authApi"
+import { authenticateLogin, verifyToken } from "../services/authApi"
 
 
 
-function AuthProvider({children}) {
+function AuthProvider({ children }) {
     const [isLoggedIn, setIsLogin] = useState(false);
     const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        async function checkLogin(){
+            try {
+                const token = localStorage.getItem("token");
+                if(!token){
+                    return;
+                }
+                const data = await verifyToken(token);
+                setUserData(data);
+                setIsLogin(true);
+            } catch (error) {
+                localStorage.removeItem("token");
+                setIsLogin(false);
+                console.error(error);
+            }
+        }
+        checkLogin();
+    }, [])
 
     const login = async (payload) => {
         const data = await authenticateLogin(payload);
         setUserData(data);
         setIsLogin(true);
-        localStorage.setItem("token",data);
+        localStorage.setItem("token", data);
     }
 
     const authContextValues = {

@@ -20,3 +20,24 @@ export async function authenticateLogin(payload){
         }
 }
 
+export async function verifyToken(token){
+    try{
+        const res = await fetch(`${BASE_URL}/profile`,{
+            method:'GET',
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${token}`
+            }
+        })
+
+        if(!res.ok){
+            throw new Error(`Error in token verification ${res.status}`)
+        }
+
+        const data = await res.json();
+        return data;
+    }catch(err){
+        throw new Error(err.message)
+    }
+}
+
