@@ -8,6 +8,7 @@ import { authenticateLogin, verifyToken } from "../services/authApi"
 function AuthProvider({ children }) {
     const [isLoggedIn, setIsLogin] = useState(false);
     const [userData, setUserData] = useState({});
+    const [isLoading,setIsLoading] = useState(true);
 
     useEffect(() => {
         async function checkLogin(){
@@ -23,9 +24,12 @@ function AuthProvider({ children }) {
                 localStorage.removeItem("token");
                 setIsLogin(false);
                 console.error(error);
+            }finally{
+                setIsLoading(false);
             }
         }
         checkLogin();
+        
     }, [])
 
     const login = async (payload) => {
@@ -38,7 +42,8 @@ function AuthProvider({ children }) {
     const authContextValues = {
         isLoggedIn,
         login,
-        userData
+        userData,
+        isLoading
     }
 
     return (

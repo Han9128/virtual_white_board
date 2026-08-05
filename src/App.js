@@ -10,7 +10,7 @@ import Login from "./components/Login/index"
 
 function App() {
   // useRef is used to
-  const {isLoggedIn} = useContext(authContext)
+  const {isLoggedIn, isLoading} = useContext(authContext)
 
   
 
@@ -21,7 +21,7 @@ function App() {
     <BoardProvider>
     <ToolConfigProvider>
     <div className="App">
-      {!isLoggedIn? <Login />:
+      {isLoading? <p>Loading...</p>: !isLoggedIn? <Login />:
       <>
       <ToolBar/>
       <Board />
