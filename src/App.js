@@ -7,10 +7,11 @@ import ToolConfigBox from "./components/ToolConfigBox"
 import ToolBarProivder from "./store/ToolBarProvider"
 import authContext from "./store/auth-context"
 import Login from "./components/Login/index"
+import Register from "./components/Register"
 
 function App() {
   // useRef is used to
-  const {isLoggedIn, isLoading} = useContext(authContext)
+  const {isLoggedIn, isLoading, showRegister} = useContext(authContext)
 
   
 
@@ -21,7 +22,7 @@ function App() {
     <BoardProvider>
     <ToolConfigProvider>
     <div className="App">
-      {isLoading? <p>Loading...</p>: !isLoggedIn? <Login />:
+      {isLoading? <p>Loading...</p>: showRegister?<Register />:  !isLoggedIn? <Login />:
       <>
       <ToolBar/>
       <Board />

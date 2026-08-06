@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import authContext from "./auth-context";
-import { authenticateLogin, verifyToken } from "../services/authApi"
+import { authenticateLogin, verifyToken, registerUser } from "../services/authApi"
 
 
 
@@ -9,7 +9,9 @@ function AuthProvider({ children }) {
     const [isLoggedIn, setIsLogin] = useState(false);
     const [userData, setUserData] = useState({});
     const [isLoading,setIsLoading] = useState(true);
+    const [showRegister,setShowRegister] = useState(false);
 
+    // we cant make callback function of useEffect async as useEffect expects nothing or a fuction returned but async function returns promise so react gives error using async on callback of useEffect
     useEffect(() => {
         async function checkLogin(){
             try {
@@ -32,18 +34,30 @@ function AuthProvider({ children }) {
         
     }, [])
 
+    const register = async (payload)=> {
+        try{
+            const data = await registerUser(payload);
+            setShowRegister(false);
+            return data;
+        }catch(err){
+            throw new Error(err.message)
+        }
+    }
+
     const login = async (payload) => {
-        const data = await authenticateLogin(payload);
-        setUserData(data);
+        const token = await authenticateLogin(payload);
         setIsLogin(true);
-        localStorage.setItem("token", data);
+        localStorage.setItem("token", token);
     }
 
     const authContextValues = {
         isLoggedIn,
         login,
         userData,
-        isLoading
+        isLoading,
+        register,
+        showRegister,
+        setShowRegister
     }
 
     return (

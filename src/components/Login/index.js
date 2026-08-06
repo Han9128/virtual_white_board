@@ -6,7 +6,7 @@ import { useContext } from "react";
 
 
 function Login() {
-    const { login } = useContext(authContext);
+    const { login,setShowRegister } = useContext(authContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
 
@@ -58,7 +58,7 @@ function Login() {
                 </form>
                 <p className={classes.register}>
                     Don't have an account? 
-                    <a href="#/login">
+                    <a href="#/login" onClick={()=> setShowRegister(true)}>
                         <span className={classes.registerLink}>
                             Register
                         </span>
