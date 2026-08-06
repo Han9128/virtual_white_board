@@ -1,0 +1,43 @@
+
+.registerBackground{
+    height: 100vh;
+    background-color: rgb(176, 216, 203);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-image: url("../../../public/images/board.png"); */
+}
+
+.registerContainer{
+    background-color: aquamarine;
+    padding: 1.2rem 3rem;
+    border: 1px solid oldlace;
+    border-radius: 0.8rem;
+}
+
+.registerField{
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: 0.8rem;
+}
+
+.registerInput{
+    height: 1.8rem;
+    border-radius: 0.3rem;
+    border: 1px solid rgb(176, 216, 203);
+}
+
+.registerBtn{
+    background-color: blue;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.4rem;
+    color: white;
+    margin-top: 1rem;
+}
+
+.passwordError{
+    font-size: 0.7rem;
+    color: red;
+}

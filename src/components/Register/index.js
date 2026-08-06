@@ -8,14 +8,14 @@ function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [passwordError, setPasswordError] = useState(false)
+    const [passwordError, setPasswordError] = useState("")
     const { register } = useContext(authContext)
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            setPasswordError(true);
+            setPasswordError("password doesn't match");
             return;
         }
 
@@ -31,6 +31,7 @@ function Register() {
             // throw new Error(err.message)
             // we use throw when this function is being called by someone and they will handle the error so we pass (throw) the error to that, here handleSubmit is called when 
             // form is submitted so no where this function is called again so instead of throwing just catch it here and log
+            setPasswordError(err.message);
             console.error(err.message);
         }
     }
@@ -48,6 +49,7 @@ function Register() {
                             <label htmlFor="name">Name:</label>
                             <input
                                 id="name"
+                                required
                                 value={name}
                                 className={`${classes.nameInput} ${classes.registerInput}`}
                                 type="text"
@@ -59,6 +61,7 @@ function Register() {
                             <input
                                 value={email}
                                 id="email"
+                                required
                                 className={`${classes.emailInput} ${classes.registerInput}`}
                                 type="email"
                                 onChange={(e) => setEmail(e.target.value)}
@@ -69,6 +72,7 @@ function Register() {
                             <label htmlFor="password">Password:</label>
                             <input
                                 id="password"
+                                required
                                 className={`${classes.passwordInput} ${classes.registerInput}`}
                                 type="password" onChange={(e) => setPassword(e.target.value)}
                                 value={password}
@@ -78,15 +82,16 @@ function Register() {
                             <label htmlFor="confirm">Confirm Password:</label>
                             <input
                                 id="confirm"
+                                required
                                 value={confirmPassword}
                                 className={`${classes.confirmInput} ${classes.registerInput}`}
                                 type="password"
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                             />
-                            {passwordError && <p className={classes.passwordError}>Password doesn't match!</p>}
+                            {passwordError && <p className={classes.passwordError}>{passwordError}</p>}
                         </div>
                     </div>
-                    <button type="submit">Submit</button>
+                    <button type="submit" className={classes.registerBtn}>Register</button>
                 </form>
             </div>
         </div>
