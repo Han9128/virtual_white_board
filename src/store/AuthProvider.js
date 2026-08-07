@@ -7,13 +7,11 @@ import { authenticateLogin, verifyToken, registerUser } from "../services/authAp
 
 function AuthProvider({ children }) {
     const [isLoggedIn, setIsLogin] = useState(false);
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState(null);
     const [isLoading,setIsLoading] = useState(true);
     const [showRegister,setShowRegister] = useState(false);
 
-    // we cant make callback function of useEffect async as useEffect expects nothing or a fuction returned but async function returns promise so react gives error using async on callback of useEffect
-    useEffect(() => {
-        async function checkLogin(){
+    async function checkLogin(){
             try {
                 const token = localStorage.getItem("token");
                 if(!token){
@@ -30,6 +28,9 @@ function AuthProvider({ children }) {
                 setIsLoading(false);
             }
         }
+
+    // we cant make callback function of useEffect async as useEffect expects nothing or a fuction returned but async function returns promise so react gives error using async on callback of useEffect
+    useEffect(() => {
         checkLogin();
         
     }, [])
@@ -48,6 +49,7 @@ function AuthProvider({ children }) {
         const token = await authenticateLogin(payload);
         setIsLogin(true);
         localStorage.setItem("token", token);
+        await checkLogin();
     }
 
     const authContextValues = {
@@ -57,7 +59,8 @@ function AuthProvider({ children }) {
         isLoading,
         register,
         showRegister,
-        setShowRegister
+        setShowRegister,
+        checkLogin
     }
 
     return (
