@@ -1,0 +1,230 @@
+.dashBoardBackground {
+    /* background-color:aliceblue; */
+    background-color: #f5f8fc;
+    /* height:100vh;  this makes the container take only 100 percent of view port if our content needs more it wont grow and contents will overflow, use min-height instead*/
+    min-height: 100vh;
+}
+
+.dashBoardContainer {
+    /* this css makes the dashboard container to takes 90% width of its parent but if it becomes more than 1200px then max-width forces it to remain 1200px only not more */
+    width: 90%;
+    max-width: 1200px;
+
+    /* center the container with margin auto */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+
+.navBar {
+    background-color: cornflowerblue;
+    width: 90%;
+    max-width: 1200px;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    position: fixed;
+    top: 1rem;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* color:rgb(253, 235, 235); */
+}
+
+.logo {
+    font-size: 1.5rem;
+    color: azure;
+    font-weight: bold;
+}
+
+.profilePicture {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: azure;
+    color: cornflowerblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.contents {
+    padding-top: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.welcomeSection {
+    display: flex;
+    flex-direction: column;
+}
+
+.welcomMessage {
+    display: flex;
+    flex-direction: column;
+}
+
+.welcomeMessage h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+
+}
+
+.welcomeMessage h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.7)
+}
+
+.profileCard {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+
+    /* box-shadow:  horizontal  vertical  blur  color
+              ↓          ↓         ↓      ↓
+              0          4px       16px   rgba(...) */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)
+}
+
+.profileCard:hover {
+    border: 1px solid cornflowerblue;
+}
+
+
+.profileAvatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #eef4ff;
+    color: #5b8def;
+
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.userInfo {
+    height: 100%;
+}
+
+
+.userInfo h4 {
+    color: gray;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.canvasSection {
+    background-color: #eef4ff;
+    padding: 2rem;
+}
+
+.canvasSection .header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.canvasSection h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: cornflowerblue;
+}
+
+.canvasSection button {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.7)
+}
+
+.canvasGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1.5rem;
+    margin-top:1.2rem;
+}
+
+.canvasCard {
+    padding:0;
+    height:300px;
+    width:300px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius:1rem;
+
+    /* box-shadow:  horizontal  vertical  blur  color
+              ↓          ↓         ↓      ↓
+              0          4px       16px   rgba(...) */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.topPart{
+    height:70%;
+    background-image:url(../../../public/images/board.png);
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+.bottomPart{
+    height:30%;
+    border-top:1px solid rgba(100, 148, 237, 0.952);
+    background-color: rgba(100, 148, 237, 0.5);
+    display:flex;
+    flex-direction:column;
+}
+
+.bottomPart h5,p{
+    margin-left:1rem;
+}
+
+.canvasName{
+    font-size:1.2rem;
+    font-weight:600;
+}
+
+.bottomPart p{
+    color: rgba(0,0,0,0.8);
+    font-size:medium;
+    font-weight:400;
+}
+
+.editDuration{
+    color:blue;
+}
+
+.dashFooter {
+    position: fixed;
+    bottom: 20px;
+    right: 32px;
+}
+
+
+.createBtn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: blue;
+    color: white;
+}
