@@ -12,7 +12,7 @@ import Dashboard from "./components/Dashboard/index"
 
 function App() {
   // useRef is used to
-  const {isLoggedIn, isLoading, showRegister} = useContext(authContext)
+  const {isLoggedIn, isLoading, showRegister,showDashboard} = useContext(authContext)
 
   
 
@@ -27,7 +27,7 @@ function App() {
        <p>Loading...</p>: 
        showRegister?<Register />: 
         !isLoggedIn? <Login />: 
-        true? <Dashboard /> :
+        showDashboard? <Dashboard /> :
       <>
       <ToolBar/>
       <Board />

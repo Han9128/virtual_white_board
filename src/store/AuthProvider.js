@@ -8,39 +8,42 @@ import { authenticateLogin, verifyToken, registerUser } from "../services/authAp
 function AuthProvider({ children }) {
     const [isLoggedIn, setIsLogin] = useState(false);
     const [userData, setUserData] = useState(null);
-    const [isLoading,setIsLoading] = useState(true);
-    const [showRegister,setShowRegister] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [showRegister, setShowRegister] = useState(false);
+    const [showDashboard, setShowDashboard] = useState(false);
 
-    async function checkLogin(){
-            try {
-                const token = localStorage.getItem("token");
-                if(!token){
-                    return;
-                }
-                const data = await verifyToken(token);
-                setUserData(data);
-                setIsLogin(true);
-            } catch (error) {
-                localStorage.removeItem("token");
-                setIsLogin(false);
-                console.error(error);
-            }finally{
-                setIsLoading(false);
+    async function checkLogin() {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                return;
             }
+            const data = await verifyToken(token);
+            setUserData(data);
+            setIsLogin(true);
+            setShowDashboard(true);
+        } catch (error) {
+            localStorage.removeItem("token");
+            setIsLogin(false);
+            setShowDashboard(false);
+            console.error(error);
+        } finally {
+            setIsLoading(false);
         }
+    }
 
     // we cant make callback function of useEffect async as useEffect expects nothing or a fuction returned but async function returns promise so react gives error using async on callback of useEffect
     useEffect(() => {
         checkLogin();
-        
+
     }, [])
 
-    const register = async (payload)=> {
-        try{
+    const register = async (payload) => {
+        try {
             const data = await registerUser(payload);
             setShowRegister(false);
             return data;
-        }catch(err){
+        } catch (err) {
             throw new Error(err.message)
         }
     }
@@ -48,6 +51,7 @@ function AuthProvider({ children }) {
     const login = async (payload) => {
         const token = await authenticateLogin(payload);
         setIsLogin(true);
+        setShowDashboard(true);
         localStorage.setItem("token", token);
         await checkLogin();
     }
@@ -60,7 +64,9 @@ function AuthProvider({ children }) {
         register,
         showRegister,
         setShowRegister,
-        checkLogin
+        checkLogin,
+        showDashboard,
+        setShowDashboard
     }
 
     return (

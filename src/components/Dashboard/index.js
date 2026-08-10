@@ -2,18 +2,19 @@
 import React,{useContext, useEffect, useState} from "react";
 import authContext from "../../store/auth-context"
 import classes from "./index.module.css"
-import {getCanvases} from "../../services/canvasApi"
+import {getCanvases, createCanvas} from "../../services/canvasApi"
 import Canvas from "./Canvas"
 
 function Dashboard(){
 
-    const {userData} = useContext(authContext)
+    const {userData, setShowDashboard} = useContext(authContext)
     const [canvases,setCanvases] = useState([]);
-    const [loader,setLoader] = useState("Loading...")
+    const [loader,setLoader] = useState("Loading...");
 
+    const token = localStorage.getItem('token');
     useEffect(()=>{
         const fetchCanvas = async ()=>{
-            const token = localStorage.getItem('token');
+            
             try{
                 const data = await getCanvases(token);
                 setCanvases(data.canvases)
@@ -28,6 +29,22 @@ function Dashboard(){
         fetchCanvas();
     },[])
 
+
+    const handleCreateCanvas = async ()=>{
+        
+        try{
+            const data = await createCanvas(token);
+            // console.log(data);
+            setShowDashboard(false);
+            return data;
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+    const handleDeleteCanvas = (id)=>{
+        setCanvases((prevCanvases)=>prevCanvases.filter((canvas)=> canvas._id!==id))
+    }
     const capitalize = (str) => str? str.charAt(0).toUpperCase() + str.slice(1):str; 
 
 
@@ -65,19 +82,19 @@ function Dashboard(){
                 <div className={classes.canvasSection}>
                     <div className={classes.header}>
                         <h4>Your Canvases</h4>
-                        <button>+ Create Canvas</button>
+                        <button onClick={handleCreateCanvas}>+ Create Canvas</button>
                     </div>
 
                     <div className={classes.canvasGrid}>
 
                     {canvases.length===0?<p className={classes.noCanvas}>No Canvas Found!</p>:canvases.map((canvas)=>{
-                        return (<Canvas key={canvas._id} canvas={canvas} />)
+                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} />)
                     })}
                     </div>
                 </div>
                 </div>
                 <div className={classes.dashFooter}>
-                    <button type="submit" className={classes.createBtn}>Create</button>
+                    <button type="submit" className={classes.createBtn} onClick={handleCreateCanvas}>Create</button>
                 </div>
             </div>
         </div>
