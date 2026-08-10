@@ -87,7 +87,12 @@ function Dashboard(){
 
                     <div className={classes.canvasGrid}>
 
-                    {canvases.length===0?<p className={classes.noCanvas}>No Canvas Found!</p>:canvases.map((canvas)=>{
+                    {canvases.length===0?
+                    <div className={classes.noCanvasSection}>
+                    <h2 className={classes.noCanvas}>No Canvas Found!</h2>
+                    <button className={classes.createBtn} onClick={handleCreateCanvas}>Create</button>
+                    </div>:
+                    canvases.map((canvas)=>{
                         return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} />)
                     })}
                     </div>
