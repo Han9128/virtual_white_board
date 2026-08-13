@@ -138,6 +138,7 @@ const boardReducer = (state, action) => {
             }
         case BOARD_ACTIONS.LOAD_CANVAS:
             {
+                console.log("reducer payload", action.payload.elements)
                 return {
                     ...state,
                     elements:action.payload.elements,

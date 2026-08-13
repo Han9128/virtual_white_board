@@ -76,12 +76,14 @@ export async function loadCanvas(token, id) {
         )
 
         const data = await res.json();
-        console.log(`data from backend ${data.canvas}`)
+        console.log("data from backend", data)
         if (!res.ok) {
+            console.log("error in loadCanvas")
             throw new Error(data.message)
         }
         return data;
     } catch (err) {
+        console.log(err);
         throw new Error(err.message)
     }
 }

@@ -21,7 +21,7 @@ function Board(){
     const {activeToolItem}  = useContext(toolBarContext);
     const {token} = useContext(authContext);
     
-  useEffect(()=>{
+  useLayoutEffect(()=>{
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -30,6 +30,7 @@ function Board(){
 
   const saveCanvas = async (token,id,elements) => {
     try{
+      console.log(elements);
       const data = await updateCanvas(token,id,elements);
       return data;
     }catch(err){
@@ -47,7 +48,17 @@ function Board(){
     context.save();
     
     const roughCanvas = rough.canvas(canvas);
+    console.log("in layout effect",elements);
     elements.forEach((element)=>{
+       console.log({
+            type: element.type,
+            roughElement: element.roughElement,
+            path: element.path,
+            x1: element.x1,
+            y1: element.y1,
+            x2: element.x2,
+            y2: element.y2
+        });
       if(element.type === TOOLS.BRUSH){
         context.fillStyle = element.color
         context.fill(element.path);
@@ -65,6 +76,7 @@ function Board(){
     })
 
     return ()=>{
+      console.log("cleanup");
       context.clearRect(0,0,canvas.width,canvas.height);
     }
   }, [elements])

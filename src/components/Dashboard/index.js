@@ -50,8 +50,8 @@ function Dashboard(){
 
     const handleLoadCanvas = (id,elements) => {
         setCanvasId(id);
-        setShowDashboard(false);
         loadCanvasHandler(elements);
+        setShowDashboard(false);
     }
     const capitalize = (str) => str? str.charAt(0).toUpperCase() + str.slice(1):str; 
 
