@@ -93,6 +93,7 @@ export const BOARD_ACTIONS = {
     CHANGE_TEXT: "CHANGE_TEXT",
     UNDO:"UNDO",
     REDO: "REDO",
+    LOAD_CANVAS:"LOAD_CANVAS"
 }
 
 

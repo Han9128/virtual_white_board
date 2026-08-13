@@ -1,6 +1,6 @@
 
 import boardContext from "./board-context";
-import { useReducer, useContext,useCallback } from "react";
+import { useReducer, useState, useContext,useCallback } from "react";
 import { TOOLS,BOARD_ACTIONS } from "../constants/constants"
 import generateRoughEle from "../utils/generateRoughEle"
 import getStroke from "perfect-freehand";
@@ -136,6 +136,15 @@ const boardReducer = (state, action) => {
                     index: state.index + 1,
                 }
             }
+        case BOARD_ACTIONS.LOAD_CANVAS:
+            {
+                return {
+                    ...state,
+                    elements:action.payload.elements,
+                    history:[action.payload.elements],
+                    index:0
+                }
+            }
         default:
             return state;
     }
@@ -149,19 +158,18 @@ const initialBoardState = {
 
 function BoardProvider({ children }) {
     const [boardState, dispatchBoardState] = useReducer(boardReducer, initialBoardState);
+    const [canvasId, setCanvasId] = useState(null)
     const { activeToolItem } = useContext(toolBarContext);
 
 
 
     function boardMouseDownHandler(event, toolConfigState, isWriting) {
-
-        if (isWriting) return;
+        if(isWriting) return;
         const clientX = event.clientX;
         const clientY = event.clientY;
         const tool = activeToolItem;
 
         if (tool === TOOLS.UNDO || tool === TOOLS.REDO || tool === TOOLS.DOWNLOAD) return;
-
         if (tool === TOOLS.ERASER) {
             dispatchBoardState({
                 type: BOARD_ACTIONS.ERASE,
@@ -172,6 +180,7 @@ function BoardProvider({ children }) {
                 }
             })
         } else if (tool === TOOLS.TEXT) {
+            console.log("inside text")
             dispatchBoardState({
                 type: BOARD_ACTIONS.WRITE,
                 payload: {
@@ -270,6 +279,15 @@ function BoardProvider({ children }) {
         anchor.click();
     }
 
+    const loadCanvasHandler = (elements) => {
+        dispatchBoardState({
+            type:BOARD_ACTIONS.LOAD_CANVAS,
+            payload:{
+                elements
+            }
+        })
+    }
+
     const boardContextValues = {
         elements: boardState.elements,
         history: boardState.history,
@@ -280,6 +298,9 @@ function BoardProvider({ children }) {
         undoHandler,
         redoHandler,
         downloadHandler,
+        canvasId,
+        setCanvasId,
+        loadCanvasHandler
     }
 
     return (

@@ -1,9 +1,12 @@
 
 import React from "react";
 import classes from "./index.module.css";
-import {deleteCanvas} from "../../services/canvasApi"
+import {deleteCanvas,loadCanvas} from "../../services/canvasApi"
 
-function Canvas({ canvas,token, onDelete }) {
+function Canvas({ canvas,token, onDelete,onLoad }) {
+
+
+    
 
     const findEditDuration = () => {
         let seconds = (new Date() - new Date(canvas.modifiedAt)) / 1000;
@@ -33,8 +36,21 @@ function Canvas({ canvas,token, onDelete }) {
             console.error(err.message);
         }
     }
+
+    const handleCardClick = async (id,elements) => {
+        try{
+            console.log("card is clicked")
+            const data = await loadCanvas(token,id);
+            console.log(data);
+            onLoad(id,elements);
+            return data.canvas;
+        }catch(err){
+            console.erroor(err.message);
+        }
+    }
+
     return (
-        <div className={classes.canvasCard}>
+        <div className={classes.canvasCard} onClick={()=>handleCardClick(canvas._id)}>
             <div className={classes.topPart}>
 
             </div>
@@ -45,7 +61,7 @@ function Canvas({ canvas,token, onDelete }) {
                 </div>
                 <button
                     className={classes.deleteCanvas}
-                    onClick={() => handleDelete(canvas._id)}
+                    onClick={() => handleDelete(canvas._id, canvas.elements)}
                   >Delete
             </button>
         </div>

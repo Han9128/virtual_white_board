@@ -38,6 +38,7 @@ const toolConfigReducer = (state, action) => {
     }
 };
 
+// we use [] brackets to write our tool so that js evalutes it use it as a key, directly writing TOOLS.BRUSH is invalid syntax in js
 const initialToolConfigState = {
     [TOOLS.BRUSH]:{
         color:COLORS.BLACK,

@@ -1,6 +1,7 @@
 
 import React,{useContext, useEffect, useState} from "react";
 import authContext from "../../store/auth-context"
+import boardContext from "../../store/board-context"
 import classes from "./index.module.css"
 import {getCanvases, createCanvas} from "../../services/canvasApi"
 import Canvas from "./Canvas"
@@ -8,6 +9,7 @@ import Canvas from "./Canvas"
 function Dashboard(){
 
     const {userData, setShowDashboard} = useContext(authContext)
+    const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState("Loading...");
 
@@ -27,7 +29,7 @@ function Dashboard(){
         }
 
         fetchCanvas();
-    },[])
+    },[token])
 
 
     const handleCreateCanvas = async ()=>{
@@ -44,6 +46,12 @@ function Dashboard(){
 
     const handleDeleteCanvas = (id)=>{
         setCanvases((prevCanvases)=>prevCanvases.filter((canvas)=> canvas._id!==id))
+    }
+
+    const handleLoadCanvas = (id,elements) => {
+        setCanvasId(id);
+        setShowDashboard(false);
+        loadCanvasHandler(elements);
     }
     const capitalize = (str) => str? str.charAt(0).toUpperCase() + str.slice(1):str; 
 
@@ -93,7 +101,7 @@ function Dashboard(){
                     <button className={classes.createBtn} onClick={handleCreateCanvas}>Create</button>
                     </div>:
                     canvases.map((canvas)=>{
-                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} />)
+                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} onLoad={handleLoadCanvas} />)
                     })}
                     </div>
                 </div>

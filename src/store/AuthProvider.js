@@ -11,7 +11,7 @@ function AuthProvider({ children }) {
     const [isLoading, setIsLoading] = useState(true);
     const [showRegister, setShowRegister] = useState(false);
     const [showDashboard, setShowDashboard] = useState(false);
-
+    const token = localStorage.getItem("token");
     async function checkLogin() {
         try {
             const token = localStorage.getItem("token");
@@ -66,7 +66,8 @@ function AuthProvider({ children }) {
         setShowRegister,
         checkLogin,
         showDashboard,
-        setShowDashboard
+        setShowDashboard,
+        token
     }
 
     return (

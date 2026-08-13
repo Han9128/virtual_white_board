@@ -9,7 +9,7 @@ function Login() {
     const { login, setShowRegister } = useContext(authContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
-   
+
     const handleSubmit = async (e) => {
         e.preventDefault(); // prevents refreshing the page on submitting the form
         const payload = {

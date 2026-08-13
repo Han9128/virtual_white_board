@@ -3,8 +3,10 @@ import rough from "roughjs";
 import boardContext from "../../store/board-context";
 import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
+import authContext from "../../store/auth-context"
 import {TOOLS} from "../../constants/constants";
-import classes from "./index.module.css"
+import classes from "./index.module.css";
+import {updateCanvas} from "../../services/canvasApi"
 
 
 
@@ -14,16 +16,28 @@ function Board(){
     const [isWriting, setIsWriting] = useState(false);
     const textAreaRef = useRef();
     
-    const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler,boardMouseUpHandler, undoHandler, redoHandler} = useContext(boardContext);
+    const {elements, boardMouseDownHandler,boardMouseMoveHandler, textAreaBlurHandler,boardMouseUpHandler, undoHandler, redoHandler, canvasId} = useContext(boardContext);
     const {toolConfigState} = useContext(toolConfigContext);
     const {activeToolItem}  = useContext(toolBarContext);
+    const {token} = useContext(authContext);
     
   useEffect(()=>{
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
   },[]);
+
+
+  const saveCanvas = async (token,id,elements) => {
+    try{
+      const data = await updateCanvas(token,id,elements);
+      return data;
+    }catch(err){
+      console.error(err.message);
+    }
+  }
+
+ 
 
   // when we are just dealing with dom and want to run side effects with dom update synchronously then the best hook is useLayoutEffect,
   // and for calling third party apis, communicating with network we use useEffect
@@ -56,11 +70,10 @@ function Board(){
   }, [elements])
 
   useEffect(()=>{
-    const textArea = textAreaRef.current;
+   
     if(isWriting){
-    setTimeout(()=>{
-        textArea.focus();
-      },0)
+       const textArea = textAreaRef.current;
+       textArea?.focus();
     }
   },[isWriting])
 
@@ -100,6 +113,7 @@ const handleMouseUp = ()=>{
   if(isDrawing.current){
     boardMouseUpHandler();
     isDrawing.current = false;
+    saveCanvas(token,canvasId,elements)
   }
   
 }
