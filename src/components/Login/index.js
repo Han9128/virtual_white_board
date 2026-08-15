@@ -30,7 +30,7 @@ function Login() {
                 <form onSubmit={(e) => handleSubmit(e)}>
                     <div className={classes.loginFieldBox}>
                         <div>
-                            <label for="email">email:</label>
+                            <label htmlFor="email">email:</label>
                             <br></br>
                             <input
                                 type="email"
@@ -41,7 +41,7 @@ function Login() {
                             />
                         </div>
                         <div>
-                            <label for="password">password:</label>
+                            <label htmlFor="password">password:</label>
                             <br></br>
                             <input
                                 type="password"

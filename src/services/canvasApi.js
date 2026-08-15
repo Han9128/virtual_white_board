@@ -24,10 +24,13 @@ export async function getCanvases(token) {
 }
 
 
-export async function createCanvas(token) {
+export async function createCanvas(token,name) {
     try {
         const res = await fetch(`${BASE_URL}/canvas/create`, {
             method: 'POST',
+            body:JSON.stringify({
+                name
+            }),
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
@@ -89,11 +92,11 @@ export async function loadCanvas(token, id) {
 }
 
 
-export async function updateCanvas(token, id,elements) {
+export async function updateCanvas(token, id, elements) {
     try {
         const res = await fetch(`${BASE_URL}/canvas/update/${id}`, {
             method: 'PUT',
-            body:JSON.stringify({
+            body: JSON.stringify({
                 elements
             }),
             headers: {
@@ -108,7 +111,29 @@ export async function updateCanvas(token, id,elements) {
         }
 
         return data;
-    }catch(err){
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+export async function shareCanvas(token, id, payload) {
+    try {
+        const res = await fetch(`${BASE_URL}/canvas/share/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.message)
+        }
+
+        return data;
+    } catch (err) {
         throw new Error(err.message);
     }
 }

@@ -1,13 +1,14 @@
 
-import React from "react";
+import React, { useState, useRef} from "react";
 import classes from "./index.module.css";
-import {deleteCanvas,loadCanvas} from "../../services/canvasApi"
+import loginClasses from "../Login/index.module.css"
+import { deleteCanvas, loadCanvas, shareCanvas } from "../../services/canvasApi"
 
-function Canvas({ canvas,token, onDelete,onLoad }) {
+function Canvas({ canvas, token, onDelete, onLoad }) {
 
-
-    
-
+    const [askEmail, setAskEmail] = useState(false);
+    const [email, setEmail] = useState("");
+    const canvasId = useRef(null);
     const findEditDuration = () => {
         let seconds = (new Date() - new Date(canvas.modifiedAt)) / 1000;
         const day = Math.floor(seconds / (3600 * 24));
@@ -28,44 +29,82 @@ function Canvas({ canvas,token, onDelete,onLoad }) {
     }
 
     const handleDelete = async (id) => {
-        try{
-            const data = await deleteCanvas(token,id);
+        try {
+            const data = await deleteCanvas(token, id);
             onDelete(id);
             return data;
-        }catch(err){
+        } catch (err) {
             console.error(err.message);
         }
     }
 
     const handleCardClick = async (id) => {
-        try{
+        try {
             console.log("card is clicked")
-            const data = await loadCanvas(token,id);
+            const data = await loadCanvas(token, id);
             console.log(data.canvas.elements);
-            onLoad(id,data.canvas.elements);
+            onLoad(id, data.canvas.elements);
             return data;
-        }catch(err){
+        } catch (err) {
             console.erroor(err.message);
         }
     }
 
-    return (
-        <div className={classes.canvasCard} onClick={()=>handleCardClick(canvas._id)}>
-            <div className={classes.topPart}>
 
+    const handleShare = async (e) => {
+        e.preventDefault();
+        const id = canvasId.current;
+        try {
+            const payload = {
+                email: email
+            }
+            const data = await shareCanvas(token,id, payload);
+            setAskEmail(false);
+            return data;
+        } catch (err) {
+            console.error(err.message);
+        }
+    }
+
+    return (
+        askEmail ?
+             <div className={loginClasses.loginBackground}>
+            <div className={loginClasses.loginContainer}>
+                <form onSubmit={handleShare}>
+                    <div className={loginClasses.loginFieldBox}>
+                        <div>
+                            <label htmlFor="email">email:</label>
+                            <br></br>
+                            <input
+                                type="email"
+                                name="email"
+                                id="userName"
+                                className={`${loginClasses.username} ${loginClasses.loginInput}`}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <br />
+                    </div>
+                    <button type="submit" className={loginClasses.loginBtn}>Share</button>
+                </form>
             </div>
-            <div className={classes.bottomPart}>
-                <div className={classes.canvasInfo}>
-                    <h5 className={classes.canvasName}>Canvas</h5>
-                    <p>Edited <span className={classes.editDuration}>{findEditDuration()}</span>ago</p>
+        </div> :
+            <div className={classes.canvasCard} >
+                <div className={classes.topPart} onClick={() => handleCardClick(canvas._id)}>
+                    <p  className={classes.share} onClick={(e) => {e.stopPropagation();canvasId.current=canvas._id;setAskEmail(true);}}>Share</p>
                 </div>
-                <button
-                    className={classes.deleteCanvas}
-                    onClick={() => handleDelete(canvas._id, canvas.elements)}
-                  >Delete
-            </button>
-        </div>
-        </div >
+                <div className={classes.bottomPart}>
+                    <div className={classes.canvasInfo}>
+                        <h5 className={classes.canvasName}>{canvas.name || 'Canvas'}</h5>
+                        <p>Edited <span className={classes.editDuration}>{findEditDuration()}</span> ago</p>
+                    </div>
+                    <button
+                        className={classes.deleteCanvas}
+                        onClick={(e) => {e.stopPropagation();handleDelete(canvas._id, canvas.elements)}}
+                    >Delete
+                    </button>
+                </div>
+            </div >
 
     )
 }

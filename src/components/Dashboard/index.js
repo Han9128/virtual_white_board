@@ -35,8 +35,8 @@ function Dashboard(){
     const handleCreateCanvas = async ()=>{
         
         try{
-            const data = await createCanvas(token);
-            // console.log(data);
+            const name = `Untitled ${canvases.length+1}`
+            const data = await createCanvas(token,name);
             setShowDashboard(false);
             return data;
         }catch(err){

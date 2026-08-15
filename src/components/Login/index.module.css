@@ -1,6 +1,13 @@
-
-.loginBackground{
+.loginBackground {
+    position: fixed;
+    width: 100vw;
     height: 100vh;
+    /* shorthand for 
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0; */
+    inset: 0;
     background-color: rgb(176, 216, 203);
     display: flex;
     justify-content: center;
@@ -8,20 +15,20 @@
     /* background-image: url("../../../public/images/board.png"); */
 }
 
-.loginContainer{
+.loginContainer {
     background-color: aquamarine;
     padding: 1.2rem 3rem;
     border: 1px solid oldlace;
     border-radius: 0.8rem;
 }
 
-.loginFieldBox{
+.loginFieldBox {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.loginInput{
+.loginInput {
     /* margin-bottom: 1rem; */
     border: 1px solid azure;
     height: 2rem;
@@ -29,7 +36,7 @@
     color: black;
 }
 
-.forgotPassword{
+.forgotPassword {
     font-size: 0.8rem;
     text-align: right;
     cursor: pointer;
@@ -37,23 +44,22 @@
     margin-top: 0.2rem;
 }
 
-.loginBtn{
+.loginBtn {
     background-color: blue;
     width: 100%;
     padding: 0.5rem;
     border-radius: 0.4rem;
-    color: white;
+    color: white !important;
 }
 
-.register{
+.register {
     margin-top: 1rem;
     font-size: 0.8rem;
 }
 
-.registerLink{
+.registerLink {
     text-decoration: underline;
     color: blue;
     cursor: pointer;
     margin-left: 0.1rem;
 }
-
