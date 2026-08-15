@@ -138,11 +138,22 @@ const boardReducer = (state, action) => {
             }
         case BOARD_ACTIONS.LOAD_CANVAS:
             {
+                // Path2D is a browser object which is not serializable and not stored in mongodb so we have to make path again after getting the points from db
+                const loadedElements = action.payload.elements.map((element)=>{
+                    if(element.type===TOOLS.BRUSH){
+                        return {
+                            ...element,
+                            path:new Path2D(getSvgPathFromStroke(getStroke(element.points)))
+                        }
+                    }
+
+                    return element
+                })
                 console.log("reducer payload", action.payload.elements)
                 return {
                     ...state,
-                    elements:action.payload.elements,
-                    history:[action.payload.elements],
+                    elements:loadedElements,
+                    history:[loadedElements],
                     index:0
                 }
             }
