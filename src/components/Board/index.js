@@ -106,8 +106,11 @@ function Board() {
      if(version===0) return;
 
      if(!canvasId || !token) return;
-    saveCanvas(token,canvasId,elements)
+     const timer = setTimeout(()=>{
+      saveCanvas(token,canvasId,elements);
+     },1000)
 
+     return () => clearTimeout(timer)
   },[version])
 
   useEffect(() => {
