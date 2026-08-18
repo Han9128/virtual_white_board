@@ -1,6 +1,6 @@
 
 import boardContext from "./board-context";
-import { useReducer, useState, useContext,useCallback } from "react";
+import { useReducer, useState, useContext,useCallback} from "react";
 import { TOOLS,BOARD_ACTIONS } from "../constants/constants"
 import generateRoughEle from "../utils/generateRoughEle"
 import getStroke from "perfect-freehand";
@@ -36,6 +36,7 @@ const boardReducer = (state, action) => {
                 if (action.payload.tool === TOOLS.BRUSH) {
                     if (updatedElements[idx].points) {
                         updatedElements[idx].points = [...updatedElements[idx].points, { x: clientX, y: clientY }];
+                        // generate thick brush like stroke with getStroke(points), convert into svg then convert into browser path object to render
                         updatedElements[idx].path = new Path2D(getSvgPathFromStroke(getStroke(updatedElements[idx].points)));
                     }
                     return {
@@ -65,6 +66,7 @@ const boardReducer = (state, action) => {
                     ...state,
                     history: newHistory,
                     index: state.index + 1,
+                    version:state.version+1
                 }
             }
         case BOARD_ACTIONS.ERASE:
@@ -91,6 +93,7 @@ const boardReducer = (state, action) => {
                     elements: newElements,
                     history:somethingErased?newHistory:state.history,
                     index:newIndex,
+                    version:somethingErased?state.version+1:state.version
 
                 }
             }
@@ -124,6 +127,7 @@ const boardReducer = (state, action) => {
                     ...state,
                     elements: state.history[state.index - 1],
                     index: state.index - 1,
+                    version:state.version+1
                 }
             }
 
@@ -134,6 +138,7 @@ const boardReducer = (state, action) => {
                     ...state,
                     elements: state.history[state.index + 1],
                     index: state.index + 1,
+                    version:state.version+1
                 }
             }
         case BOARD_ACTIONS.LOAD_CANVAS:
@@ -149,12 +154,12 @@ const boardReducer = (state, action) => {
 
                     return element
                 })
-                console.log("reducer payload", action.payload.elements)
                 return {
                     ...state,
                     elements:loadedElements,
                     history:[loadedElements],
-                    index:0
+                    index:0,
+                    version:0
                 }
             }
         default:
@@ -166,6 +171,7 @@ const initialBoardState = {
     elements: [],
     history: [[]],
     index: 0,
+    version:0
 }
 
 function BoardProvider({ children }) {
@@ -192,7 +198,6 @@ function BoardProvider({ children }) {
                 }
             })
         } else if (tool === TOOLS.TEXT) {
-            console.log("inside text")
             dispatchBoardState({
                 type: BOARD_ACTIONS.WRITE,
                 payload: {
@@ -303,6 +308,7 @@ function BoardProvider({ children }) {
     const boardContextValues = {
         elements: boardState.elements,
         history: boardState.history,
+        version: boardState.version,
         boardMouseDownHandler,
         boardMouseMoveHandler,
         textAreaBlurHandler,
@@ -312,7 +318,8 @@ function BoardProvider({ children }) {
         downloadHandler,
         canvasId,
         setCanvasId,
-        loadCanvasHandler
+        loadCanvasHandler,
+        
     }
 
     return (

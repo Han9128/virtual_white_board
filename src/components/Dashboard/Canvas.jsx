@@ -68,7 +68,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
 
     return (
         askEmail ?
-             <div className={loginClasses.loginBackground}>
+             <div className={loginClasses.loginBackground} >
             <div className={loginClasses.loginContainer}>
                 <form onSubmit={handleShare}>
                     <div className={loginClasses.loginFieldBox}>

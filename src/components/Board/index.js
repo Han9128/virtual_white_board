@@ -16,7 +16,7 @@ function Board() {
   const [isWriting, setIsWriting] = useState(false);
   const textAreaRef = useRef();
 
-  const { elements, boardMouseDownHandler, boardMouseMoveHandler, textAreaBlurHandler, boardMouseUpHandler, undoHandler, redoHandler, canvasId } = useContext(boardContext);
+  const { elements, boardMouseDownHandler, boardMouseMoveHandler, textAreaBlurHandler, boardMouseUpHandler, undoHandler, redoHandler, canvasId, version } = useContext(boardContext);
   const { toolConfigState } = useContext(toolConfigContext);
   const { activeToolItem } = useContext(toolBarContext);
   const { token } = useContext(authContext);
@@ -47,7 +47,7 @@ function Board() {
 
 
   // when we are just dealing with dom and want to run side effects with dom update synchronously then the best hook is useLayoutEffect,
-  // and for calling third party apis, communicating with network we use useEffect
+  // and for calling third party apis, communicating with network we use useEffect.
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -81,6 +81,11 @@ function Board() {
       }
     })
 
+    // if (shouldSaveRef.current) {
+    //   saveCanvas(token, canvasId, elements);
+    //   shouldSaveRef.current = false;
+    // }
+
     return () => {
       console.log("cleanup");
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -95,6 +100,15 @@ function Board() {
     }
   }, [isWriting])
 
+
+
+  useEffect(() => {
+     if(version===0) return;
+
+     if(!canvasId || !token) return;
+    saveCanvas(token,canvasId,elements)
+
+  },[version])
 
   useEffect(() => {
 
@@ -131,10 +145,11 @@ function Board() {
     if (isDrawing.current) {
       boardMouseUpHandler();
       isDrawing.current = false;
-      saveCanvas(token, canvasId, elements)
     }
 
   }
+
+   
 
   return (
     <>
