@@ -1,6 +1,7 @@
 
 import React, { useState, useRef} from "react";
 import classes from "./index.module.css";
+import { Share2,Trash } from "lucide-react";
 import loginClasses from "../Login/index.module.css"
 import { deleteCanvas, loadCanvas, shareCanvas } from "../../services/canvasApi"
 
@@ -91,7 +92,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
         </div> :
             <div className={classes.canvasCard} >
                 <div className={classes.topPart} onClick={() => handleCardClick(canvas._id)}>
-                    <p  className={classes.share} onClick={(e) => {e.stopPropagation();canvasId.current=canvas._id;setAskEmail(true);}}>Share</p>
+                    <p  className={classes.share} onClick={(e) => {e.stopPropagation();canvasId.current=canvas._id;setAskEmail(true);}}><Share2/></p>
                 </div>
                 <div className={classes.bottomPart}>
                     <div className={classes.canvasInfo}>
@@ -101,7 +102,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
                     <button
                         className={classes.deleteCanvas}
                         onClick={(e) => {e.stopPropagation();handleDelete(canvas._id, canvas.elements)}}
-                    >Delete
+                    ><Trash/>
                     </button>
                 </div>
             </div >

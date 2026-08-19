@@ -1,6 +1,5 @@
 .dashBoardBackground {
-    /* background-color:aliceblue; */
-    background-color: #f5f8fc;
+    background-color: var(--page-bg);
     /* height:100vh;  this makes the container take only 100 percent of view port if our content needs more it wont grow and contents will overflow, use min-height instead*/
     min-height: 100vh;
 }
@@ -19,7 +18,6 @@
 
 
 .navBar {
-    background-color: cornflowerblue;
     width: 90%;
     max-width: 1200px;
     padding: 1rem 1.5rem;
@@ -32,13 +30,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* color:rgb(253, 235, 235); */
 }
 
 .logo {
-    font-size: 1.5rem;
-    color: azure;
-    font-weight: bold;
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-lg);
+    /* color: azure; */
+    /* font-weight: bold; */
 }
 
 .profilePicture {

@@ -1,7 +1,8 @@
 
 import React,{useContext, useEffect, useState} from "react";
+import {Plus} from 'lucide-react';
 import authContext from "../../store/auth-context"
-import boardContext from "../../store/board-context"
+import boardContext from "../../store/board-context";
 import classes from "./index.module.css"
 import {getCanvases, createCanvas} from "../../services/canvasApi"
 import Canvas from "./Canvas"
@@ -90,7 +91,7 @@ function Dashboard(){
                 <div className={classes.canvasSection}>
                     <div className={classes.header}>
                         <h4>Your Canvases</h4>
-                        <button onClick={handleCreateCanvas}>+ Create Canvas</button>
+                        <button onClick={handleCreateCanvas}><span><Plus/></span> Create Canvas</button>
                     </div>
 
                     <div className={classes.canvasGrid}>
