@@ -1,0 +1,73 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    /* Colors */
+    --page-bg: #F7F5F1;
+    --chip-bg: #EFEBE3;
+    --primary-txt: #211F2E;
+    --secondary-text: #6B6975;
+    --line: #E4E0D8;
+    --card-bg: #FFFFFF;
+    --primary-acc: #5B4FE8;
+    --primary-hover: #463BC7;
+    --teal: #1E9E90;
+    --delete: #C4452F;
+    --coral:#FF6B4A;
+
+ /* ---------- TYPOGRAPHY ---------- */
+  --font-display: 'Fraunces', serif;           /* headings, wordmark */
+  --font-body:    'Inter', sans-serif;          /* UI text, buttons, paragraphs */
+  --font-mono:    'JetBrains Mono', monospace;  /* timestamps, emails, counts */
+ 
+  --fw-regular:   400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+ 
+  --text-xs:      12px;   /* meta, chips */
+  --text-sm:      13px;   /* captions, secondary labels */
+  --text-base:    14px;   /* body, buttons */
+  --text-md:      15px;   /* card titles, hero subtext */
+  --text-lg:      22px;   /* section headings */
+  --text-xl:      38px;   /* page hero heading */
+ 
+  /* ---------- RADIUS ---------- */
+  --radius-sm:    10px;   /* icon buttons, small controls */
+  --radius-md:    11px;   /* buttons */
+  --radius-lg:    16px;   /* account card */
+  --radius-xl:    18px;   /* canvas cards */
+  --radius-full:  50%;    /* avatars, dots */
+ 
+  /* ---------- SHADOW ---------- */
+  --shadow-sm:    0 1px 2px rgba(33,31,46,0.04), 0 8px 24px -12px rgba(33,31,46,0.15);
+  --shadow-hover: 0 4px 8px rgba(33,31,46,0.06), 0 18px 34px -14px rgba(33,31,46,0.28);
+  --shadow-accent:0 4px 14px -4px rgba(33,31,46,0.35);
+  --shadow-brand: 0 4px 12px -2px rgba(91,79,232,0.45);
+ 
+  /* ---------- GRADIENTS ---------- */
+  --gradient-brand:  linear-gradient(155deg, var(--primary-acc), var(--primary-hover));
+  --gradient-avatar: linear-gradient(155deg, #C9C3F7, #A79BF0);
+ 
+  /* ---------- TEXTURE ---------- */
+  --dot-grid-soft: radial-gradient(circle at 1px 1px, rgba(33,31,46,0.055) 1px, transparent 0);
+  --dot-grid-strong: radial-gradient(circle at 1px 1px, rgba(33,31,46,0.09) 1px, transparent 0);
+  --dot-grid-size: 22px 22px;
+  --dot-grid-size-tight: 16px 16px;
+ 
+  /* ---------- MOTION ---------- */
+  --ease-standard: 0.15s ease;
+  --ease-lift:     0.2s ease;
+  --lift-hover:    translateY(-3px);
+  --lift-hover-sm: translateY(-1px);
+ 
+  /* ---------- SPACING (4px scale) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+}
