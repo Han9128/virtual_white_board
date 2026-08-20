@@ -1,5 +1,6 @@
 .dashBoardBackground {
     background-color: var(--page-bg);
+    min-width: 100vw;
     /* height:100vh;  this makes the container take only 100 percent of view port if our content needs more it wont grow and contents will overflow, use min-height instead*/
     min-height: 100vh;
 }
@@ -32,24 +33,44 @@
     align-items: center;
 }
 
+.brand{
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.brandMark{
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    /* background-color: linear-gradient(155deg, var(--primary-acc), var(--primary-hover)); */
+    background-color: var(--primary-acc);
+    color: var(--card-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .logo {
     font-family: var(--font-display);
     font-weight: var(--fw-semibold);
     font-size: var(--text-lg);
-    /* color: azure; */
-    /* font-weight: bold; */
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
 }
 
-.profilePicture {
-    width: 60px;
-    height: 60px;
+.avatar {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background-color: azure;
-    color: cornflowerblue;
+    /* background-color: linear-gradient(155deg, #C9C3F7, #A79BF0); */
+    background-color: #C9C3F7;
+    color: var(--primary-acc);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: var(--text-md);
     font-weight: bold;
 }
 
@@ -70,31 +91,32 @@
     flex-direction: column;
 }
 
-.welcomeMessage h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
+.welcomeMessage h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--fw-semibold);
+    margin-bottom: var(--space-1);
 
 }
 
-.welcomeMessage h4 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.7)
+.welcomeMessage p{
+    color: var(--secondary-txt);
+    font-size: 16px;
 }
 
 .profileCard {
     display: flex;
     align-items: center;
-    margin-top: 0.5rem;
-    background-color: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(128, 128, 128, 0.2);
+    margin-top: var(--space-3);
+    background-color: var(--card-bg);
+    border: 1px solid var(--line);
+    padding: 14px 20px;
+    border-radius: var(--space-4);
 
     /* box-shadow:  horizontal  vertical  blur  color
               ↓          ↓         ↓      ↓
               0          4px       16px   rgba(...) */
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08)
+    box-shadow: 0 1px 2px rgba(33,31,46,0.04), 0 8px 24px -12px rgba(33,31,46,0.15)
 }
 
 .profileCard:hover {
@@ -102,7 +124,7 @@
 }
 
 
-.profileAvatar {
+/* .profileAvatar {
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -116,7 +138,7 @@
 
     font-size: 1.5rem;
     font-weight: bold;
-}
+} */
 
 .profileInfo {
     display: flex;
@@ -134,6 +156,24 @@
     color: gray;
     font-size: 1.1rem;
     font-weight: 500;
+}
+
+
+.statusDot{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--teal);
+    font-size: var(--text-xs);
+    font-weight: var(--fw-semibold);
+}
+
+.statusDot i{
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+    background-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(30, 158, 144, 0.15);
 }
 
 .canvasSection {
@@ -205,7 +245,7 @@
 }
 
 
-.bottomPart h5,p{
+.bottomPart h5{
     margin-left:1rem;
 }
 

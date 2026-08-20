@@ -1,6 +1,6 @@
 
 import React,{useContext, useEffect, useState} from "react";
-import {Plus} from 'lucide-react';
+import {Plus, Presentation} from 'lucide-react';
 import authContext from "../../store/auth-context"
 import boardContext from "../../store/board-context";
 import classes from "./index.module.css"
@@ -63,26 +63,35 @@ function Dashboard(){
             <div className={classes.dashBoardContainer}>
 
                 <div className={classes.navBar}>
+                    <div className={classes.brand}>
+                        <div className={classes.brandMark}>
+                            <Presentation />
+                        </div>
                     <h2 className={classes.logo}>Whiteboard</h2>
-                    <button className={classes.profilePicture}>{userData.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
+                    </div>
+                    <button className={classes.avatar}>{userData.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
                 </div>
 
 
                 <div className={classes.contents}>
                 <div className={classes.welcomeSection}>
                     <div className={classes.welcomeMessage}>
-                        <h3>Welcome Back, {userData? capitalize(userData.name): "Creator"}</h3>
-                        <h4>Your creative workspace</h4>
+                        <h1>Welcome Back, {userData? capitalize(userData.name): "Creator"}</h1>
+                        <p>Your creative workspace - pick up a canvas or start something new</p>
                     </div>
 
                     <div className={classes.profileCard}>
                         <div className={classes.profileInfo}>
-                            <div className={classes.profileAvatar}>
+                            <div className={classes.avatar}>
                                 {userData.name?userData.name.slice(0,2).toUpperCase():'WB'}
                             </div>
                             <div className={classes.userInfo}>
                                 <h4 className={classes.name}>{userData? capitalize(userData.name): "Creator"}</h4>
                                 <h4 className={classes.email}>{userData? userData.email: "creator@gmail.com"}</h4>
+                            </div>
+                            <div className={classes.statusDot}>
+                                <i></i>
+                                Synced
                             </div>
                         </div>
                     </div>
