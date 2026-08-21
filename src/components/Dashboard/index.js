@@ -86,14 +86,14 @@ function Dashboard(){
                                 {userData.name?userData.name.slice(0,2).toUpperCase():'WB'}
                             </div>
                             <div className={classes.userInfo}>
-                                <h4 className={classes.name}>{userData? capitalize(userData.name): "Creator"}</h4>
-                                <h4 className={classes.email}>{userData? userData.email: "creator@gmail.com"}</h4>
+                                <strong className={classes.name}>{userData? capitalize(userData.name): "Creator"}</strong>
+                                <p className={classes.email}>{userData? userData.email: "creator@gmail.com"}</p>
                             </div>
+                        </div>
                             <div className={classes.statusDot}>
                                 <i></i>
                                 Synced
                             </div>
-                        </div>
                     </div>
                 </div>
 

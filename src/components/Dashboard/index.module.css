@@ -1,6 +1,6 @@
 .dashBoardBackground {
     background-color: var(--page-bg);
-    min-width: 100vw;
+    /* min-width: 100vw; */
     /* height:100vh;  this makes the container take only 100 percent of view port if our content needs more it wont grow and contents will overflow, use min-height instead*/
     min-height: 100vh;
 }
@@ -83,7 +83,18 @@
 
 .welcomeSection {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap:20px; /* by seeting gap and justify content both makes the elements be atleast 20px far if they have more gap than this then that is distributed as per what set in justify-content */
+    flex-wrap: wrap;
+}
+
+/* for screen of width 600 and less apply this css */
+@media (max-width:600px){
+    .welcomeSection{
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 .welcomMessage {
@@ -107,6 +118,8 @@
 .profileCard {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap:16px;
     margin-top: var(--space-3);
     background-color: var(--card-bg);
     border: 1px solid var(--line);
@@ -119,9 +132,9 @@
     box-shadow: 0 1px 2px rgba(33,31,46,0.04), 0 8px 24px -12px rgba(33,31,46,0.15)
 }
 
-.profileCard:hover {
+/* .profileCard:hover {
     border: 1px solid cornflowerblue;
-}
+} */
 
 
 /* .profileAvatar {
@@ -142,21 +155,13 @@
 
 .profileInfo {
     display: flex;
-    flex-direction: row;
     gap: 1rem;
     align-items: center;
 }
 
-.userInfo {
+/* .userInfo {
     height: 100%;
-}
-
-
-.userInfo h4 {
-    color: gray;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
+} */
 
 
 .statusDot{
