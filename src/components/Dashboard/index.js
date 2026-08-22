@@ -99,8 +99,8 @@ function Dashboard(){
 
                 <div className={classes.canvasSection}>
                     <div className={classes.header}>
-                        <h4>Your Canvases</h4>
-                        <button onClick={handleCreateCanvas}><span><Plus/></span> Create Canvas</button>
+                        <h2>Your Canvases <span className={classes.countChip}>{canvases.length}</span></h2>
+                        <button className={classes.newBtn} onClick={handleCreateCanvas}><Plus/> Create Canvas</button>
                     </div>
 
                     <div className={classes.canvasGrid}>

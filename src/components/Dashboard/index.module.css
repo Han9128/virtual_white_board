@@ -126,9 +126,9 @@
     padding: 14px 20px;
     border-radius: var(--space-4);
 
-    /* box-shadow:  horizontal  vertical  blur  color
-              ↓          ↓         ↓      ↓
-              0          4px       16px   rgba(...) */
+/*box-shadow:  horizontal  vertical  blur  color
+                ↓          ↓         ↓      ↓
+                0          1px       2px   rgba(...) */
     box-shadow: 0 1px 2px rgba(33,31,46,0.04), 0 8px 24px -12px rgba(33,31,46,0.15)
 }
 
@@ -182,25 +182,62 @@
 }
 
 .canvasSection {
-    background-color: #eef4ff;
     padding: 2rem;
 }
 
 .canvasSection .header {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
 }
 
-.canvasSection h4 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: cornflowerblue;
+.canvasSection h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--primary-txt);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.canvasSection button {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.7)
+.countChip{
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--fw-regular);
+    color: var(--secondary-txt);
+    /* count chip is a span (inline) element, setting width and height on inline element does not work */
+    /* width: 12px;
+    height: 12px; */
+    padding: 3px 9px;
+    border-radius: 20px;
+    border-radius: var(--radius-full);
+    background-color: var(--chip-bg);
+}
+
+.newBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary-txt);
+    padding: 11px 18px;
+    border-radius: 11px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-base);
+    color: #fff;
+    transition: 0.15s;
+/*box-shadow:  horizontal  vertical  blur radius spread radius  color
+                ↓          ↓         ↓                ↓            ↓
+                0          4px       14px             -4px        rgba(...) */
+    box-shadow: 0 4px 14px -4px rgba(33,31,46,0.35);
+}
+
+.newBtn:hover{
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px -4px rgba(33,31,46,0.45); 
 }
 
 .canvasGrid{
