@@ -111,6 +111,9 @@ function Board() {
      },1000)
 
      return () => clearTimeout(timer)
+     // version changes in the same commit as elements, so the closure is always
+      // fresh. Adding elements here would fire on every mousemove and save half-finished strokes.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   },[version])
 
   useEffect(() => {

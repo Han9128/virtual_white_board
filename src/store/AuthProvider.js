@@ -56,6 +56,11 @@ function AuthProvider({ children }) {
         await checkLogin();
     }
 
+    const logout = () => {
+        localStorage.removeItem('token');
+        setIsLogin(false);
+    }
+
     const authContextValues = {
         isLoggedIn,
         login,
@@ -67,7 +72,8 @@ function AuthProvider({ children }) {
         checkLogin,
         showDashboard,
         setShowDashboard,
-        token
+        token,
+        logout
     }
 
     return (

@@ -182,6 +182,9 @@
 }
 
 .canvasSection {
+    display:flex;
+    flex-direction:column;
+    gap:var(--space-6);
     padding: 2rem;
 }
 
@@ -242,76 +245,109 @@
 
 .canvasGrid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    /* 
+ * auto-fit vs auto-fill:
+ * auto-fit: Collapses empty slots. Stretches items to fill the whole row width. (Best for cards)
+ * auto-fill: Keeps empty slots open. Items stay fixed size; leaves blank space on the right.
+ */
+    grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
     gap:1.5rem;
-    margin-top:1.2rem;
 }
 
 .canvasCard {
+    background-color:var(--card-bg);
     padding:0;
     height:300px;
-    width:300px;
-    border: 1px solid rgba(128, 128, 128, 0.2);
+    /* width:300px; */
+    border: 1px solid var(--line);
     border-radius:1rem;
 
     /* box-shadow:  horizontal  vertical  blur  color
               ↓          ↓         ↓      ↓
               0          4px       16px   rgba(...) */
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-sm);
+    cursor:pointer;
+
+    /* it smoothes out out any hover effect */
+    transition:0.2s ease;
+}
+
+.canvasCard:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-hover);
 }
 
 .topPart{
     height:70%;
+    background:var(--dot-grid-strong);
+    border-bottom:1px solid var(--line);
     background-image:url(../../../public/images/board.png);
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
-    cursor:pointer;
+    position:relative;
+}
+
+.share{
+    display:flex;
+    align-items:center;
+    gap:var(--space-1);
+    position:absolute;
+    top:var(--space-3);
+    right:var(--space-2);
+    font-size:var(--text-sm);
+    font-weight:var(--fw-semibold);
+    color:var(--secondary-txt);
+    padding:4px 7px;
+    background:rgba(255,255,255,0.85);
+    border:1px solid var(--line);
+    border-radius:20px;
+     /* 2. Blur everything passing underneath the share tag */
+    backdrop-filter:blur(2px);
 }
 
 .bottomPart{
     height:30%;
-    border-top:1px solid rgba(100, 148, 237, 0.952);
-    background-color: rgba(100, 148, 237, 0.5);
+    /* display:flex;
+    justify-content:space-between;
+    align-items:center; */
+    padding:12px 16px 16px
+}
+
+.canvasInfo{
     display:flex;
     justify-content:space-between;
-    align-items:start
-}
-
-
-.share{
-    text-align:right;
-    padding:1rem;
-    color:green;
-    cursor:pointer;
-}
-
-
-.bottomPart h5{
-    margin-left:1rem;
+    align-items:center;
+    /* gap:var(--space-3); */
 }
 
 .canvasName{
-    font-size:1.2rem;
-    font-weight:600;
+    font-family:var(--font-body);
+    font-size:var(--text-base);
+    font-weight:var(--fw-semibold);
 }
 
-.bottomPart p{
-    color: rgba(0,0,0,0.8);
-    font-size:medium;
-    font-weight:400;
+.deleteCanvas{
+    color:var(--delete);
+    opacity:0;
+    transition:.5s;
 }
 
-.deleteCanvas {
-    margin-right: 0.5rem;
-    color: red !important;
-    background: transparent;
-    border: none;
-    cursor: pointer;
+.canvasCard:hover .deleteCanvas{
+    opacity:1;
 }
 
+
+
+.canvasMeta{
+    margin-top: var(--space-1);
+    font-family:var(--font-mono);
+    color:var(--secondary-txt);
+    font-size:var(--text-xs);
+}
 .editDuration{
-    color:blue;
+    color: var(--primary-txt);
+    font-weight:var(--fw-semibold);
 }
 
 .noCanvasSection{
@@ -342,12 +378,22 @@
 }
 
 
-.createBtn {
+.logout {
+    font-family:var(--font-body);
+    font-size:var(--text-base);
+
     width: 60px;
     height: 60px;
-    border-radius: 50%;
-    background-color: blue;
+    border-radius: var(--radius-full);
+    background-color: var(--coral);
     color: white;
+    box-shadow: var(--shadow-sm);
+    transition:0.2s;
+}
+
+.logout:hover{
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
 }
 
 

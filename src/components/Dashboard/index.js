@@ -9,7 +9,7 @@ import Canvas from "./Canvas"
 
 function Dashboard(){
 
-    const {userData, setShowDashboard} = useContext(authContext)
+    const {userData, setShowDashboard, logout} = useContext(authContext)
     const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState("Loading...");
@@ -54,6 +54,11 @@ function Dashboard(){
         loadCanvasHandler(elements);
         setShowDashboard(false);
     }
+
+    const handleLogout = () => {
+        logout();
+    }
+
     const capitalize = (str) => str? str.charAt(0).toUpperCase() + str.slice(1):str; 
 
 
@@ -117,7 +122,7 @@ function Dashboard(){
                 </div>
                 </div>
                 <div className={classes.dashFooter}>
-                    <button type="submit" className={classes.createBtn} onClick={handleCreateCanvas}>Create</button>
+                    <button type="submit" className={classes.logout} onClick={handleLogout}>Log out</button>
                 </div>
             </div>
         </div>
