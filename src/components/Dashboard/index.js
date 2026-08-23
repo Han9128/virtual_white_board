@@ -108,17 +108,22 @@ function Dashboard(){
                         <button className={classes.newBtn} onClick={handleCreateCanvas}><Plus/> Create Canvas</button>
                     </div>
 
-                    <div className={classes.canvasGrid}>
-
                     {canvases.length===0?
                     <div className={classes.noCanvasSection}>
                     <h2 className={classes.noCanvas}>No Canvas Found!</h2>
-                    <button className={classes.createBtn} onClick={handleCreateCanvas}>Create</button>
+                    <div className={classes.newCard} onClick={handleCreateCanvas}>
+                        <div className={classes.plusRing}>
+                            <Plus />
+                        </div>
+                        <span>Create a new Canvas</span>
+                    </div>
                     </div>:
-                    canvases.map((canvas)=>{
+                    <div className={classes.canvasGrid}>
+
+                    {canvases.map((canvas)=>{
                         return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} onLoad={handleLoadCanvas} />)
                     })}
-                    </div>
+                    </div>}
                 </div>
                 </div>
                 <div className={classes.dashFooter}>

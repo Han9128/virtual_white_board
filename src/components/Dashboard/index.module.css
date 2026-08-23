@@ -243,14 +243,60 @@
     box-shadow: 0 6px 20px -4px rgba(33,31,46,0.45); 
 }
 
+.noCanvasSection{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:1rem;
+}
+
+.newCard{
+    width:300px;
+    height:250px;
+    border:1px dashed #C9C3B4;
+    border-radius: var(--space-6);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    transition:0.15s;
+}
+
+.newCard:hover{
+    border-color:var(--primary-acc);
+    color:var(--primary-hover);
+    background:#5b4fe80d;
+}
+
+.plusRing{
+    width:50px;
+    height:50px;
+    border-radius:var(--radius-full);
+    /* curretnColor use the same color we have defined for this class if we didnt set any color to it then it inherits color from its parent */
+    border:1.5px solid currentColor;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.newCard span{
+    font-size:var(--text-base);
+    font-weight:var(--fw-semibold);
+}
+
 .canvasGrid{
     display:grid;
     /* 
  * auto-fit vs auto-fill:
- * auto-fit: Collapses empty slots. Stretches items to fill the whole row width. (Best for cards)
+ * auto-fit: Collapses empty slots. Stretches items to fill the whole row width. 
  * auto-fill: Keeps empty slots open. Items stay fixed size; leaves blank space on the right.
+ *  when we have few cards lets say 2 on wider screen then auto-fit stretches to fill the remaining width and look bad, so used auto fill it preserve the space when card is not there
  */
-    grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
     gap:1.5rem;
 }
 
@@ -262,9 +308,6 @@
     border: 1px solid var(--line);
     border-radius:1rem;
 
-    /* box-shadow:  horizontal  vertical  blur  color
-              ↓          ↓         ↓      ↓
-              0          4px       16px   rgba(...) */
     box-shadow: var(--shadow-sm);
     cursor:pointer;
 
@@ -350,16 +393,7 @@
     font-weight:var(--fw-semibold);
 }
 
-.noCanvasSection{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:1rem;
-    grid-column:2;
-    grid-row:2;
-}
+
 
 .noCanvasSection h2{
     font-size:1.5rem;
