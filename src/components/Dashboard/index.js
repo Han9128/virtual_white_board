@@ -13,6 +13,7 @@ function Dashboard(){
     const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState("Loading...");
+    
 
     const token = localStorage.getItem('token');
     useEffect(()=>{

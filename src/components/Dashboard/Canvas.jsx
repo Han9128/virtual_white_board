@@ -47,7 +47,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
             onLoad(id, data.canvas.elements);
             return data;
         } catch (err) {
-            console.erroor(err.message);
+            console.errror(err.message);
         }
     }
 
