@@ -37,6 +37,17 @@
 
 }
 
+
+.navbarBackdrop{
+    position: fixed;
+    left:0;
+    right:0;
+    top:0;
+    height:90px;
+    background-color: var(--page-bg);
+    z-index: 1000;
+}
+
 /* only applied once scrolled */
 .navbarScrolled {
     background-color: var(--card-bg);
@@ -223,6 +234,12 @@
                 ↓          ↓         ↓                ↓            ↓
                 0          4px       14px             -4px        rgba(...) */
     box-shadow: 0 4px 14px -4px rgba(33,31,46,0.35);
+}
+
+@media (max-width:500px){
+    .createCanvasTxt{
+        display: none;
+    }
 }
 
 .newBtn:hover{

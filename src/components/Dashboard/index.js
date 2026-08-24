@@ -35,7 +35,7 @@ function Dashboard(){
 
     useEffect(()=>{
         const handleScroll = ()=>{
-            setScrolled(window.scrollY>30);
+            setScrolled(window.scrollY>60);
         };
 
         window.addEventListener('scroll',handleScroll);
@@ -78,7 +78,8 @@ function Dashboard(){
        <div className={classes.dashBoardBackground}>
             <div className={classes.dashBoardContainer}>
 
-                <div className={`${classes.navBar} ${scrolled? classes.navbarScrolled:''}`} >
+                <div className={classes.navbarBackdrop}>
+                    <div className={`${classes.navBar} ${scrolled? classes.navbarScrolled:''}`} >
                     <div className={classes.brand}>
                         <div className={classes.brandMark}>
                             <Presentation />
@@ -86,6 +87,7 @@ function Dashboard(){
                     <h2 className={classes.logo}>Whiteboard</h2>
                     </div>
                     <button className={classes.avatar}>{userData.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
+                </div>
                 </div>
 
 
@@ -116,7 +118,8 @@ function Dashboard(){
                 <div className={classes.canvasSection}>
                     <div className={classes.header}>
                         <h2>Your Canvases <span className={classes.countChip}>{canvases.length}</span></h2>
-                        <button className={classes.newBtn} onClick={handleCreateCanvas}><Plus/> Create Canvas</button>
+                        <button className={classes.newBtn} onClick={handleCreateCanvas}><Plus/> 
+                        <span className={classes.createCanvasTxt}>Create Canvas</span></button>
                     </div>
 
                     {canvases.length===0?
