@@ -13,7 +13,7 @@ function Dashboard(){
     const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState("Loading...");
-    
+    const [scrolled, setScrolled] = useState(false);
 
     const token = localStorage.getItem('token');
     useEffect(()=>{
@@ -32,6 +32,16 @@ function Dashboard(){
 
         fetchCanvas();
     },[token])
+
+    useEffect(()=>{
+        const handleScroll = ()=>{
+            setScrolled(window.scrollY>30);
+        };
+
+        window.addEventListener('scroll',handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll); 
+    }, [])
 
 
     const handleCreateCanvas = async ()=>{
@@ -68,7 +78,7 @@ function Dashboard(){
        <div className={classes.dashBoardBackground}>
             <div className={classes.dashBoardContainer}>
 
-                <div className={classes.navBar}>
+                <div className={`${classes.navBar} ${scrolled? classes.navbarScrolled:''}`} >
                     <div className={classes.brand}>
                         <div className={classes.brandMark}>
                             <Presentation />
