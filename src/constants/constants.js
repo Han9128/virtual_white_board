@@ -101,4 +101,5 @@ export const BOARD_ACTIONS = {
 export const ERASE_THRESHOLD = 0.1;
 
 
-export const BASE_URL = "http://localhost:5000/api"
+// export const BASE_URL = "http://192.168.1.9:5000/api"
+export const BASE_URL = "https://whiteboard-backend-2o2g.onrender.com/api"
