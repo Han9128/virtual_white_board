@@ -8,25 +8,172 @@
     bottom: 0;
     left: 0; */
     inset: 0;
-    background-color: rgb(176, 216, 203);
+    /* background-color: rgb(176, 216, 203); */
+    background: radial-gradient(circle at 1px 1px, rgba(33, 31, 46, 0.06) 1px, transparent 0) 0 0 / 22px 22px, var(--page-bg);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index:1000;
+    z-index: 1000;
     /* background-image: url("../../../public/images/board.png"); */
 }
 
 .loginContainer {
-    background-color: aquamarine;
-    padding: 1.2rem 3rem;
-    border: 1px solid oldlace;
-    border-radius: 0.8rem;
+    display: flex;
+    width: min(920px, 92vw);
+    /* automatically find min of the comma sepeareted values and apply that as width*/
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    /* The border-radius: 20px is applied, but the inner .authAside has sharp, square corners that overlap 
+    and hide the parent's rounded edges. It looks glitchy. */
+    overflow: hidden;
+    box-shadow: var(--shadow-hover);
+    border: 1px solid var(--line);
+}
+
+.leftSection {
+    flex: 1;
+    background: linear-gradient(160deg, var(--primary-acc), var(--primary-hover));
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #FFF;
+    position: relative;
+    min-width: 280px;
+}
+
+.leftSection::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.12) 1px, transparent 0) 0 0 / 20px 20px;
+    opacity: 0.6;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.brandMark {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    /* background-color: linear-gradient(155deg, var(--primary-acc), var(--primary-hover)); */
+    color: var(--card-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.logo {
+    font-family: var(--font-display);
+    font-weight: var(--fw-semibold);
+    font-size: var(--text-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.mid {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.mid h2 {
+    font-size: 30px;
+    font-family: var(--font-display);
+    font-weight: var(--bold);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px;
+}
+
+.mid p {
+    font-size: 14.5px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    max-width: 280px;
+}
+
+.bottom {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.rightSection {
+    flex: 1;
+    padding: 52px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 300px;
+}
+
+.authHead {
+    margin-bottom: 30px;
+}
+
+.authHead h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 28px;
+    margin: 0 0 6px;
+    /* sets bottom margin into 6 px*/
+    letter-spacing: -0.01em;
+}
+
+.authHead p {
+    color: var(--secondary-txt);
+    font-size: 14.5px;
 }
 
 .loginFieldBox {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-txt);
+    margin-bottom: 7px;
+}
+
+.inputWrap {
+    position: relative;
+}
+
+.inputWrap svg {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--secondary-txt);
+}
+
+.field input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--primary-txt);
+    background: #FCFBF9;
+    outline: none;
+    transition: 0.15s;
 }
 
 .loginInput {
@@ -38,19 +185,26 @@
 }
 
 .forgotPassword {
-    font-size: 0.8rem;
+    font-size: 13px;
     text-align: right;
     cursor: pointer;
-    columns: gray;
+    color: var(--primary-acc);
     margin-top: 0.2rem;
 }
 
 .loginBtn {
-    background-color: blue;
     width: 100%;
-    padding: 0.5rem;
-    border-radius: 0.4rem;
-    color: white !important;
+    padding: 13px;
+    border: none;
+    border-radius:var(--radius-md);
+    background:var(--primary-txt);
+    color: white;
+    font-family:var(--font-body);
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 4px 14px -4px rgba(33, 31, 46, 0.35);
+    transition:0.15s;
 }
 
 .register {
