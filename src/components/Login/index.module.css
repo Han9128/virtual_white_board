@@ -176,6 +176,16 @@
     transition: 0.15s;
 }
 
+@media (max-width:760px){
+    .leftSection{
+        display: none;
+    }
+
+    .rightSection{
+        padding: 44px 30px;
+    }
+}
+
 .loginInput {
     /* margin-bottom: 1rem; */
     border: 1px solid azure;

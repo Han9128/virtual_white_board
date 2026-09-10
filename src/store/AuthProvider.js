@@ -73,7 +73,8 @@ function AuthProvider({ children }) {
         showDashboard,
         setShowDashboard,
         token,
-        logout
+        logout,
+        setIsLogin
     }
 
     return (
