@@ -19,12 +19,12 @@
 
 .loginContainer {
     display: flex;
-    width: min(920px, 92vw);
     /* automatically find min of the comma sepeareted values and apply that as width*/
+    width: min(920px, 92vw);
     background-color: var(--card-bg);
     border-radius: 20px;
     /* The border-radius: 20px is applied, but the inner .authAside has sharp, square corners that overlap 
-    and hide the parent's rounded edges. It looks glitchy. */
+    and hide the parent's rounded edges. It looks glitchy so overflow hidden take care of that. */
     overflow: hidden;
     box-shadow: var(--shadow-hover);
     border: 1px solid var(--line);
@@ -125,8 +125,8 @@
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 28px;
+    /* sets bottom margin 6 px*/
     margin: 0 0 6px;
-    /* sets bottom margin into 6 px*/
     letter-spacing: -0.01em;
 }
 
@@ -156,7 +156,9 @@
 .inputWrap svg {
     position: absolute;
     left: 13px;
+    /* this pushes the top edge of icon to the center */
     top: 50%;
+    /* this pulls up by half of its own height. This completely offsets the icon's size and ensure it perfectly centerd */
     transform: translateY(-50%);
     width: 16px;
     height: 16px;
@@ -172,6 +174,7 @@
     font-size: 14.5px;
     color: var(--primary-txt);
     background: #FCFBF9;
+    /* removes the default focus ring or visual border that browsers automatically display around an input element when a user clicks or tabs into it. */
     outline: none;
     transition: 0.15s;
 }
@@ -197,6 +200,7 @@
     text-align: right;
     cursor: pointer;
     color: var(--primary-acc);
+    /* 3 Values (margin: -6px 0 22px;): Top, [Left & Right], Bottom. */
     margin: -6px 0 22px;
 }
 
@@ -264,8 +268,10 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* take all child as a block and put them in center then give a gap of 8px */
+    justify-content: center; 
     gap: 8px;
+    /* this delays the transition of colors so hovering looks smooth */
     transition: 0.15s;
 }
 
