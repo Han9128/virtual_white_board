@@ -176,22 +176,20 @@
     transition: 0.15s;
 }
 
-@media (max-width:760px){
-    .leftSection{
+@media (max-width:760px) {
+    .leftSection {
         display: none;
     }
 
-    .rightSection{
+    .rightSection {
         padding: 44px 30px;
     }
 }
 
-.loginInput {
-    /* margin-bottom: 1rem; */
-    border: 1px solid azure;
-    height: 2rem;
-    border-radius: 0.4rem;
-    color: black;
+.loginInput:focus {
+    border-color: var(--primary-acc);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(91, 79, 232, 0.12);
 }
 
 .forgotPassword {
@@ -199,32 +197,94 @@
     text-align: right;
     cursor: pointer;
     color: var(--primary-acc);
-    margin-top: 0.2rem;
+    margin: -6px 0 22px;
+}
+
+.forgotPassword:hover {
+    text-decoration: underline;
 }
 
 .loginBtn {
     width: 100%;
     padding: 13px;
     border: none;
-    border-radius:var(--radius-md);
-    background:var(--primary-txt);
+    border-radius: var(--radius-md);
+    background: var(--primary-txt);
     color: white;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px -4px rgba(33, 31, 46, 0.35);
+    transition: 0.15s;
+}
+
+.loginBtn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px -4px rgba(33, 31, 46, 0.45);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--secondary-txt);
+    font-size: 12.5px;
+    margin: 22px 0;
     font-family:var(--font-body);
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    box-shadow:0 4px 14px -4px rgba(33, 31, 46, 0.35);
-    transition:0.15s;
+}
+
+.divider::before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+
+}
+
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+
+.googleBtn {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--primary-txt);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.15s;
+}
+
+.googleBtn:hover {
+    border-color: #C9C3B4;
+    background: #FCFBF9;
 }
 
 .register {
-    margin-top: 1rem;
-    font-size: 0.8rem;
+    margin-top: 26px;
+    font-size: 13.5px;
+    text-align:center;
+    color:var(--secondary-txt);
+    font-family:var(--font-body);
 }
 
 .registerLink {
-    text-decoration: underline;
-    color: blue;
+    text-decoration: none;
+    color: var(--primary-acc);
     cursor: pointer;
-    margin-left: 0.1rem;
+    margin-left: 2px;
 }
