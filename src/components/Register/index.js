@@ -2,7 +2,7 @@
 import React, { useState, useContext } from "react";
 import classes from './index.module.css';
 import authContext from "../../store/auth-context";
-import { Presentation } from 'lucide-react';
+import { Presentation,User,Mail,Lock,CircleCheck  } from 'lucide-react';
 
 function Register() {
     const [name, setName] = useState("");
@@ -56,27 +56,17 @@ function Register() {
                         <p>Create your free account and get an infinite canvas that's always synced and ready when you are.</p>
                         <ul className={classes.checkList}>
                             <li>
-                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)">
-                                </circle>
-                                    <path d="m8 12.5 2.5 2.5L16 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </svg>
+                                
+                                <CircleCheck className={classes.check}/>
                                 Unlimited Canvases
                             </li>
                             <li>
-                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)">
-                                </circle>
-                                    <path d="m8 12.5 2.5 2.5L16 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </svg>
+                                
+                                <CircleCheck className={classes.check}/>
                                 Real-time collaboration
                             </li>
                             <li>
-                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)">
-                                </circle>
-                                    <path d="m8 12.5 2.5 2.5L16 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </svg>
+                                <CircleCheck className={classes.check}/>
                                 Free forever, no card needed
                             </li>
                         </ul>
@@ -96,12 +86,7 @@ function Register() {
                             <div className={classes.field}>
                                 <label htmlFor="userName">Full name:</label>
                                 <div className={classes.inputWrap}>
-                                    <svg viewBox="0 0 24 24" fill="none">
-                                        <circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6">
-                                        </circle>
-                                        <path d="M5 20c1.2-4 4-5.8 7-5.8s5.8 1.8 7 5.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-                                        </path>
-                                    </svg>
+                                    <User className={classes.inputIcon} />
                                     <input
                                         type="text"
                                         name="name"
@@ -115,10 +100,7 @@ function Register() {
                             <div className={classes.field}>
                                 <label htmlFor="userEmail">Email:</label>
                                 <div className={classes.inputWrap}>
-                                    <svg viewBox="0 0 24 24" fill="none">
-                                        <path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="1.6"></path>
-                                        <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.6"></path>
-                                    </svg>
+                                    <Mail className={classes.inputIcon} />
                                     <input
                                         type="email"
                                         name="email"
@@ -132,10 +114,7 @@ function Register() {
                             <div className={classes.field}>
                                 <label htmlFor="password">Password:</label>
                                 <div className={classes.inputWrap}>
-                                    <svg viewBox="0 0 24 24" fill="none">
-                                        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"></rect>
-                                        <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6"></path>
-                                    </svg>
+                                    <Lock className={classes.inputIcon} />
                                     <input
                                         type="password"
                                         name="password"
@@ -149,10 +128,7 @@ function Register() {
                             <div className={classes.field}>
                                 <label htmlFor="cnfpassword">Confirm password:</label>
                                 <div className={classes.inputWrap}>
-                                    <svg viewBox="0 0 24 24" fill="none">
-                                        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"></rect>
-                                        <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6"></path>
-                                    </svg>
+                                    <Lock className={classes.inputIcon} />
                                     <input
                                         type="password"
                                         name="password"
