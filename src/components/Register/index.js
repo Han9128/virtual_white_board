@@ -10,7 +10,7 @@ function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState("")
-    const { register,setIsLogin } = useContext(authContext)
+    const { register, setShowRegister } = useContext(authContext)
 
 
     const handleSubmit = async (e) => {
@@ -54,14 +54,32 @@ function Register() {
                     <div className={classes.mid}>
                         <h2>Start sketching in under a minute.</h2>
                         <p>Create your free account and get an infinite canvas that's always synced and ready when you are.</p>
-                        <div className="doodleWrap">
-                            <svg viewBox="0 0 280 110" fill="none">
-                                <path d="M15 60c25-35 55 5 45 25s-50-5-30-30 60-15 65 10" stroke="rgba(255,255,255,0.55)" stroke-width="3" stroke-linecap="round" fill="none"></path>
-                                <rect x="140" y="20" width="55" height="34" rx="4" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"></rect>
-                                <circle cx="230" cy="35" r="18" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"></circle>
-                                <path d="M150 75 230 65" stroke="rgba(255,255,255,0.35)" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round"></path>
-                            </svg>
-                        </div>
+                        <ul className={classes.checkList}>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)">
+                                </circle>
+                                    <path d="m8 12.5 2.5 2.5L16 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </svg>
+                                Unlimited Canvases
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)">
+                                </circle>
+                                    <path d="m8 12.5 2.5 2.5L16 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </svg>
+                                Real-time collaboration
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)">
+                                </circle>
+                                    <path d="m8 12.5 2.5 2.5L16 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </svg>
+                                Free forever, no card needed
+                            </li>
+                        </ul>
                     </div>
                     <div className={classes.bottom}>
                         Trusted by developer who thinks in whiteboards
@@ -72,64 +90,90 @@ function Register() {
                         <h1>Create your account</h1>
                         <p>It only takes a minute to gest started.</p>
                     </div>
-                
-                <form className={classes.registerForm} onSubmit={handleSubmit}>
-                    <div>
-                        <div className={`${classes.registerField} ${classes.nameField}`}>
-                            <label htmlFor="name">Name:</label>
-                            <input
-                                id="name"
-                                required
-                                value={name}
-                                className={`${classes.nameInput} ${classes.registerInput}`}
-                                type="text"
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </div>
-                        <div className={`${classes.registerField} ${classes.emailField}`}>
-                            <label htmlFor="email">Email:</label>
-                            <input
-                                value={email}
-                                id="email"
-                                required
-                                className={`${classes.emailInput} ${classes.registerInput}`}
-                                type="email"
-                                onChange={(e) => setEmail(e.target.value)}
 
-                            />
+                    <form className={classes.registerForm} onSubmit={handleSubmit}>
+                        <div className={classes.registerFieldBox}>
+                            <div className={classes.field}>
+                                <label htmlFor="userName">Full name:</label>
+                                <div className={classes.inputWrap}>
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6">
+                                        </circle>
+                                        <path d="M5 20c1.2-4 4-5.8 7-5.8s5.8 1.8 7 5.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                                        </path>
+                                    </svg>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="userName"
+                                        className={classes.registerInput}
+                                        onChange={(e) => setName(e.target.value)}
+                                        placeholder="john doe"
+                                    />
+                                </div>
+                            </div>
+                            <div className={classes.field}>
+                                <label htmlFor="userEmail">Email:</label>
+                                <div className={classes.inputWrap}>
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="1.6"></path>
+                                        <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.6"></path>
+                                    </svg>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="userEmail"
+                                        className={classes.registerInput}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="you@example.com"
+                                    />
+                                </div>
+                            </div>
+                            <div className={classes.field}>
+                                <label htmlFor="password">Password:</label>
+                                <div className={classes.inputWrap}>
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"></rect>
+                                        <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6"></path>
+                                    </svg>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        className={classes.registerInput}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="••••••••"
+                                    />
+                                </div>
+                            </div>
+                            <div className={classes.field}>
+                                <label htmlFor="cnfpassword">Confirm password:</label>
+                                <div className={classes.inputWrap}>
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"></rect>
+                                        <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6"></path>
+                                    </svg>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        id="cnfpassword"
+                                        className={classes.registerInput}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        placeholder="••••••••"
+                                    />
+                                </div>
+                                {passwordError && <p className={classes.passwordError}>{passwordError}</p>}
+                            </div>
                         </div>
-                        <div className={`${classes.registerField} ${classes.passwordField}`}>
-                            <label htmlFor="password">Password:</label>
-                            <input
-                                id="password"
-                                required
-                                className={`${classes.passwordInput} ${classes.registerInput}`}
-                                type="password" onChange={(e) => setPassword(e.target.value)}
-                                value={password}
-                            />
-                        </div>
-                        <div className={`${classes.registerField} ${classes.confirmField}`}>
-                            <label htmlFor="confirm">Confirm Password:</label>
-                            <input
-                                id="confirm"
-                                required
-                                value={confirmPassword}
-                                className={`${classes.confirmInput} ${classes.registerInput}`}
-                                type="password"
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                            />
-                            {passwordError && <p className={classes.passwordError}>{passwordError}</p>}
-                        </div>
-                    </div>
-                    <button type="submit" className={classes.registerBtn}>Register</button>
-                </form>
-                {/* <p className={classes.register}>
-                        Already have an account? 
-                        <a href="#/login" onClick={() => setIsLogin(true)}>
-                            <span className={classes.registerLink}>
+                        <button type="submit" className={classes.registerBtn}>Create account</button>
+                    </form>
+                    <p className={classes.login}>
+                        Already have an account?
+                        <a href="#/login" onClick={() => setShowRegister(false)}>
+                            <span className={classes.loginLink}>
                                 Log in
                             </span>
-                        </a></p> */}
+                        </a></p>
                 </div>
             </div>
         </div>

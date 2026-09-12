@@ -93,6 +93,32 @@
     max-width: 280px;
 }
 
+.checkList{
+    list-style:none;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:22px 0 0;
+}
+
+.checkList li{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--font-body);
+    font-weight:400;
+    font-size:14px;
+    color:rgba(255,255,255,0.9);
+}
+
+.checkList svg{
+    width:16px;
+    height:16px;
+    /* this prevents shrinking the icon when we have less space */
+    flex-shrink:0;
+}
+
 .bottom {
     font-family: var(--font-mono);
     font-size: 12.5px;
@@ -126,6 +152,61 @@
     font-size: 14.5px;
 }
 
+
+.registerFieldBox {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-txt);
+    margin-bottom: 7px;
+}
+
+.inputWrap {
+    position: relative;
+}
+
+.inputWrap svg {
+    position: absolute;
+    left: 13px;
+    /* this pushes the top edge of icon to the center */
+    top: 50%;
+    /* this pulls up by half of its own height. This completely offsets the icon's size and ensure it perfectly centerd */
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--secondary-txt);
+}
+
+.field input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--primary-txt);
+    background: #FCFBF9;
+    /* removes the default focus ring or visual border that browsers automatically display around an input element when a user clicks or tabs into it. */
+    outline: none;
+    transition: 0.15s;
+}
+
+@media (max-width:760px) {
+    .leftSection {
+        display: none;
+    }
+
+    .rightSection {
+        padding: 44px 30px;
+    }
+}
+
 .registerField{
     display: flex;
     flex-direction: column;
@@ -133,19 +214,47 @@
     margin-top: 0.8rem;
 }
 
-.registerInput{
-    height: 1.8rem;
-    border-radius: 0.3rem;
-    border: 1px solid rgb(176, 216, 203);
+.registerInput:focus {
+    border-color: var(--primary-acc);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(91, 79, 232, 0.12);
 }
 
-.registerBtn{
-    background-color: blue;
+.registerBtn {
     width: 100%;
-    padding: 0.5rem;
-    border-radius: 0.4rem;
+    padding: 13px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--primary-txt);
     color: white;
-    margin-top: 1rem;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px -4px rgba(33, 31, 46, 0.35);
+    transition: 0.15s;
+    margin-top:22px;
+}
+
+.registerBtn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px -4px rgba(33, 31, 46, 0.45);
+}
+
+.login {
+    margin-top: 26px;
+    font-size: 13.5px;
+    text-align:center;
+    color:var(--secondary-txt);
+    font-family:var(--font-body);
+}
+
+.loginLink {
+    text-decoration: none;
+    color: var(--primary-acc);
+    cursor: pointer;
+    margin-left: 2px;
 }
 
 .passwordError{
