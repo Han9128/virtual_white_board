@@ -5,14 +5,15 @@ import authContext from "../../store/auth-context"
 import boardContext from "../../store/board-context";
 import classes from "./index.module.css"
 import {getCanvases, createCanvas} from "../../services/canvasApi"
-import Canvas from "./Canvas"
+import Canvas from "./Canvas";
+import PageLoader from "../../components/PageLoader/index";
 
 function Dashboard(){
 
-    const {userData, setShowDashboard, logout} = useContext(authContext)
+    const {userData, setShowDashboard, logout,isLoading, setIsLoading} = useContext(authContext)
     const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
     const [canvases,setCanvases] = useState([]);
-    const [loader,setLoader] = useState("Loading...");
+    const [loader,setLoader] = useState(true);
     const [scrolled, setScrolled] = useState(false);
 
     const token = localStorage.getItem('token');
@@ -26,7 +27,8 @@ function Dashboard(){
             }catch(err){
                 console.error(err);
             }finally{
-                setLoader("")
+                setLoader(false);
+                // setIsLoading(false);
             }
         }
 
@@ -74,7 +76,7 @@ function Dashboard(){
 
 
     return (
-       loader? <p className={classes.dashLoader}>{loader}</p>: 
+       loader? <PageLoader/>: 
        <div className={classes.dashBoardBackground}>
             <div className={classes.dashBoardContainer}>
 

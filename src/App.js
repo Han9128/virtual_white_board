@@ -8,7 +8,8 @@ import ToolBarProivder from "./store/ToolBarProvider"
 import authContext from "./store/auth-context"
 import Login from "./components/Login/index"
 import Register from "./components/Register";
-import Dashboard from "./components/Dashboard/index"
+import Dashboard from "./components/Dashboard/index";
+import PageLoader from "./components/PageLoader/index"
 
 function App() {
   // useRef is used to
@@ -24,7 +25,7 @@ function App() {
         <ToolConfigProvider>
           <div className="App">
             {isLoading ?
-              <p>Loading...</p> :
+              <PageLoader /> :
               showRegister ? <Register /> :
                 !isLoggedIn ? <Login /> :
                   showDashboard ? <Dashboard /> :

@@ -53,7 +53,7 @@ function AuthProvider({ children }) {
         setIsLogin(true);
         setShowDashboard(true);
         localStorage.setItem("token", token);
-        await checkLogin();
+        // await checkLogin();
     }
 
     const logout = () => {
@@ -66,6 +66,7 @@ function AuthProvider({ children }) {
         login,
         userData,
         isLoading,
+        setIsLoading,
         register,
         showRegister,
         setShowRegister,

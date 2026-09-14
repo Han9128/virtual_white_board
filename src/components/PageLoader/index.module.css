@@ -1,0 +1,79 @@
+.pageLoader {
+    /* inset can be used on position: absolue,fixed and sticky. inset:0 forces a chile element to cover parent completely. like here we want pageLoader to cover the whole page. */
+    /* width and height can alsoe be set to 100vw and 100vh respectively to do this but this create some layout bugs such as horizontal vertical scrollbar and migh push 
+    elements off if we have some browser margin */
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--page-bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(33, 31, 46, 0.06) 1px, transparent 0);
+    background-size: 22px 22px;
+}
+
+
+.loaderMark {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-acc);
+    border-radius: var(--radius-md);
+    color: #fff;
+    /*    name | duration | timing-function | delay | iteration-count */
+    animation: loaderPulse 1.4s ease-in-out 0 infinite;
+}
+
+@keyframes loaderPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        /* x-offset | y-offset | blur-radius | spread-radius | color */
+         box-shadow: 0 0 0 0 rgba(91,79,232,0.35);
+    }
+
+    50%{
+        transform: scale(1.06);
+         box-shadow: 0 0 0 14px rgba(91,79,232,0);
+    }
+}
+
+
+.loaderText{
+    font-family:var(--font-body);
+    font-size:var(--text-sm);
+    font-weight:var(--fw-semibold);
+    color:var(--secondary-txt);
+    letter-spacing:0.02em;
+}
+
+
+.loaderText span{
+    display:inline-block;
+    animation: loaderDot 1.4s ease-in-out infinite;
+}
+
+.loaderText span:nth-child(2){
+    animation-delay:0.2s;
+}
+
+.loaderText span:nth-child(3){
+    animation-delay:0.4s;
+}
+
+@keyframes loaderDot{
+    0%, 80%,100%{
+        opacity:0.25;
+        transform:translateY(0);
+    }
+
+    40%{
+        opacity:1;
+        transform:translateY(-2px);
+    }
+}
