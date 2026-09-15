@@ -37,7 +37,7 @@ export async function authenticateLogin(payload) {
         })
 
         if (!res.ok) {
-            throw new Error(`Error in log in, status ${res.status}`);
+            return new Error(`Error in log in, status ${res.status}`);
         }
         const token = await res.json();
         return token;

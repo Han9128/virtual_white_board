@@ -297,3 +297,18 @@
     cursor: pointer;
     margin-left: 2px;
 }
+
+
+
+.authError{
+    font-family:var(--font-body);
+    font-size:15px;
+    font-weight:var(--fw-semibold);
+    color:var(--delete);
+}
+
+.fieldError{
+    font-family:var(--font-body);
+    font-size:13px;
+    color:var(--delete);
+}

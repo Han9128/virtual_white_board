@@ -10,19 +10,78 @@ import { useContext } from "react";
 
 function Login() {
     const { login, setShowRegister } = useContext(authContext);
+    const [loginError, setLoginError] = useState("");
+    const [fieldErrors, setFieldErrors] = useState({});
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
 
+    const isValidEmail = (email) => {
+        const account = email.split('@').length - 1;
+        // make sure only one @ is present and some value is present before and after @
+        if(account!==1){
+            return false;
+        }
+        if(email.includes(' ')){
+            return false;
+        }
+
+        const [beforeAt, afterAt] = email.split('@');
+       
+        if(beforeAt.length === 0 || afterAt.length === 0) return false;
+
+
+        // there must be a dot in string after @
+        if(!afterAt.includes('.')){
+            return false;
+        }
+
+        const dotIndex = afterAt.indexOf('.');
+
+        // there must be some string after dot
+        if(dotIndex === afterAt.length-1){
+            return false;
+        }
+
+        return true;
+    }
+
+    const validate = () => {
+        const errors = {};
+        if(!email){
+            errors.email = "Please enter an email id";
+        }else if(!isValidEmail(email)){
+            errors.email = "Please enter a valid email address"
+        }
+
+        if(!password){
+            errors.password = "Enter your password"
+        }
+
+        return errors;
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault(); // prevents refreshing the page on submitting the form
+
+        const errors = validate();
+        setFieldErrors(errors);
+        if(Object.keys(errors).length>0) return;
         const payload = {
             email,
             password
         }
-        try {
 
-            await login(payload)
+        try {
+            const res = await login(payload);
+            if(res.status === 401){
+                setLoginError("Invalid email or password");
+            }
+
+            if(!res.ok){
+                setLoginError("Something went wrong. Please try again.")
+            }
         } catch (err) {
+            setLoginError("Unable to connect. Check your internet and try again.")
             console.error(err.message);
         }
     }
@@ -55,6 +114,7 @@ function Login() {
                         <p>Login to pickup right where you left off.</p>
                     </div>
                     <form onSubmit={(e) => handleSubmit(e)}>
+                        {loginError && (<div className={classes.authError}>{loginError}</div>)}
                         <div className={classes.loginFieldBox}>
                             <div className={classes.field}>
                                 <label htmlFor="email">Email:</label>
@@ -69,6 +129,7 @@ function Login() {
                                         placeholder="you@example.com"
                                     />
                                 </div>
+                                {fieldErrors.email && <div className={classes.fieldError}> {fieldErrors.email}</div>}
                             </div>
                             <div className={classes.field}>
                                 <label htmlFor="password">Password:</label>
@@ -83,7 +144,7 @@ function Login() {
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </div>
-
+                                {fieldErrors.password && <div className={classes.fieldError}> {fieldErrors.password}</div>}
                             </div>
                             <p className={classes.forgotPassword}>Forgot password?</p>
                         </div>
