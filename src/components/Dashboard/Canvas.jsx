@@ -41,9 +41,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
 
     const handleCardClick = async (id) => {
         try {
-            console.log("card is clicked")
             const data = await loadCanvas(token, id);
-            console.log(data.canvas.elements);
             onLoad(id, data.canvas.elements);
             return data;
         } catch (err) {

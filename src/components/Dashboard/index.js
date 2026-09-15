@@ -10,7 +10,7 @@ import PageLoader from "../../components/PageLoader/index";
 
 function Dashboard(){
 
-    const {userData, setShowDashboard, logout,isLoading, setIsLoading} = useContext(authContext)
+    const {userData, setShowDashboard, logout} = useContext(authContext)
     const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState(true);
@@ -28,7 +28,6 @@ function Dashboard(){
                 console.error(err);
             }finally{
                 setLoader(false);
-                // setIsLoading(false);
             }
         }
 
@@ -51,6 +50,7 @@ function Dashboard(){
         try{
             const name = `Untitled ${canvases.length+1}`
             const data = await createCanvas(token,name);
+            setCanvasId(data.canvasId);
             setShowDashboard(false);
             return data;
         }catch(err){

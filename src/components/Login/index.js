@@ -23,7 +23,7 @@ function Login() {
 
             await login(payload)
         } catch (err) {
-            console.log(err.message);
+            console.error(err.message);
         }
     }
 
