@@ -35,7 +35,6 @@ function AuthProvider({ children }) {
     // we cant make callback function of useEffect async as useEffect expects nothing or a fuction returned but async function returns promise so react gives error using async on callback of useEffect
     useEffect(() => {
         checkLogin();
-
     }, [])
 
     const register = async (payload) => {
@@ -50,10 +49,10 @@ function AuthProvider({ children }) {
 
     const login = async (payload) => {
         const token = await authenticateLogin(payload);
-        setIsLogin(true);
-        setShowDashboard(true);
+        // setIsLogin(true);
+        // setShowDashboard(true);
         localStorage.setItem("token", token);
-        // await checkLogin();
+        await checkLogin();
     }
 
     const logout = () => {

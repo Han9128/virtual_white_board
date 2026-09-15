@@ -19,7 +19,7 @@ export async function getCanvases(token) {
 
         return data;
     } catch (err) {
-        throw new Error(err.message)
+        throw new Error(err.message);
     }
 }
 

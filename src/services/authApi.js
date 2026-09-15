@@ -59,11 +59,10 @@ export async function verifyToken(token) {
         if (!res.ok) {
             throw new Error(`Error in token verification ${res.status}`)
         }
-
         const data = await res.json();
         return data;
     } catch (err) {
-        throw new Error(err.message)
+        throw new Error(err.message);
     }
 }
 
