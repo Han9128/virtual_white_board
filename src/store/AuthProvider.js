@@ -48,11 +48,16 @@ function AuthProvider({ children }) {
     }
 
     const login = async (payload) => {
-        const token = await authenticateLogin(payload);
-        // setIsLogin(true);
-        // setShowDashboard(true);
-        localStorage.setItem("token", token);
-        await checkLogin();
+        try{
+            const token = await authenticateLogin(payload);
+            if(token.status){
+                return token;
+            }
+            localStorage.setItem("token", token);
+            await checkLogin();
+        }catch(err){
+            console.error(err.message);
+        }
     }
 
     const logout = () => {

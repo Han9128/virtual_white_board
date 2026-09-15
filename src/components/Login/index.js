@@ -75,10 +75,12 @@ function Login() {
             const res = await login(payload);
             if(res.status === 401){
                 setLoginError("Invalid email or password");
+                return;
             }
 
             if(!res.ok){
                 setLoginError("Something went wrong. Please try again.")
+                return;
             }
         } catch (err) {
             setLoginError("Unable to connect. Check your internet and try again.")

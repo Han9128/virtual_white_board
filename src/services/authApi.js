@@ -37,7 +37,9 @@ export async function authenticateLogin(payload) {
         })
 
         if (!res.ok) {
-            return new Error(`Error in log in, status ${res.status}`);
+            const error = new Error(`Error in log in, status ${res.status}`);
+            error.status = res.status;
+            return error;
         }
         const token = await res.json();
         return token;
@@ -57,7 +59,7 @@ export async function verifyToken(token) {
         })
 
         if (!res.ok) {
-            throw new Error(`Error in token verification ${res.status}`)
+            return new Error(`Error in token verification ${res.status}`)
         }
         const data = await res.json();
         return data;
