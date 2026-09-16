@@ -1,14 +1,15 @@
 
 import React, { useState, useRef} from "react";
 import classes from "./index.module.css";
-import { Share2,Trash } from "lucide-react";
+import { Share2,Trash,Mail } from "lucide-react";
 import loginClasses from "../Login/index.module.css"
-import { deleteCanvas, loadCanvas, shareCanvas } from "../../services/canvasApi"
+import { deleteCanvas, loadCanvas, shareCanvas } from "../../services/canvasApi";
 
 function Canvas({ canvas, token, onDelete, onLoad }) {
 
     const [askEmail, setAskEmail] = useState(false);
     const [email, setEmail] = useState("");
+    const [fieldError, setFieldError] = useState("");
     const canvasId = useRef(null);
     const findEditDuration = () => {
         let seconds = (new Date() - new Date(canvas.modifiedAt)) / 1000;
@@ -57,34 +58,53 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
             const payload = {
                 email: email
             }
-            const data = await shareCanvas(token,id, payload);
+            const res = await shareCanvas(token,id, payload);
+            if(res.status === 404){
+                console.log("error:",res.message);
+                setFieldError(res.message);
+                return;
+            }
+            if(res.status === 403){
+                console.log("error:",res.message);
+                setFieldError(res.message);
+                return;
+            }
+
+            if(res.status === 400){
+                setFieldError(res.message);
+                return;
+            }
             setAskEmail(false);
-            return data;
+            return res;
         } catch (err) {
+            setFieldError("Something went wrong. Please try again")
             console.error(err.message);
         }
     }
 
     return (
         askEmail ?
-             <div className={loginClasses.loginBackground} >
-            <div className={loginClasses.loginContainer}>
+             <div className={classes.shareBackground} >
+            <div className={classes.shareContainer}>
                 <form onSubmit={handleShare}>
-                    <div className={loginClasses.loginFieldBox}>
-                        <div>
-                            <label htmlFor="email">email:</label>
-                            <br></br>
-                            <input
-                                type="email"
-                                name="email"
-                                id="userName"
-                                className={`${loginClasses.username} ${loginClasses.loginInput}`}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                        <br />
+                    <div className={classes.shareFieldBox}>
+                       <div className={loginClasses.field}>
+                                <label htmlFor="email">Email:</label>
+                                <div className={loginClasses.inputWrap}>
+                                    <Mail className={loginClasses.inputIcon}/>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="userName"
+                                        className={loginClasses.loginInput}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="you@example.com"
+                                    />
+                                </div>
+                                {fieldError && <div className={loginClasses.fieldError}> {fieldError}</div>}
+                            </div>
                     </div>
-                    <button type="submit" className={loginClasses.loginBtn}>Share</button>
+                    <button type="submit" className={classes.shareBtn}>Share</button>
                 </form>
             </div>
         </div> :

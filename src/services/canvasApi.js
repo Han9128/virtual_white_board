@@ -126,7 +126,11 @@ export async function shareCanvas(token, id, payload) {
 
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data.message)
+            const error = new Error(data);
+            error.status = res.status;
+            error.message = data.message;
+            console.log("error:",error);
+            return error;
         }
 
         return data;
