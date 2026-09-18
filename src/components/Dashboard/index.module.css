@@ -493,3 +493,10 @@
     transform: translateY(-1px);
     box-shadow: 0 6px 20px -4px rgba(33, 31, 46, 0.45);
 }
+
+.deleteError{
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:var(--fw-regular);
+    color:var(--delete);
+}

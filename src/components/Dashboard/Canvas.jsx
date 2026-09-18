@@ -10,6 +10,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
     const [askEmail, setAskEmail] = useState(false);
     const [email, setEmail] = useState("");
     const [fieldError, setFieldError] = useState("");
+    const [deleteError, setDeleteError] = useState("");
     const canvasId = useRef(null);
     const findEditDuration = () => {
         let seconds = (new Date() - new Date(canvas.modifiedAt)) / 1000;
@@ -36,6 +37,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
             onDelete(id);
             return data;
         } catch (err) {
+            setDeleteError(err.message);
             console.error(err.message);
         }
     }
@@ -60,12 +62,10 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
             }
             const res = await shareCanvas(token,id, payload);
             if(res.status === 404){
-                console.log("error:",res.message);
                 setFieldError(res.message);
                 return;
             }
             if(res.status === 403){
-                console.log("error:",res.message);
                 setFieldError(res.message);
                 return;
             }
@@ -117,9 +117,11 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
                         <h3 className={classes.canvasName}>{canvas.name || 'Canvas'}</h3>
                     <button
                         className={classes.deleteCanvas}
+                        style={deleteError ? {display:'none'}:{}}
                         onClick={(e) => {e.stopPropagation();handleDelete(canvas._id, canvas.elements)}}
                     ><Trash size={16}/>
                     </button>
+                    {deleteError && <p className={classes.deleteError}>{deleteError}</p>}
                     </div>
                     <div className={classes.canvasMeta}>
                         Edited <span className={classes.editDuration}><b>{findEditDuration()}</b></span> ago

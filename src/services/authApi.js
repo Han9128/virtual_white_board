@@ -57,9 +57,8 @@ export async function verifyToken(token) {
                 'Authorization': `Bearer ${token}`
             }
         })
-
         if (!res.ok) {
-            return new Error(`Error in token verification ${res.status}`)
+            throw new Error(`Error in token verification ${res.status}`)
         }
         const data = await res.json();
         return data;

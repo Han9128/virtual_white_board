@@ -60,7 +60,7 @@ export async function deleteCanvas(token, id) {
         })
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data)
+            throw new Error(data.error)
         }
     } catch (err) {
         throw new Error(err.message)
@@ -129,7 +129,6 @@ export async function shareCanvas(token, id, payload) {
             const error = new Error(data);
             error.status = res.status;
             error.message = data.message;
-            console.log("error:",error);
             return error;
         }
 
