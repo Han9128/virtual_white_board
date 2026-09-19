@@ -1,6 +1,6 @@
 
 import React,{useContext, useEffect, useState} from "react";
-import {Plus, Presentation} from 'lucide-react';
+import {Plus, Presentation, LogOut} from 'lucide-react';
 import authContext from "../../store/auth-context"
 import boardContext from "../../store/board-context";
 import classes from "./index.module.css"
@@ -15,7 +15,7 @@ function Dashboard(){
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState(true);
     const [scrolled, setScrolled] = useState(false);
-
+    const [openDrawer, setOpenDrawer] = useState(false);
     const token = localStorage.getItem('token');
     useEffect(()=>{
         const fetchCanvas = async ()=>{
@@ -74,6 +74,9 @@ function Dashboard(){
 
     const capitalize = (str) => str? str.charAt(0).toUpperCase() + str.slice(1):str; 
 
+    const handleProfileClick = ()=>{
+        setOpenDrawer(!openDrawer);
+    }
 
     return (
        loader? <PageLoader/>: 
@@ -88,7 +91,30 @@ function Dashboard(){
                         </div>
                     <h2 className={classes.logo}>Whiteboard</h2>
                     </div>
-                    <button className={classes.avatar}>{userData.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
+                    <div className={classes.profileContainer}>
+                    <button className={classes.avatar} onClick={handleProfileClick}>{userData.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
+                    {openDrawer && 
+                    (
+                        <>
+                    <div className={classes.drawerBackdrop} onClick={()=>setOpenDrawer(false)}></div>
+                        <div className={classes.profileDrawer}>
+                        <div className={classes.profileInfo}>
+                            <div className={classes.avatar}>
+                                {userData.name?userData.name.slice(0,2).toUpperCase():'WB'}
+                            </div>
+                            <div className={classes.userInfo}>
+                                <strong className={classes.name}>{userData? capitalize(userData.name): "Creator"}</strong>
+                                <p className={classes.email}>{userData? userData.email: "creator@gmail.com"}</p>
+                            </div>
+                        </div>
+                        <div className={classes.logoutContainer} onClick={handleLogout}>
+                            < LogOut size={16}/>
+                            {/* type="submit" alwasy submits a form so if a button is not menat to submit a form give its type just button */}
+                    <button type="button" className={classes.logout} >Log out</button>
+                </div>
+                    </div>
+                    </>)}
+                    </div>
                 </div>
                 </div>
 
@@ -142,9 +168,7 @@ function Dashboard(){
                     </div>}
                 </div>
                 </div>
-                <div className={classes.dashFooter}>
-                    <button type="submit" className={classes.logout} onClick={handleLogout}>Log out</button>
-                </div>
+                
             </div>
         </div>
     )
