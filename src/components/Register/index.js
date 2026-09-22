@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import classes from './index.module.css';
 import authContext from "../../store/auth-context";
 import { Presentation,User,Mail,Lock,CircleCheck  } from 'lucide-react';
+import {Link} from "react-router";
 
 function Register() {
     const [name, setName] = useState("");
@@ -145,11 +146,13 @@ function Register() {
                     </form>
                     <p className={classes.login}>
                         Already have an account?
-                        <a href="#/login" onClick={() => setShowRegister(false)}>
+                        {/* upon action (clicking on this) change the url in address bar so it loads the required component, we can also use anchor tag with href the 
+                        difference is <Link> tag is handled by react router and anchor tag handled by browser */}
+                        <Link to ="/login" onClick={() => setShowRegister(false)}>
                             <span className={classes.loginLink}>
                                 Log in
                             </span>
-                        </a></p>
+                        </Link></p>
                 </div>
             </div>
         </div>

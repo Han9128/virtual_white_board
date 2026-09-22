@@ -4,34 +4,41 @@ import {Plus, Presentation, LogOut} from 'lucide-react';
 import authContext from "../../store/auth-context"
 import boardContext from "../../store/board-context";
 import classes from "./index.module.css"
-import {getCanvases, createCanvas} from "../../services/canvasApi"
+import {getCanvases, createCanvas} from "../../services/canvasApi";
+import {fetchProfile} from "../../services/authApi"
 import Canvas from "./Canvas";
 import PageLoader from "../../components/PageLoader/index";
 
 function Dashboard(){
 
-    const {userData, setShowDashboard, logout} = useContext(authContext)
+    const {setShowDashboard, logout} = useContext(authContext)
     const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
+    const [userData, setUserData] = useState(null);
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState(true);
     const [scrolled, setScrolled] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const token = localStorage.getItem('token');
     useEffect(()=>{
-        const fetchCanvas = async ()=>{
+        const fetchProfileAndCanvas = async ()=>{
             
             try{
-                const data = await getCanvases(token);
-                setCanvases(data.canvases)
+                // const data = await getCanvases(token);
+                const [profile,canvases] = await Promise.all([fetchProfile(token),getCanvases(token)])
+                setUserData(profile);
+                setCanvases(canvases.canvases)
                 
             }catch(err){
+                if(err.status === 401){
+                    logout();
+                }
                 console.error(err);
             }finally{
                 setLoader(false);
             }
         }
 
-        fetchCanvas();
+        fetchProfileAndCanvas();
     },[token])
 
     useEffect(()=>{
@@ -92,7 +99,7 @@ function Dashboard(){
                     <h2 className={classes.logo}>Whiteboard</h2>
                     </div>
                     <div className={classes.profileContainer}>
-                    <button className={classes.avatar} onClick={handleProfileClick}>{userData.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
+                    <button className={classes.avatar} onClick={handleProfileClick}>{userData?.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
                     {openDrawer && 
                     (
                         <>

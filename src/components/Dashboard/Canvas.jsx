@@ -4,6 +4,8 @@ import classes from "./index.module.css";
 import { Share2,Trash,Mail } from "lucide-react";
 import loginClasses from "../Login/index.module.css"
 import { deleteCanvas, loadCanvas, shareCanvas } from "../../services/canvasApi";
+import PageLoader from "../../components/PageLoader"
+import {useNavigate, useParams, Link} from "react-router";
 
 function Canvas({ canvas, token, onDelete, onLoad }) {
 
@@ -11,7 +13,11 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
     const [email, setEmail] = useState("");
     const [fieldError, setFieldError] = useState("");
     const [deleteError, setDeleteError] = useState("");
+    const [loader,setLoader] = useState(false);
     const canvasId = useRef(null);
+    const navigate = useNavigate();
+    const {id} = useParams();
+
     const findEditDuration = () => {
         let seconds = (new Date() - new Date(canvas.modifiedAt)) / 1000;
         const day = Math.floor(seconds / (3600 * 24));
@@ -46,9 +52,13 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
         try {
             const data = await loadCanvas(token, id);
             onLoad(id, data.canvas.elements);
+            navigate(`/canvas/${id}`);
+            setLoader(true);
             return data;
         } catch (err) {
-            console.errror(err.message);
+            console.error(err.message);
+        }finally{
+            setLoader(false);
         }
     }
 
@@ -82,6 +92,8 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
         }
     }
 
+    if(loader) return <PageLoader />
+
     return (
         askEmail ?
              <div className={classes.shareBackground} >
@@ -110,7 +122,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
         </div> :
             <div className={classes.canvasCard} >
                 <div className={classes.topPart} onClick={() => handleCardClick(canvas._id)}>
-                    <p  className={classes.share} onClick={(e) => {e.stopPropagation();canvasId.current=canvas._id;setAskEmail(true);}}><Share2 size={13}/> Share</p>
+                    <p className={classes.share} onClick={(e) => {e.stopPropagation();canvasId.current=canvas._id;setAskEmail(true);}}><Share2 size={13}/> Share</p>
                 </div>
                 <div className={classes.bottomPart}>
                     <div className={classes.canvasInfo}>

@@ -3,10 +3,12 @@ import rough from "roughjs";
 import boardContext from "../../store/board-context";
 import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
-import authContext from "../../store/auth-context"
+import authContext from "../../store/auth-context";
+import PageLoader from "../../components/PageLoader"
 import { TOOLS } from "../../constants/constants";
 import classes from "./index.module.css";
-import { updateCanvas } from "../../services/canvasApi"
+import { updateCanvas, loadCanvas } from "../../services/canvasApi";
+import { useParams } from "react-router"
 
 
 
@@ -15,11 +17,41 @@ function Board() {
   const isDrawing = useRef(false);
   const [isWriting, setIsWriting] = useState(false);
   const textAreaRef = useRef();
+  const [loader, setLoader] = useState(false);
 
-  const { elements, boardMouseDownHandler, boardMouseMoveHandler, textAreaBlurHandler, boardMouseUpHandler, undoHandler, redoHandler, canvasId, version } = useContext(boardContext);
+  const { elements,
+    boardMouseDownHandler,
+    boardMouseMoveHandler,
+    textAreaBlurHandler,
+    boardMouseUpHandler,
+    undoHandler,
+    redoHandler,
+    canvasId,
+    version,
+    loadCanvasHandler } = useContext(boardContext);
   const { toolConfigState } = useContext(toolConfigContext);
   const { activeToolItem } = useContext(toolBarContext);
-  const { token } = useContext(authContext);
+  const { token} = useContext(authContext);
+  const { id } = useParams();
+
+
+  useEffect(() => {
+    const fetchCanvas = async () => {
+      setLoader(true);
+      try{
+
+        const data = await loadCanvas(token, id);
+        loadCanvasHandler(data?.canvas?.elements);
+        return data;
+      }catch(err){
+        console.error(err.message);
+      }finally{
+        setLoader(false);
+      }
+    }
+
+    fetchCanvas();
+  }, [id])
 
 
   // Initialize the canvas dimensions before drawing.
@@ -32,6 +64,9 @@ function Board() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }, []);
+
+
+   
 
 
   const saveCanvas = async (token, id, elements) => {
@@ -91,18 +126,20 @@ function Board() {
 
 
   useEffect(() => {
-     if(version===0) return;
+    if (version === 0) return;
 
-     if(!canvasId || !token) return;
-     const timer = setTimeout(()=>{
-      saveCanvas(token,canvasId,elements);
-     },1000)
+    if (!canvasId || !token) return;
+    const timer = setTimeout(() => {
+      saveCanvas(token, canvasId, elements);
+    }, 1000)
 
-     return () => clearTimeout(timer)
-     // version changes in the same commit as elements, so the closure is always
-      // fresh. Adding elements here would fire on every mousemove and save half-finished strokes.
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[version])
+    return () => clearTimeout(timer)
+    // version changes in the same commit as elements, so the closure is always
+    // fresh. Adding elements here would fire on every mousemove and save half-finished strokes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [version])
+
+ 
 
   useEffect(() => {
 
@@ -143,7 +180,8 @@ function Board() {
 
   }
 
-   
+  //  if(loader) return <PageLoader/>
+
 
   return (
     <>

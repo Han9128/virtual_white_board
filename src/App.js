@@ -9,23 +9,48 @@ import authContext from "./store/auth-context"
 import Login from "./components/Login/index"
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard/index";
-import PageLoader from "./components/PageLoader/index"
+import PageLoader from "./components/PageLoader/index";
+import { Routes, Route,Navigate } from "react-router";
 
 function App() {
   // useRef is used to
   const { isLoggedIn, isLoading, showRegister, showDashboard } = useContext(authContext)
 
+  // if (isLoading) return <PageLoader />
 
-
-  // we cant keep auth Provider here because we are consume aut context here so provider must wrap the app
+  // we cant keep auth Provider here because we are consuming auth context here so provider must wrap the app
   return (
 
     <ToolBarProivder>
       <BoardProvider>
         <ToolConfigProvider>
           <div className="App">
-            {isLoading ?
-              <PageLoader /> :
+            <Routes>
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/login"
+                element={!isLoggedIn ? <Login /> : <Navigate to="/dashboard" replace />}
+              />
+              <Route
+                path="/dashboard"
+                element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" replace />}
+              />
+
+              <Route
+                path="/canvas/:id"
+                element={
+                  isLoggedIn ?
+                    <>
+                      <ToolBar />
+                      <Board />
+                      <ToolConfigBox />
+                    </> :
+                    <Navigate to="/login" replace />
+                }
+              />
+              <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
+            </Routes>
+            {/* {
               showRegister ? <Register /> :
                 !isLoggedIn ? <Login /> :
                   showDashboard ? <Dashboard /> :
@@ -34,7 +59,7 @@ function App() {
                       <Board />
                       <ToolConfigBox />
                     </>
-            }
+            } */}
           </div>
         </ToolConfigProvider>
       </BoardProvider>

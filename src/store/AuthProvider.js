@@ -1,41 +1,42 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import authContext from "./auth-context";
-import { authenticateLogin, verifyToken, registerUser } from "../services/authApi"
+import { authenticateLogin, registerUser } from "../services/authApi"
 
 
 
 function AuthProvider({ children }) {
-    const [isLoggedIn, setIsLogin] = useState(false);
-    const [userData, setUserData] = useState(null);
+    const [isLoggedIn, setIsLogin] = useState(()=>!!localStorage.getItem("token"));
+    // const [userData, setUserData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showRegister, setShowRegister] = useState(false);
     const [showDashboard, setShowDashboard] = useState(false);
     const token = localStorage.getItem("token");
-    async function checkLogin() {
-        try {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                return;
-            }
-            const data = await verifyToken(token);
-            setUserData(data);
-            setIsLogin(true);
-            setShowDashboard(true);
-        } catch (error) {
-            localStorage.removeItem("token");
-            setIsLogin(false);
-            setShowDashboard(false);
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    // async function checkLogin() {
+    //     try {
+    //         const token = localStorage.getItem("token");
+    //         if (!token) {
+    //             return;
+    //         }
+    //         const data = await verifyToken(token);
+    //         setUserData(data);
+    //         setIsLogin(true);
+    //         setShowDashboard(true);
+    //     } catch (error) {
+    //         localStorage.removeItem("token");
+    //         setIsLogin(false);
+    //         setShowDashboard(false);
+    //         console.error(error);
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
 
     // we cant make callback function of useEffect async as useEffect expects nothing or a fuction returned but async function returns promise so react gives error using async on callback of useEffect
-    useEffect(() => {
-        checkLogin();
-    }, [])
+    // useEffect(() => {
+    //     console.log("check login is running everytime app mounts")
+    //     checkLogin();
+    // }, [])
 
     const register = async (payload) => {
         try {
@@ -54,7 +55,8 @@ function AuthProvider({ children }) {
                 return token;
             }
             localStorage.setItem("token", token);
-            await checkLogin();
+            setIsLogin(true);
+            // await checkLogin();
         }catch(err){
             console.error(err.message);
         }
@@ -68,13 +70,13 @@ function AuthProvider({ children }) {
     const authContextValues = {
         isLoggedIn,
         login,
-        userData,
+        // userData,
         isLoading,
         setIsLoading,
         register,
         showRegister,
         setShowRegister,
-        checkLogin,
+        // checkLogin,
         showDashboard,
         setShowDashboard,
         token,

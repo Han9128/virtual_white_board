@@ -48,7 +48,7 @@ export async function authenticateLogin(payload) {
     }
 }
 
-export async function verifyToken(token) {
+export async function fetchProfile(token) {
     try {
         const res = await fetch(`${BASE_URL}/profile`, {
             method: 'GET',
@@ -58,12 +58,14 @@ export async function verifyToken(token) {
             }
         })
         if (!res.ok) {
-            throw new Error(`Error in token verification ${res.status}`)
+            const error = new Error(`Error in token verification ${res.status}`);
+            error.status = res.status;
+            throw error;
         }
         const data = await res.json();
         return data;
     } catch (err) {
-        throw new Error(err.message);
+        throw err;
     }
 }
 

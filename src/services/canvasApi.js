@@ -14,12 +14,14 @@ export async function getCanvases(token) {
 
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data)
+            const error = new Error(data);
+            error.status = res.status;
+            throw error;
         }
 
         return data;
     } catch (err) {
-        throw new Error(err.message);
+        throw err;
     }
 }
 

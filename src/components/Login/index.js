@@ -6,7 +6,7 @@ import { Presentation,Mail,Lock } from 'lucide-react';
 import {ReactComponent as Google} from "../../assets/icons/google.svg";
 import {ReactComponent as Doodle} from "../../assets/icons/doodle.svg";
 import { useContext } from "react";
-
+import {Link} from "react-router";
 
 function Login() {
     const { login, setShowRegister } = useContext(authContext);
@@ -161,11 +161,11 @@ function Login() {
                     </button>
                     <p className={classes.register}>
                         Don't have an account?   
-                        <a href="#/login" onClick={() => setShowRegister(true)}>
+                        <Link to ="/register" onClick={() => setShowRegister(true)}>
                             <span className={classes.registerLink}>
                                  Create one
                             </span>
-                        </a></p>
+                        </Link></p>
                 </div>
             </div>
         </div>
