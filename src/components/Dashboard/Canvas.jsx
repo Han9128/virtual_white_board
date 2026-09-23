@@ -1,11 +1,10 @@
 
-import React, { useState, useRef} from "react";
+import { useState, useRef} from "react";
 import classes from "./index.module.css";
 import { Share2,Trash,Mail } from "lucide-react";
 import loginClasses from "../Login/index.module.css"
-import { deleteCanvas, loadCanvas, shareCanvas } from "../../services/canvasApi";
-import PageLoader from "../../components/PageLoader"
-import {useNavigate, useParams, Link} from "react-router";
+import { deleteCanvas,shareCanvas } from "../../services/canvasApi";
+import {useNavigate} from "react-router";
 
 function Canvas({ canvas, token, onDelete, onLoad }) {
 
@@ -13,10 +12,8 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
     const [email, setEmail] = useState("");
     const [fieldError, setFieldError] = useState("");
     const [deleteError, setDeleteError] = useState("");
-    const [loader,setLoader] = useState(false);
     const canvasId = useRef(null);
     const navigate = useNavigate();
-    const {id} = useParams();
 
     const findEditDuration = () => {
         let seconds = (new Date() - new Date(canvas.modifiedAt)) / 1000;
@@ -49,17 +46,7 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
     }
 
     const handleCardClick = async (id) => {
-        try {
-            setLoader(true);
-            const data = await loadCanvas(token, id);
-            onLoad(id, data.canvas.elements);
             navigate(`/canvas/${id}`);
-            return data;
-        } catch (err) {
-            console.error(err.message);
-        }finally{
-            setLoader(false);
-        }
     }
 
 
@@ -92,7 +79,6 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
         }
     }
 
-    if(loader) return <PageLoader />
 
     return (
         askEmail ?

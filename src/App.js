@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import { useContext } from "react"
 import Board from "./components/Board"
 import ToolBar from "./components/ToolBar";
 import BoardProvider from "./store/BoardProvider";
@@ -9,12 +9,11 @@ import authContext from "./store/auth-context"
 import Login from "./components/Login/index"
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard/index";
-import PageLoader from "./components/PageLoader/index";
 import { Routes, Route,Navigate } from "react-router";
 
 function App() {
   // useRef is used to
-  const { isLoggedIn, isLoading, showRegister, showDashboard } = useContext(authContext)
+  const { isLoggedIn } = useContext(authContext)
 
   // if (isLoading) return <PageLoader />
 
@@ -37,7 +36,7 @@ function App() {
               />
 
               <Route
-                path="/canvas/:id"
+                path="/canvas/:canvasId"
                 element={
                   isLoggedIn ?
                     <>

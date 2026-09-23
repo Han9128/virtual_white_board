@@ -26,21 +26,23 @@ function Board() {
     boardMouseUpHandler,
     undoHandler,
     redoHandler,
-    canvasId,
     version,
     loadCanvasHandler } = useContext(boardContext);
   const { toolConfigState } = useContext(toolConfigContext);
   const { activeToolItem } = useContext(toolBarContext);
   const { token} = useContext(authContext);
-  const { id } = useParams();
+
+
+  const { canvasId } = useParams();
 
 
   useEffect(() => {
     const fetchCanvas = async () => {
+
       setLoader(true);
       try{
 
-        const data = await loadCanvas(token, id);
+        const data = await loadCanvas(token, canvasId);
         loadCanvasHandler(data?.canvas?.elements);
         return data;
       }catch(err){
@@ -51,7 +53,7 @@ function Board() {
     }
 
     fetchCanvas();
-  }, [id])
+  }, [canvasId])
 
 
   // Initialize the canvas dimensions before drawing.
@@ -105,11 +107,7 @@ function Board() {
       }
     })
 
-    // if (shouldSaveRef.current) {
-    //   saveCanvas(token, canvasId, elements);
-    //   shouldSaveRef.current = false;
-    // }
-
+  
     return () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
     }
@@ -129,9 +127,12 @@ function Board() {
     if (version === 0) return;
 
     if (!canvasId || !token) return;
+    
+    // console.log("id from params:", id);
+    console.log("canvasd id:", canvasId);
     const timer = setTimeout(() => {
       saveCanvas(token, canvasId, elements);
-    }, 1000)
+    }, 500)
 
     return () => clearTimeout(timer)
     // version changes in the same commit as elements, so the closure is always
@@ -185,6 +186,7 @@ function Board() {
 
   return (
     <>
+     {loader && <PageLoader/>}
       {isWriting && (<textarea
         className={classes.textElementBox}
         type="text"

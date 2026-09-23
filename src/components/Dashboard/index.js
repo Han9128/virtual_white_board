@@ -1,8 +1,7 @@
 
-import React,{useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Plus, Presentation, LogOut} from 'lucide-react';
 import authContext from "../../store/auth-context"
-import boardContext from "../../store/board-context";
 import classes from "./index.module.css"
 import {getCanvases, createCanvas} from "../../services/canvasApi";
 import {fetchProfile} from "../../services/authApi"
@@ -12,8 +11,7 @@ import {useNavigate} from "react-router";
 
 function Dashboard(){
 
-    const {setShowDashboard, logout} = useContext(authContext)
-    const {loadCanvasHandler,setCanvasId} = useContext(boardContext);
+    const {logout} = useContext(authContext)
     const [userData, setUserData] = useState(null);
     const [canvases,setCanvases] = useState([]);
     const [loader,setLoader] = useState(true);
@@ -27,7 +25,6 @@ function Dashboard(){
         const fetchProfileAndCanvas = async ()=>{
             
             try{
-                // const data = await getCanvases(token);
                 const [profile,canvases] = await Promise.all([fetchProfile(token),getCanvases(token)])
                 setUserData(profile);
                 setCanvases(canvases.canvases)
@@ -51,7 +48,6 @@ function Dashboard(){
         };
 
         window.addEventListener('scroll',handleScroll);
-
         return () => window.removeEventListener('scroll', handleScroll); 
     }, [])
 
@@ -61,9 +57,7 @@ function Dashboard(){
         try{
             const name = `Untitled ${canvases.length+1}`
             const data = await createCanvas(token,name);
-            setCanvasId(data.canvasId);
             navigate(`/canvas/${data.canvasId}`);
-            // setShowDashboard(false);
             return data;
         }catch(err){
             console.error(err);
@@ -74,11 +68,7 @@ function Dashboard(){
         setCanvases((prevCanvases)=>prevCanvases.filter((canvas)=> canvas._id!==id))
     }
 
-    const handleLoadCanvas = (id,elements) => {
-        setCanvasId(id);
-        loadCanvasHandler(elements);
-        setShowDashboard(false);
-    }
+
 
     const handleLogout = () => {
         logout();
@@ -175,7 +165,7 @@ function Dashboard(){
                     <div className={classes.canvasGrid}>
 
                     {canvases.map((canvas)=>{
-                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} onLoad={handleLoadCanvas} />)
+                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} />)
                     })}
                     </div>}
                 </div>
