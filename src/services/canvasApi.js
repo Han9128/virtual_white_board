@@ -82,11 +82,13 @@ export async function loadCanvas(token, id) {
 
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data.message)
+            const error = new Error(data.message);
+            error.status = res.status;
+            throw error;
         }
         return data;
     } catch (err) {
-        throw new Error(err.message)
+        throw err;
     }
 }
 

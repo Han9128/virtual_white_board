@@ -102,7 +102,7 @@ function Dashboard(){
                         <div className={classes.profileDrawer}>
                         <div className={classes.profileInfo}>
                             <div className={classes.avatar}>
-                                {userData.name?userData.name.slice(0,2).toUpperCase():'WB'}
+                                {userData?.name?userData.name.slice(0,2).toUpperCase():'WB'}
                             </div>
                             <div className={classes.userInfo}>
                                 <strong className={classes.name}>{userData? capitalize(userData.name): "Creator"}</strong>
@@ -131,7 +131,7 @@ function Dashboard(){
                     <div className={classes.profileCard}>
                         <div className={classes.profileInfo}>
                             <div className={classes.avatar}>
-                                {userData.name?userData.name.slice(0,2).toUpperCase():'WB'}
+                                {userData?.name ? userData.name.slice(0,2).toUpperCase():'WB'}
                             </div>
                             <div className={classes.userInfo}>
                                 <strong className={classes.name}>{userData? capitalize(userData.name): "Creator"}</strong>

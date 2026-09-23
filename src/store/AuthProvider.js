@@ -7,36 +7,10 @@ import { authenticateLogin, registerUser } from "../services/authApi"
 
 function AuthProvider({ children }) {
     const [isLoggedIn, setIsLogin] = useState(()=>!!localStorage.getItem("token"));
-    // const [userData, setUserData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showRegister, setShowRegister] = useState(false);
     const [showDashboard, setShowDashboard] = useState(false);
     const token = localStorage.getItem("token");
-    // async function checkLogin() {
-    //     try {
-    //         const token = localStorage.getItem("token");
-    //         if (!token) {
-    //             return;
-    //         }
-    //         const data = await verifyToken(token);
-    //         setUserData(data);
-    //         setIsLogin(true);
-    //         setShowDashboard(true);
-    //     } catch (error) {
-    //         localStorage.removeItem("token");
-    //         setIsLogin(false);
-    //         setShowDashboard(false);
-    //         console.error(error);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
-    // we cant make callback function of useEffect async as useEffect expects nothing or a fuction returned but async function returns promise so react gives error using async on callback of useEffect
-    // useEffect(() => {
-    //     console.log("check login is running everytime app mounts")
-    //     checkLogin();
-    // }, [])
 
     const register = async (payload) => {
         try {
@@ -56,7 +30,6 @@ function AuthProvider({ children }) {
             }
             localStorage.setItem("token", token);
             setIsLogin(true);
-            // await checkLogin();
         }catch(err){
             console.error(err.message);
         }
@@ -70,13 +43,11 @@ function AuthProvider({ children }) {
     const authContextValues = {
         isLoggedIn,
         login,
-        // userData,
         isLoading,
         setIsLoading,
         register,
         showRegister,
         setShowRegister,
-        // checkLogin,
         showDashboard,
         setShowDashboard,
         token,

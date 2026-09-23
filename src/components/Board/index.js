@@ -30,7 +30,7 @@ function Board() {
     loadCanvasHandler } = useContext(boardContext);
   const { toolConfigState } = useContext(toolConfigContext);
   const { activeToolItem } = useContext(toolBarContext);
-  const { token} = useContext(authContext);
+  const { token, logout} = useContext(authContext);
 
 
   const { canvasId } = useParams();
@@ -46,6 +46,10 @@ function Board() {
         loadCanvasHandler(data?.canvas?.elements);
         return data;
       }catch(err){
+        console.log("error:",err.status);
+        if(err.status === 401){
+          logout();
+        } else loadCanvasHandler([]);
         console.error(err.message);
       }finally{
         setLoader(false);
@@ -128,7 +132,6 @@ function Board() {
 
     if (!canvasId || !token) return;
     
-    // console.log("id from params:", id);
     console.log("canvasd id:", canvasId);
     const timer = setTimeout(() => {
       saveCanvas(token, canvasId, elements);
@@ -181,7 +184,6 @@ function Board() {
 
   }
 
-  //  if(loader) return <PageLoader/>
 
 
   return (
