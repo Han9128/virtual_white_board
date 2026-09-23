@@ -8,6 +8,7 @@ import {getCanvases, createCanvas} from "../../services/canvasApi";
 import {fetchProfile} from "../../services/authApi"
 import Canvas from "./Canvas";
 import PageLoader from "../../components/PageLoader/index";
+import {useNavigate} from "react-router";
 
 function Dashboard(){
 
@@ -19,6 +20,9 @@ function Dashboard(){
     const [scrolled, setScrolled] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const token = localStorage.getItem('token');
+
+    const navigate = useNavigate();
+
     useEffect(()=>{
         const fetchProfileAndCanvas = async ()=>{
             
@@ -58,7 +62,8 @@ function Dashboard(){
             const name = `Untitled ${canvases.length+1}`
             const data = await createCanvas(token,name);
             setCanvasId(data.canvasId);
-            setShowDashboard(false);
+            navigate(`/canvas/${data.canvasId}`);
+            // setShowDashboard(false);
             return data;
         }catch(err){
             console.error(err);
