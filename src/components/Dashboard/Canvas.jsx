@@ -50,10 +50,10 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
 
     const handleCardClick = async (id) => {
         try {
+            setLoader(true);
             const data = await loadCanvas(token, id);
             onLoad(id, data.canvas.elements);
             navigate(`/canvas/${id}`);
-            setLoader(true);
             return data;
         } catch (err) {
             console.error(err.message);

@@ -12,6 +12,7 @@
     background-color: var(--page-bg);
     background-image: radial-gradient(circle at 1px 1px, rgba(33, 31, 46, 0.06) 1px, transparent 0);
     background-size: 22px 22px;
+    z-index:3000;
 }
 
 
