@@ -17,7 +17,7 @@ function Board() {
   const isDrawing = useRef(false);
   const [isWriting, setIsWriting] = useState(false);
   const textAreaRef = useRef();
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   const { elements,
     boardMouseDownHandler,
