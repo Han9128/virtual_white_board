@@ -19,6 +19,11 @@ function App() {
   // we cant keep auth Provider here because we are consuming auth context here so provider must wrap the app
   return (
 
+    // Had to move BoardProvider inside routes cause when we open a canvas and come back on dashboard open another canvas then 
+    // it only unmounts Boar component not BoardProvider as its above dashboard so elements 
+    // form past canvas sruvives and give a pas element flashes before loadign elements of new canvas
+    
+    
     // <ToolBarProivder>
     //   <BoardProvider>
     //     <ToolConfigProvider>
@@ -38,17 +43,19 @@ function App() {
           path="/canvas/:canvasId"
           element={
             isLoggedIn ?
-            
-                <ToolBarProivder>
+
+
+              <ToolBarProivder>
+                <ToolConfigProvider>
                   <BoardProvider>
-                    <ToolConfigProvider>
-                      <ToolBar />
-                      <Board />
-                      <ToolConfigBox />
-                    </ToolConfigProvider>
+                    <ToolBar />
+                    <Board />
+                    <ToolConfigBox />
                   </BoardProvider>
-                </ToolBarProivder>
-               :
+
+                </ToolConfigProvider>
+              </ToolBarProivder>
+              :
               <Navigate to="/login" replace />
           }
         />
@@ -64,9 +71,6 @@ function App() {
                       <ToolConfigBox />
                     </>
             } */}
-        {/* </ToolConfigProvider>
-      </BoardProvider>
-    </ToolBarProivder> */}
     </div>
 
   );

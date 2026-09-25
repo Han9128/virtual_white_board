@@ -1,18 +1,14 @@
 
-import { useState, useRef} from "react";
+import { useState} from "react";
 import classes from "./index.module.css";
-import { Share2,Trash,Mail } from "lucide-react";
-import loginClasses from "../Login/index.module.css"
-import { deleteCanvas,shareCanvas } from "../../services/canvasApi";
+import { Share2,Trash} from "lucide-react";
+import { deleteCanvas} from "../../services/canvasApi";
 import {useNavigate} from "react-router";
 
-function Canvas({ canvas, token, onDelete, onLoad }) {
+function Canvas({ canvas, token, onDelete, onShare}) {
 
-    const [askEmail, setAskEmail] = useState(false);
-    const [email, setEmail] = useState("");
-    const [fieldError, setFieldError] = useState("");
+   
     const [deleteError, setDeleteError] = useState("");
-    const canvasId = useRef(null);
     const navigate = useNavigate();
 
     const findEditDuration = () => {
@@ -50,65 +46,14 @@ function Canvas({ canvas, token, onDelete, onLoad }) {
     }
 
 
-    const handleShare = async (e) => {
-        e.preventDefault();
-        const id = canvasId.current;
-        try {
-            const payload = {
-                email: email
-            }
-            const res = await shareCanvas(token,id, payload);
-            if(res.status === 404){
-                setFieldError(res.message);
-                return;
-            }
-            if(res.status === 403){
-                setFieldError(res.message);
-                return;
-            }
-
-            if(res.status === 400){
-                setFieldError(res.message);
-                return;
-            }
-            setAskEmail(false);
-            return res;
-        } catch (err) {
-            setFieldError("Something went wrong. Please try again")
-            console.error(err.message);
-        }
-    }
+    
 
 
     return (
-        askEmail ?
-             <div className={classes.shareBackground} >
-            <div className={classes.shareContainer}>
-                <form onSubmit={handleShare}>
-                    <div className={classes.shareFieldBox}>
-                       <div className={loginClasses.field}>
-                                <label htmlFor="email">Email:</label>
-                                <div className={loginClasses.inputWrap}>
-                                    <Mail className={loginClasses.inputIcon}/>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        id="userName"
-                                        className={loginClasses.loginInput}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="you@example.com"
-                                    />
-                                </div>
-                                {fieldError && <div className={loginClasses.fieldError}> {fieldError}</div>}
-                            </div>
-                    </div>
-                    <button type="submit" className={classes.shareBtn}>Share</button>
-                </form>
-            </div>
-        </div> :
+       
             <div className={classes.canvasCard} >
                 <div className={classes.topPart} onClick={() => handleCardClick(canvas._id)}>
-                    <p className={classes.share} onClick={(e) => {e.stopPropagation();canvasId.current=canvas._id;setAskEmail(true);}}><Share2 size={13}/> Share</p>
+                    <p className={classes.share} onClick={(e) => {e.stopPropagation(); onShare(canvas._id)}}><Share2 size={13}/> Share</p>
                 </div>
                 <div className={classes.bottomPart}>
                     <div className={classes.canvasInfo}>

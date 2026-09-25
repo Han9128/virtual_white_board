@@ -1,178 +1,245 @@
 
-import {useContext, useEffect, useState} from "react";
-import {Plus, Presentation, LogOut} from 'lucide-react';
+import { useContext, useEffect, useState } from "react";
+import { Plus, Presentation, LogOut, Mail } from 'lucide-react';
 import authContext from "../../store/auth-context"
 import classes from "./index.module.css"
-import {getCanvases, createCanvas} from "../../services/canvasApi";
-import {fetchProfile} from "../../services/authApi"
+import { getCanvases, createCanvas, shareCanvas } from "../../services/canvasApi";
+import { fetchProfile } from "../../services/authApi"
 import Canvas from "./Canvas";
 import PageLoader from "../../components/PageLoader/index";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
+import loginClasses from "../Login/index.module.css";
 
-function Dashboard(){
+function Dashboard() {
 
-    const {logout} = useContext(authContext)
+    const { logout } = useContext(authContext)
     const [userData, setUserData] = useState(null);
-    const [canvases,setCanvases] = useState([]);
-    const [loader,setLoader] = useState(true);
+    const [canvases, setCanvases] = useState([]);
+    const [loader, setLoader] = useState(true);
     const [scrolled, setScrolled] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
+    const [askEmail, setAskEmail] = useState(false);
+    const [email, setEmail] = useState("");
+    const [canvasId, setCanvasId] = useState(null);
+    const [fieldMessage, setFieldMessage] = useState("");
     const token = localStorage.getItem('token');
-
     const navigate = useNavigate();
 
-    useEffect(()=>{
-        const fetchProfileAndCanvas = async ()=>{
-            
-            try{
-                const [profile,canvases] = await Promise.all([fetchProfile(token),getCanvases(token)])
+    useEffect(() => {
+        const fetchProfileAndCanvas = async () => {
+
+            try {
+                const [profile, canvases] = await Promise.all([fetchProfile(token), getCanvases(token)])
                 setUserData(profile);
                 setCanvases(canvases.canvases)
-                
-            }catch(err){
-                if(err.status === 401){
+
+            } catch (err) {
+                if (err.status === 401) {
                     logout();
                 }
                 console.error(err);
-            }finally{
+            } finally {
                 setLoader(false);
             }
         }
 
         fetchProfileAndCanvas();
-    },[token])
+    }, [token])
 
-    useEffect(()=>{
-        const handleScroll = ()=>{
-            setScrolled(window.scrollY>60);
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 60);
         };
 
-        window.addEventListener('scroll',handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll); 
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, [])
 
 
-    const handleCreateCanvas = async ()=>{
-        
-        try{
-            const name = `Untitled ${canvases.length+1}`
-            const data = await createCanvas(token,name);
+    const handleCreateCanvas = async () => {
+
+        try {
+            const name = `Untitled ${canvases.length + 1}`
+            const data = await createCanvas(token, name);
             navigate(`/canvas/${data.canvasId}`);
             return data;
-        }catch(err){
+        } catch (err) {
             console.error(err);
         }
     }
 
-    const handleDeleteCanvas = (id)=>{
-        setCanvases((prevCanvases)=>prevCanvases.filter((canvas)=> canvas._id!==id))
+    const handleDeleteCanvas = (id) => {
+        setCanvases((prevCanvases) => prevCanvases.filter((canvas) => canvas._id !== id))
     }
-
-
 
     const handleLogout = () => {
         logout();
     }
 
-    const capitalize = (str) => str? str.charAt(0).toUpperCase() + str.slice(1):str; 
+    const capitalize = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
 
-    const handleProfileClick = ()=>{
+    const handleProfileClick = () => {
         setOpenDrawer(!openDrawer);
     }
 
+    const handleShareClick = (id) => {
+        setCanvasId(id);
+        setFieldMessage("");
+        setEmail("");
+        setAskEmail(true);
+    }
+
+    const handleShare = async (e) => {
+        e.preventDefault();
+        try {
+            const payload = {
+                email: email
+            }
+            const res = await shareCanvas(token, canvasId, payload);
+            if (res.status === 404) {
+                setFieldMessage(res.message);
+                return;
+            }
+            if (res.status === 403) {
+                setFieldMessage(res.message);
+                return;
+            }
+
+            if (res.status === 400) {
+                setFieldMessage(res.message);
+                return;
+            }
+           
+                setFieldMessage(res.message);
+            
+            return res;
+        } catch (err) {
+            setFieldMessage("Something went wrong. Please try again")
+            console.error(err.message);
+        }
+    }
+
     return (
-       loader? <PageLoader/>: 
-       <div className={classes.dashBoardBackground}>
-            <div className={classes.dashBoardContainer}>
-
-                <div className={classes.navbarBackdrop}>
-                    <div className={`${classes.navBar} ${scrolled? classes.navbarScrolled:''}`} >
-                    <div className={classes.brand}>
-                        <div className={classes.brandMark}>
-                            <Presentation />
+        loader ? <PageLoader /> :
+            <div className={classes.dashBoardBackground}>
+                {askEmail &&
+                    <div className={classes.shareBackground} role="dialog" aria-modal="true" onClick={() => setAskEmail(false)}>
+                        <div className={classes.shareContainer} onClick={(e) => e.stopPropagation()}>
+                            <form onSubmit={handleShare} >
+                                <div className={classes.shareFieldBox}>
+                                    <div className={loginClasses.field}>
+                                        <label htmlFor="email">Email:</label>
+                                        <div className={loginClasses.inputWrap}>
+                                            <Mail className={loginClasses.inputIcon} />
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                id="email"
+                                                className={loginClasses.loginInput}
+                                                required
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                placeholder="you@example.com"
+                                                autoFocus
+                                            />
+                                        </div>
+                                        {fieldMessage && <div className={loginClasses.fieldError}> {fieldMessage}</div>}
+                                    </div>
+                                </div>
+                                <button type="submit" className={classes.shareBtn}>Share</button>
+                            </form>
                         </div>
-                    <h2 className={classes.logo}>Whiteboard</h2>
-                    </div>
-                    <div className={classes.profileContainer}>
-                    <button className={classes.avatar} onClick={handleProfileClick}>{userData?.name?userData.name.slice(0,2).toUpperCase():'WB'}</button>
-                    {openDrawer && 
-                    (
-                        <>
-                    <div className={classes.drawerBackdrop} onClick={()=>setOpenDrawer(false)}></div>
-                        <div className={classes.profileDrawer}>
-                        <div className={classes.profileInfo}>
-                            <div className={classes.avatar}>
-                                {userData?.name?userData.name.slice(0,2).toUpperCase():'WB'}
-                            </div>
-                            <div className={classes.userInfo}>
-                                <strong className={classes.name}>{userData? capitalize(userData.name): "Creator"}</strong>
-                                <p className={classes.email}>{userData? userData.email: "creator@gmail.com"}</p>
-                            </div>
-                        </div>
-                        <div className={classes.logoutContainer} onClick={handleLogout}>
-                            < LogOut size={16}/>
-                            {/* type="submit" alwasy submits a form so if a button is not menat to submit a form give its type just button */}
-                    <button type="button" className={classes.logout} >Log out</button>
-                </div>
-                    </div>
-                    </>)}
-                    </div>
-                </div>
-                </div>
-
-
-                <div className={classes.contents}>
-                <div className={classes.welcomeSection}>
-                    <div className={classes.welcomeMessage}>
-                        <h1>Welcome Back, {userData? capitalize(userData.name): "Creator"}</h1>
-                        <p>Your creative workspace - pick up a canvas or start something new</p>
-                    </div>
-
-                    <div className={classes.profileCard}>
-                        <div className={classes.profileInfo}>
-                            <div className={classes.avatar}>
-                                {userData?.name ? userData.name.slice(0,2).toUpperCase():'WB'}
-                            </div>
-                            <div className={classes.userInfo}>
-                                <strong className={classes.name}>{userData? capitalize(userData.name): "Creator"}</strong>
-                                <p className={classes.email}>{userData? userData.email: "creator@gmail.com"}</p>
-                            </div>
-                        </div>
-                            <div className={classes.statusDot}>
-                                <i></i>
-                                Synced
-                            </div>
-                    </div>
-                </div>
-
-                <div className={classes.canvasSection}>
-                    <div className={classes.header}>
-                        <h2>Your Canvases <span className={classes.countChip}>{canvases.length}</span></h2>
-                        <button className={classes.newBtn} onClick={handleCreateCanvas}><Plus/> 
-                        <span className={classes.createCanvasTxt}>Create Canvas</span></button>
-                    </div>
-
-                    {canvases.length===0?
-                    <div className={classes.noCanvasSection}>
-                    <h2 className={classes.noCanvas}>No Canvas Found!</h2>
-                    <div className={classes.newCard} onClick={handleCreateCanvas}>
-                        <div className={classes.plusRing}>
-                            <Plus />
-                        </div>
-                        <span>Create a new Canvas</span>
-                    </div>
-                    </div>:
-                    <div className={classes.canvasGrid}>
-
-                    {canvases.map((canvas)=>{
-                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} />)
-                    })}
                     </div>}
+                <div className={classes.dashBoardContainer}>
+
+                    <div className={classes.navbarBackdrop}>
+                        <div className={`${classes.navBar} ${scrolled ? classes.navbarScrolled : ''}`} >
+                            <div className={classes.brand}>
+                                <div className={classes.brandMark}>
+                                    <Presentation />
+                                </div>
+                                <h2 className={classes.logo}>Whiteboard</h2>
+                            </div>
+                            <div className={classes.profileContainer}>
+                                <button className={classes.avatar} onClick={handleProfileClick}>{userData?.name ? userData.name.slice(0, 2).toUpperCase() : 'WB'}</button>
+                                {openDrawer &&
+                                    (
+                                        <>
+                                            <div className={classes.drawerBackdrop} onClick={() => setOpenDrawer(false)}></div>
+                                            <div className={classes.profileDrawer}>
+                                                <div className={classes.profileInfo}>
+                                                    <div className={classes.avatar}>
+                                                        {userData?.name ? userData.name.slice(0, 2).toUpperCase() : 'WB'}
+                                                    </div>
+                                                    <div className={classes.userInfo}>
+                                                        <strong className={classes.name}>{userData ? capitalize(userData.name) : "Creator"}</strong>
+                                                        <p className={classes.email}>{userData ? userData.email : "creator@gmail.com"}</p>
+                                                    </div>
+                                                </div>
+                                                <div className={classes.logoutContainer} onClick={handleLogout}>
+                                                    < LogOut size={16} />
+                                                    {/* type="submit" alwasy submits a form so if a button is not menat to submit a form give its type just button */}
+                                                    <button type="button" className={classes.logout} >Log out</button>
+                                                </div>
+                                            </div>
+                                        </>)}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className={classes.contents}>
+                        <div className={classes.welcomeSection}>
+                            <div className={classes.welcomeMessage}>
+                                <h1>Welcome Back, {userData ? capitalize(userData.name) : "Creator"}</h1>
+                                <p>Your creative workspace - pick up a canvas or start something new</p>
+                            </div>
+
+                            <div className={classes.profileCard}>
+                                <div className={classes.profileInfo}>
+                                    <div className={classes.avatar}>
+                                        {userData?.name ? userData.name.slice(0, 2).toUpperCase() : 'WB'}
+                                    </div>
+                                    <div className={classes.userInfo}>
+                                        <strong className={classes.name}>{userData ? capitalize(userData.name) : "Creator"}</strong>
+                                        <p className={classes.email}>{userData ? userData.email : "creator@gmail.com"}</p>
+                                    </div>
+                                </div>
+                                <div className={classes.statusDot}>
+                                    <i></i>
+                                    Synced
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={classes.canvasSection}>
+                            <div className={classes.header}>
+                                <h2>Your Canvases <span className={classes.countChip}>{canvases.length}</span></h2>
+                                <button className={classes.newBtn} onClick={handleCreateCanvas}><Plus />
+                                    <span className={classes.createCanvasTxt}>Create Canvas</span></button>
+                            </div>
+
+                            {canvases.length === 0 ?
+                                <div className={classes.noCanvasSection}>
+                                    <h2 className={classes.noCanvas}>No Canvas Found!</h2>
+                                    <div className={classes.newCard} onClick={handleCreateCanvas}>
+                                        <div className={classes.plusRing}>
+                                            <Plus />
+                                        </div>
+                                        <span>Create a new Canvas</span>
+                                    </div>
+                                </div> :
+                                <div className={classes.canvasGrid}>
+
+                                    {canvases.map((canvas) => {
+                                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} onShare={handleShareClick} />)
+                                    })}
+                                </div>}
+                        </div>
+                    </div>
+
                 </div>
-                </div>
-                
             </div>
-        </div>
     )
 }
 
