@@ -1,5 +1,5 @@
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState} from "react";
 import { Plus, Presentation, LogOut, Mail } from 'lucide-react';
 import authContext from "../../store/auth-context"
 import classes from "./index.module.css"
@@ -21,7 +21,7 @@ function Dashboard() {
     const [askEmail, setAskEmail] = useState(false);
     const [email, setEmail] = useState("");
     const [canvasId, setCanvasId] = useState(null);
-    const [fieldMessage, setFieldMessage] = useState("");
+    const [fieldMessage, setFieldMessage] = useState(null);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -84,7 +84,7 @@ function Dashboard() {
 
     const handleShareClick = (id) => {
         setCanvasId(id);
-        setFieldMessage("");
+        setFieldMessage(null);
         setEmail("");
         setAskEmail(true);
     }
@@ -96,25 +96,20 @@ function Dashboard() {
                 email: email
             }
             const res = await shareCanvas(token, canvasId, payload);
-            if (res.status === 404) {
-                setFieldMessage(res.message);
+            if(res.status === 200){
+                setFieldMessage({message:res.message,ok:true});
                 return;
             }
-            if (res.status === 403) {
-                setFieldMessage(res.message);
+            if (res.status) {
+                setFieldMessage({message:res.message,ok:false});
                 return;
             }
-
-            if (res.status === 400) {
-                setFieldMessage(res.message);
-                return;
-            }
-           
-                setFieldMessage(res.message);
             
+
+            console.log(fieldMessage);
             return res;
         } catch (err) {
-            setFieldMessage("Something went wrong. Please try again")
+            setFieldMessage({message:"Something went wrong. Please try again", ok:false})
             console.error(err.message);
         }
     }
@@ -125,6 +120,7 @@ function Dashboard() {
                 {askEmail &&
                     <div className={classes.shareBackground} role="dialog" aria-modal="true" onClick={() => setAskEmail(false)}>
                         <div className={classes.shareContainer} onClick={(e) => e.stopPropagation()}>
+
                             <form onSubmit={handleShare} >
                                 <div className={classes.shareFieldBox}>
                                     <div className={loginClasses.field}>
@@ -143,7 +139,7 @@ function Dashboard() {
                                                 autoFocus
                                             />
                                         </div>
-                                        {fieldMessage && <div className={loginClasses.fieldError}> {fieldMessage}</div>}
+                                        {fieldMessage && <div className={fieldMessage.ok? classes.fieldSucces:loginClasses.fieldError} > {fieldMessage.message}</div>}
                                     </div>
                                 </div>
                                 <button type="submit" className={classes.shareBtn}>Share</button>

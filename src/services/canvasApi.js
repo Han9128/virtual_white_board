@@ -135,7 +135,7 @@ export async function shareCanvas(token, id, payload) {
             error.message = data.message;
             return error;
         }
-
+        data.status = res.status;
         return data;
     } catch (err) {
         throw new Error(err.message);

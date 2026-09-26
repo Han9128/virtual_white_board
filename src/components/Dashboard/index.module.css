@@ -536,6 +536,12 @@
     box-shadow: 0 6px 20px -4px rgba(33, 31, 46, 0.45);
 }
 
+.fieldSucces{
+    font-family:var(--font-body);
+    font-size:13px;
+    color:var(--teal);
+}
+
 .deleteError{
     font-family:var(--font-body);
     font-size:13px;
