@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useContext, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useContext, useState,useCallback } from "react";
 import rough from "roughjs";
 import boardContext from "../../store/board-context";
 import toolConfigContext from "../../store/toolConfig-context";
@@ -32,9 +32,10 @@ function Board() {
   const { activeToolItem } = useContext(toolBarContext);
   const { token, logout} = useContext(authContext);
 
-
   const { canvasId } = useParams();
 
+  const latest = useRef({token,canvasId,elements});
+  const dirty = useRef(false);
 
   useEffect(() => {
     const fetchCanvas = async () => {
@@ -132,10 +133,12 @@ function Board() {
 
     if (!canvasId || !token) return;
     
-    console.log("canvasd id:", canvasId);
+    dirty.current = true;
+    latest.current = {token,canvasId,elements};
     const timer = setTimeout(() => {
+      dirty.current = false;
       saveCanvas(token, canvasId, elements);
-    }, 500)
+    }, 1000)
 
     return () => clearTimeout(timer)
     // version changes in the same commit as elements, so the closure is always
@@ -143,7 +146,38 @@ function Board() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [version])
 
- 
+  // function and bojects are compared by reference in js so if these are passed as dependency 
+  // then every render create these from scratch changing the reference which cause infinte 
+  // rendering issue, thus we use useCallback, it preserves the function's identity 
+  // across renders;
+ const flush = useCallback(()=>{
+   if(!dirty.current) return;
+   const {token,canvasId,elements} = latest.current;
+   if (!canvasId || !token) return;
+   dirty.current = false;
+   saveCanvas(token,canvasId,elements);
+ },[]);
+
+   useEffect(()=>{
+    const handlePageHide = ()=>{
+       flush();
+    }
+
+    const handleVisibility = ()=>{
+      if(document.hidden){
+        flush();
+      }
+    }
+
+    window.addEventListener('pagehide', handlePageHide);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return ()=>{
+      window.removeEventListener('pagehide', handlePageHide);
+      document.removeEventListener('visibilitychange',handleVisibility);
+      flush();
+    }
+  },[flush])
 
   useEffect(() => {
 
