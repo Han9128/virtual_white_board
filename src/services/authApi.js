@@ -12,12 +12,8 @@ export async function registerUser(payload) {
 
         const data = await res.json();
         if (!res.ok) {
-            if (data.message) {
-                throw new Error(data.message)
-            } else {
-
-                throw new Error(data.errors[0].msg)
-            }
+            const message = data.message || data.errors?.[0]?.msg || "Registration failed";
+            throw new Error(message);
         }
 
         return data;
@@ -39,12 +35,12 @@ export async function authenticateLogin(payload) {
         if (!res.ok) {
             const error = new Error(`Error in log in, status ${res.status}`);
             error.status = res.status;
-            return error;
+            throw error;
         }
         const token = await res.json();
         return token;
     } catch (err) {
-        throw new Error(err.message)
+        throw err;
     }
 }
 

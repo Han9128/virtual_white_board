@@ -23,16 +23,9 @@ function AuthProvider({ children }) {
     }
 
     const login = async (payload) => {
-        try{
             const token = await authenticateLogin(payload);
-            if(token.status){
-                return token;
-            }
             localStorage.setItem("token", token);
             setIsLogin(true);
-        }catch(err){
-            console.error(err.message);
-        }
     }
 
     const logout = () => {
