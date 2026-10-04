@@ -296,7 +296,7 @@ function BoardProvider({ children }) {
         anchor.click();
     }
 
-    const loadCanvasHandler = (elements) => {
+    const loadCanvasHandler = useCallback((elements) => {
         dispatchBoardState({
             type:BOARD_ACTIONS.LOAD_CANVAS,
             payload:{
@@ -304,6 +304,7 @@ function BoardProvider({ children }) {
             }
         })
     }
+    ,[])
 
     const boardContextValues = {
         elements: boardState.elements,

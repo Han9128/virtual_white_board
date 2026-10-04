@@ -44,7 +44,7 @@ function Dashboard() {
         }
 
         fetchProfileAndCanvas();
-    }, [token])
+    }, [token, logout])
 
     useEffect(() => {
         const handleScroll = () => {

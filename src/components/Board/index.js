@@ -58,7 +58,7 @@ function Board() {
     }
 
     fetchCanvas();
-  }, [canvasId])
+  }, [canvasId, token, logout,loadCanvasHandler])
 
 
   // Initialize the canvas dimensions before drawing.

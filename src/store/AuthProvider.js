@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useCallback} from "react";
 import authContext from "./auth-context";
 import { authenticateLogin, registerUser } from "../services/authApi"
 
@@ -20,10 +20,11 @@ function AuthProvider({ children }) {
             setIsLogin(true);
     }
 
-    const logout = () => {
+    const logout = useCallback(() => {
         localStorage.removeItem('token');
         setIsLogin(false);
     }
+    ,[])
 
     const authContextValues = {
         isLoggedIn,
