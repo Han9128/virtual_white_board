@@ -43,8 +43,6 @@ function App() {
           path="/canvas/:canvasId"
           element={
             isLoggedIn ?
-
-
               <ToolBarProivder>
                 <ToolConfigProvider>
                   <BoardProvider>
@@ -61,16 +59,6 @@ function App() {
         />
         <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
       </Routes>
-      {/* {
-              showRegister ? <Register /> :
-                !isLoggedIn ? <Login /> :
-                  showDashboard ? <Dashboard /> :
-                    <>
-                      <ToolBar />
-                      <Board />
-                      <ToolConfigBox />
-                    </>
-            } */}
     </div>
 
   );
