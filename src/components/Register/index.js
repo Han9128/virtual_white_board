@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import classes from './index.module.css';
 import authContext from "../../store/auth-context";
 import { Presentation,User,Mail,Lock,CircleCheck  } from 'lucide-react';
-import {Link} from "react-router";
+import {Link,useNavigate} from "react-router";
 
 function Register() {
     const [name, setName] = useState("");
@@ -11,8 +11,8 @@ function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState("")
-    const { register, setShowRegister } = useContext(authContext)
-
+    const { register, login} = useContext(authContext)
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,14 +21,22 @@ function Register() {
             return;
         }
 
-        setPasswordError(false);
+        setPasswordError("");
         const payload = {
             name: name,
             email: email,
             password: password
         }
         try {
-            await register(payload)
+            await register(payload);
+            try{
+                await login(payload);
+                navigate('/dashboard', {replace:true});
+                }catch(err){
+                    console.error(err);
+                    navigate('/login', {replace:true});
+                }
+            
         } catch (err) {
             // throw new Error(err.message)
             // we use throw when this function is being called by someone and they will handle the error so we pass (throw) the error to that, here handleSubmit is called when 
@@ -148,7 +156,7 @@ function Register() {
                         Already have an account?
                         {/* upon action (clicking on this) change the url in address bar so it loads the required component, we can also use anchor tag with href the 
                         difference is <Link> tag is handled by react router and anchor tag handled by browser */}
-                        <Link to ="/login" onClick={() => setShowRegister(false)}>
+                        <Link to ="/login">
                             <span className={classes.loginLink}>
                                 Log in
                             </span>

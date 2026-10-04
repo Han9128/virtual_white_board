@@ -6,20 +6,12 @@ import { authenticateLogin, registerUser } from "../services/authApi"
 
 
 function AuthProvider({ children }) {
-    const [isLoggedIn, setIsLogin] = useState(()=>!!localStorage.getItem("token"));
-    const [isLoading, setIsLoading] = useState(true);
-    const [showRegister, setShowRegister] = useState(false);
-    const [showDashboard, setShowDashboard] = useState(false);
     const token = localStorage.getItem("token");
+    const [isLoggedIn, setIsLogin] = useState(!!token);
 
     const register = async (payload) => {
-        try {
             const data = await registerUser(payload);
-            setShowRegister(false);
             return data;
-        } catch (err) {
-            throw new Error(err.message)
-        }
     }
 
     const login = async (payload) => {
@@ -36,13 +28,7 @@ function AuthProvider({ children }) {
     const authContextValues = {
         isLoggedIn,
         login,
-        isLoading,
-        setIsLoading,
         register,
-        showRegister,
-        setShowRegister,
-        showDashboard,
-        setShowDashboard,
         token,
         logout,
         setIsLogin

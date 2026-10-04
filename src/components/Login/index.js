@@ -9,7 +9,7 @@ import { useContext } from "react";
 import {Link} from "react-router";
 
 function Login() {
-    const { login, setShowRegister } = useContext(authContext);
+    const { login} = useContext(authContext);
     const [loginError, setLoginError] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
     const [email, setEmail] = useState("");
@@ -164,7 +164,7 @@ function Login() {
                     </button>
                     <p className={classes.register}>
                         Don't have an account?   
-                        <Link to ="/register" onClick={() => setShowRegister(true)}>
+                        <Link to ="/register">
                             <span className={classes.registerLink}>
                                  Create one
                             </span>
