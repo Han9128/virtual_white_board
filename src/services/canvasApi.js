@@ -12,9 +12,9 @@ export async function getCanvases(token) {
             }
         })
 
-        const data = await res.json();
+        const data = await res.json().catch(()=>({}));
         if (!res.ok) {
-            const error = new Error(data);
+            const error = new Error(data.message || `Request failed (${res.status})`);
             error.status = res.status;
             throw error;
         }
@@ -39,14 +39,16 @@ export async function createCanvas(token,name) {
             }
         })
 
-        const data = await res.json();
+        const data = await res.json().catch(()=>({}));
 
         if (!res.ok) {
-            throw new Error(data);
+            const error = new Error(data.message || `Request failed (${res.status})`);
+            error.status = res.status;
+            throw error;
         }
         return data
     } catch (err) {
-        throw new Error(err.message);
+        throw err;
     }
 }
 
@@ -60,12 +62,14 @@ export async function deleteCanvas(token, id) {
                 Authorization: `Bearer ${token}`
             }
         })
-        const data = await res.json();
+        const data = await res.json().catch(()=>({}));
         if (!res.ok) {
-            throw new Error(data.error)
+            const error = new Error(data.message || `Request failed (${res.status})`);
+            error.status = res.status;
+            throw error;
         }
     } catch (err) {
-        throw new Error(err.message)
+        throw err;
     }
 }
 
@@ -80,9 +84,9 @@ export async function loadCanvas(token, id) {
         }
         )
 
-        const data = await res.json();
+        const data = await res.json().catch(()=>({}));
         if (!res.ok) {
-            const error = new Error(data.message);
+            const error = new Error(data.message || `Request failed (${res.status})`);
             error.status = res.status;
             throw error;
         }
@@ -106,14 +110,16 @@ export async function updateCanvas(token, id, elements) {
             }
         })
 
-        const data = await res.json();
+        const data = await res.json().catch(()=>({}));
         if (!res.ok) {
-            throw new Error(data.message)
+            const error = new Error(data.message || `Request failed (${res.status})`);
+            error.status = res.status;
+            throw error;
         }
 
         return data;
     } catch (err) {
-        throw new Error(err.message);
+        throw err;
     }
 }
 
@@ -128,9 +134,9 @@ export async function shareCanvas(token, id, payload) {
             }
         })
 
-        const data = await res.json();
+        const data = await res.json().catch(()=>({}));
         if (!res.ok) {
-            const error = new Error(data);
+            const error = new Error(data || `Request failed (${res.status})`);
             error.status = res.status;
             error.message = data.message;
             return error;

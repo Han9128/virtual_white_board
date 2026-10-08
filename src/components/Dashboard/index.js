@@ -1,9 +1,9 @@
 
-import { useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import { Plus, Presentation, LogOut, Mail } from 'lucide-react';
 import authContext from "../../store/auth-context"
 import classes from "./index.module.css"
-import { getCanvases, createCanvas, shareCanvas } from "../../services/canvasApi";
+import { getCanvases, createCanvas, shareCanvas,deleteCanvas } from "../../services/canvasApi";
 import { fetchProfile } from "../../services/authApi"
 import Canvas from "./Canvas";
 import PageLoader from "../../components/PageLoader/index";
@@ -22,6 +22,7 @@ function Dashboard() {
     const [email, setEmail] = useState("");
     const [canvasId, setCanvasId] = useState(null);
     const [fieldMessage, setFieldMessage] = useState(null);
+    const [actionStatus, setActionStatus] = useState({action:"",label:""});
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -57,19 +58,35 @@ function Dashboard() {
 
 
     const handleCreateCanvas = async () => {
-
+        if (actionStatus.action) return;
         try {
+            setActionStatus({action:"Create", label:"Creating..."});
             const name = `Untitled ${canvases.length + 1}`
             const data = await createCanvas(token, name);
             navigate(`/canvas/${data.canvasId}`);
             return data;
         } catch (err) {
             console.error(err);
+            if (err.status === 401) {
+                logout();
+            } 
+            alert(err.message);
+        } finally {
+           setActionStatus({ action: "", label: "" });
         }
     }
 
-    const handleDeleteCanvas = (id) => {
-        setCanvases((prevCanvases) => prevCanvases.filter((canvas) => canvas._id !== id))
+    const handleDeleteCanvas = async (id) => {
+        try {
+            const data = await deleteCanvas(token, id);
+            setCanvases((prevCanvases) => prevCanvases.filter((canvas) => canvas._id !== id));
+            return data;
+        } catch (err) {
+            if(err.status === 401) logout();
+            alert(err.message);
+            console.error(err.message);
+        }
+
     }
 
     const handleLogout = () => {
@@ -92,25 +109,27 @@ function Dashboard() {
     const handleShare = async (e) => {
         e.preventDefault();
         try {
+            setActionStatus({action:"Share", label:"Sharing..."});
             const payload = {
                 email: email
             }
             const res = await shareCanvas(token, canvasId, payload);
-            if(res.status === 200){
-                setFieldMessage({message:res.message,ok:true});
+            if (res.status === 200) {
+                setFieldMessage({ message: res.message, ok: true });
                 return;
             }
             if (res.status) {
-                setFieldMessage({message:res.message,ok:false});
+                setFieldMessage({ message: res.message, ok: false });
                 return;
             }
-            
 
-            console.log(fieldMessage);
+
             return res;
         } catch (err) {
-            setFieldMessage({message:"Something went wrong. Please try again", ok:false})
+            setFieldMessage({ message: "Something went wrong. Please try again", ok: false })
             console.error(err.message);
+        } finally {
+            setActionStatus({ action: "", label: "" });
         }
     }
 
@@ -139,10 +158,10 @@ function Dashboard() {
                                                 autoFocus
                                             />
                                         </div>
-                                        {fieldMessage && <div className={fieldMessage.ok? classes.fieldSucces:loginClasses.fieldError} > {fieldMessage.message}</div>}
+                                        {fieldMessage && <div className={fieldMessage.ok ? classes.fieldSucces : loginClasses.fieldError} > {fieldMessage.message}</div>}
                                     </div>
                                 </div>
-                                <button type="submit" className={classes.shareBtn}>Share</button>
+                                <button type="submit" className={classes.shareBtn} disabled={actionStatus.action==='Share'}>{actionStatus.action==="Share" ? actionStatus.label : "Share"}</button>
                             </form>
                         </div>
                     </div>}
@@ -211,8 +230,8 @@ function Dashboard() {
                         <div className={classes.canvasSection}>
                             <div className={classes.header}>
                                 <h2>Your Canvases <span className={classes.countChip}>{canvases.length}</span></h2>
-                                <button className={classes.newBtn} onClick={handleCreateCanvas}><Plus />
-                                    <span className={classes.createCanvasTxt}>Create Canvas</span></button>
+                                <button className={classes.newBtn} onClick={handleCreateCanvas} disabled={actionStatus.action==="Create"}><Plus />
+                                    <span className={classes.createCanvasTxt}>{actionStatus.action==="Create" ? actionStatus.label : "Create"}</span></button>
                             </div>
 
                             {canvases.length === 0 ?
@@ -228,7 +247,7 @@ function Dashboard() {
                                 <div className={classes.canvasGrid}>
 
                                     {canvases.map((canvas) => {
-                                        return (<Canvas key={canvas._id} canvas={canvas} token={token} onDelete={handleDeleteCanvas} onShare={handleShareClick} />)
+                                        return (<Canvas key={canvas._id} canvas={canvas} onDelete={handleDeleteCanvas} onShare={handleShareClick} />)
                                     })}
                                 </div>}
                         </div>

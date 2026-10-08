@@ -300,6 +300,12 @@
     box-shadow: 0 6px 20px -4px rgba(33,31,46,0.45); 
 }
 
+.newBtn:disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
 .noCanvasSection{
     width:100%;
     display:flex;
@@ -548,3 +554,4 @@
     font-weight:var(--fw-regular);
     color:var(--delete);
 }
+

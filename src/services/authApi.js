@@ -10,15 +10,17 @@ export async function registerUser(payload) {
             }
         })
 
-        const data = await res.json();
+        const data = await res.json().catch(()=>({}));
         if (!res.ok) {
-            const message = data.message || data.errors?.[0]?.msg || "Registration failed";
-            throw new Error(message);
+            const error = new Error(data.message || `Request failed (${res.status})`);
+            error.status = res.status;
+            error.fields = data.fields;
+            throw error;
         }
 
         return data;
     } catch (err) {
-        throw new Error(err.message);
+        throw err;
     }
 }
 
