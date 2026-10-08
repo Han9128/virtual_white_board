@@ -1,14 +1,11 @@
 
-import { useState} from "react";
 import classes from "./index.module.css";
 import { Share2,Trash} from "lucide-react";
-import { deleteCanvas} from "../../services/canvasApi";
 import {useNavigate} from "react-router";
 
-function Canvas({ canvas, token, onDelete, onShare}) {
+function Canvas({ canvas, onDelete, onShare}) {
 
    
-    const [deleteError, setDeleteError] = useState("");
     const navigate = useNavigate();
 
     const findEditDuration = () => {
@@ -30,16 +27,6 @@ function Canvas({ canvas, token, onDelete, onShare}) {
         return `${seconds}s`
     }
 
-    const handleDelete = async (id) => {
-        try {
-            const data = await deleteCanvas(token, id);
-            onDelete(id);
-            return data;
-        } catch (err) {
-            setDeleteError(err.message);
-            console.error(err.message);
-        }
-    }
 
     const handleCardClick = async (id) => {
             navigate(`/canvas/${id}`);
@@ -60,11 +47,9 @@ function Canvas({ canvas, token, onDelete, onShare}) {
                         <h3 className={classes.canvasName}>{canvas.name || 'Canvas'}</h3>
                     <button
                         className={classes.deleteCanvas}
-                        style={deleteError ? {display:'none'}:{}}
-                        onClick={(e) => {e.stopPropagation();handleDelete(canvas._id, canvas.elements)}}
+                        onClick={(e) => {e.stopPropagation();onDelete(canvas._id, canvas.elements)}}
                     ><Trash size={16}/>
                     </button>
-                    {deleteError && <p className={classes.deleteError}>{deleteError}</p>}
                     </div>
                     <div className={classes.canvasMeta}>
                         Edited <span className={classes.editDuration}><b>{findEditDuration()}</b></span> ago
