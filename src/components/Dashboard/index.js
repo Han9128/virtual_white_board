@@ -1,14 +1,16 @@
 
 import { useContext, useEffect, useState } from "react";
-import { Plus, Presentation, LogOut, Mail } from 'lucide-react';
+import { Plus, Presentation, LogOut } from 'lucide-react';
 import authContext from "../../store/auth-context"
 import classes from "./index.module.css"
-import { getCanvases, createCanvas, shareCanvas,deleteCanvas } from "../../services/canvasApi";
+import { getCanvases, createCanvas, shareCanvas, deleteCanvas } from "../../services/canvasApi";
 import { fetchProfile } from "../../services/authApi"
 import Canvas from "./Canvas";
 import PageLoader from "../../components/PageLoader/index";
+import Modal from "../common/Modal";
 import { useNavigate } from "react-router";
-import loginClasses from "../Login/index.module.css";
+import { DELETE_TEXT } from "../../constants/constants";
+// import loginClasses from "../Login/index.module.css";
 
 function Dashboard() {
 
@@ -19,10 +21,11 @@ function Dashboard() {
     const [scrolled, setScrolled] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [askEmail, setAskEmail] = useState(false);
-    const [email, setEmail] = useState("");
+    const [isDelete, setIsDelete] = useState(false);
+    const [input, setInput] = useState("");
     const [canvasId, setCanvasId] = useState(null);
     const [fieldMessage, setFieldMessage] = useState(null);
-    const [actionStatus, setActionStatus] = useState({action:"",label:""});
+    const [actionStatus, setActionStatus] = useState({ action: "", label: "" });
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -60,7 +63,7 @@ function Dashboard() {
     const handleCreateCanvas = async () => {
         if (actionStatus.action) return;
         try {
-            setActionStatus({action:"Create", label:"Creating..."});
+            setActionStatus({ action: "Create", label: "Creating..." });
             const name = `Untitled ${canvases.length + 1}`
             const data = await createCanvas(token, name);
             navigate(`/canvas/${data.canvasId}`);
@@ -69,22 +72,32 @@ function Dashboard() {
             console.error(err);
             if (err.status === 401) {
                 logout();
-            } 
-            alert(err.message);
+            }
+            alert(err.status ? err.message : "Can't reach the server. Check your connection.");
         } finally {
-           setActionStatus({ action: "", label: "" });
+            setActionStatus({ action: "", label: "" });
         }
     }
 
-    const handleDeleteCanvas = async (id) => {
+    const handleDeleteCanvas = async (e) => {
+        e.preventDefault();
+        if (input.trim().toUpperCase() !== DELETE_TEXT) {
+            setFieldMessage({ message: 'Type CANVAS to confirm', ok: false });
+            return;
+        }
         try {
-            const data = await deleteCanvas(token, id);
-            setCanvases((prevCanvases) => prevCanvases.filter((canvas) => canvas._id !== id));
+            setActionStatus({ action: "Delete", label: "Deleting..." });
+            const data = await deleteCanvas(token, canvasId);
+            setCanvases((prevCanvases) => prevCanvases.filter((canvas) => canvas._id !== canvasId));
+            setIsDelete(false);
             return data;
         } catch (err) {
-            if(err.status === 401) logout();
-            alert(err.message);
-            console.error(err.message);
+            if (err.status === 401) logout();
+            const errMessage = err.status ? err.message : "Can't reach the server. Check your connection."
+            setFieldMessage({ message: errMessage, ok: false });
+            console.error(err);
+        } finally {
+            setActionStatus({ action: "", label: "" });
         }
 
     }
@@ -102,32 +115,35 @@ function Dashboard() {
     const handleShareClick = (id) => {
         setCanvasId(id);
         setFieldMessage(null);
-        setEmail("");
+        setInput("");
+        setIsDelete(false);
         setAskEmail(true);
+    }
+
+    const handleDeleteClick = (id) => {
+        setCanvasId(id);
+        setFieldMessage(null);
+        setInput("");
+        setAskEmail(false);
+        setIsDelete(true);
     }
 
     const handleShare = async (e) => {
         e.preventDefault();
         try {
-            setActionStatus({action:"Share", label:"Sharing..."});
+            setActionStatus({ action: "Share", label: "Sharing..." });
             const payload = {
-                email: email
+                email: input
             }
             const res = await shareCanvas(token, canvasId, payload);
-            if (res.status === 200) {
-                setFieldMessage({ message: res.message, ok: true });
-                return;
-            }
-            if (res.status) {
-                setFieldMessage({ message: res.message, ok: false });
-                return;
-            }
 
-
+            setFieldMessage({ message: res.message, ok: true });
             return res;
         } catch (err) {
-            setFieldMessage({ message: "Something went wrong. Please try again", ok: false })
-            console.error(err.message);
+            if (err.status === 401) logout();
+            const errMessage = err.status ? err.message : "Can't reach the server. Check your connection."
+            setFieldMessage({ message: errMessage, ok: false });
+            console.error(err);
         } finally {
             setActionStatus({ action: "", label: "" });
         }
@@ -136,35 +152,22 @@ function Dashboard() {
     return (
         loader ? <PageLoader /> :
             <div className={classes.dashBoardBackground}>
-                {askEmail &&
-                    <div className={classes.shareBackground} role="dialog" aria-modal="true" onClick={() => setAskEmail(false)}>
-                        <div className={classes.shareContainer} onClick={(e) => e.stopPropagation()}>
-
-                            <form onSubmit={handleShare} >
-                                <div className={classes.shareFieldBox}>
-                                    <div className={loginClasses.field}>
-                                        <label htmlFor="email">Email:</label>
-                                        <div className={loginClasses.inputWrap}>
-                                            <Mail className={loginClasses.inputIcon} />
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                id="email"
-                                                className={loginClasses.loginInput}
-                                                required
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                placeholder="you@example.com"
-                                                autoFocus
-                                            />
-                                        </div>
-                                        {fieldMessage && <div className={fieldMessage.ok ? classes.fieldSucces : loginClasses.fieldError} > {fieldMessage.message}</div>}
-                                    </div>
-                                </div>
-                                <button type="submit" className={classes.shareBtn} disabled={actionStatus.action==='Share'}>{actionStatus.action==="Share" ? actionStatus.label : "Share"}</button>
-                            </form>
-                        </div>
-                    </div>}
+                {askEmail && <Modal
+                    setActionState={setAskEmail}
+                    handleAction={handleShare}
+                    setInput={setInput}
+                    actionStatus={actionStatus}
+                    input={input}
+                    fieldMessage={fieldMessage}
+                    action="Share" />}
+                {isDelete && <Modal
+                    setActionState={setIsDelete}
+                    handleAction={handleDeleteCanvas}
+                    setInput={setInput}
+                    actionStatus={actionStatus}
+                    input={input}
+                    fieldMessage={fieldMessage}
+                    action="Delete" />}
                 <div className={classes.dashBoardContainer}>
 
                     <div className={classes.navbarBackdrop}>
@@ -230,8 +233,8 @@ function Dashboard() {
                         <div className={classes.canvasSection}>
                             <div className={classes.header}>
                                 <h2>Your Canvases <span className={classes.countChip}>{canvases.length}</span></h2>
-                                <button className={classes.newBtn} onClick={handleCreateCanvas} disabled={actionStatus.action==="Create"}><Plus />
-                                    <span className={classes.createCanvasTxt}>{actionStatus.action==="Create" ? actionStatus.label : "Create"}</span></button>
+                                <button className={classes.newBtn} onClick={handleCreateCanvas} disabled={actionStatus.action === "Create"}><Plus />
+                                    <span className={classes.createCanvasTxt}>{actionStatus.action === "Create" ? actionStatus.label : "Create"}</span></button>
                             </div>
 
                             {canvases.length === 0 ?
@@ -247,7 +250,7 @@ function Dashboard() {
                                 <div className={classes.canvasGrid}>
 
                                     {canvases.map((canvas) => {
-                                        return (<Canvas key={canvas._id} canvas={canvas} onDelete={handleDeleteCanvas} onShare={handleShareClick} />)
+                                        return (<Canvas key={canvas._id} canvas={canvas} onDelete={handleDeleteClick} onShare={handleShareClick} />)
                                     })}
                                 </div>}
                         </div>
