@@ -37,7 +37,6 @@ function Canvas({ canvas, onDelete, onShare}) {
 
 
     return (
-       
             <div className={classes.canvasCard} >
                 <div className={classes.topPart} onClick={() => handleCardClick(canvas._id)}>
                     <p className={classes.share} onClick={(e) => {e.stopPropagation(); onShare(canvas._id)}}><Share2 size={13}/> Share</p>
@@ -47,7 +46,7 @@ function Canvas({ canvas, onDelete, onShare}) {
                         <h3 className={classes.canvasName}>{canvas.name || 'Canvas'}</h3>
                     <button
                         className={classes.deleteCanvas}
-                        onClick={(e) => {e.stopPropagation();onDelete(canvas._id, canvas.elements)}}
+                        onClick={(e) => {e.stopPropagation();onDelete(canvas._id)}}
                     ><Trash size={16}/>
                     </button>
                     </div>

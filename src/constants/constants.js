@@ -99,6 +99,7 @@ export const BOARD_ACTIONS = {
 
 
 export const ERASE_THRESHOLD = 0.1;
+export const DELETE_TEXT = "CANVAS"
 
 
 // export const BASE_URL = "http://localhost:5000/api"
