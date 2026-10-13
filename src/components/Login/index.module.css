@@ -312,3 +312,13 @@
     font-size:13px;
     color:var(--delete);
 }
+
+
+.alert{
+    color:var(--coral);
+    font-size:var(--text-md);
+    font-weight:var(--fw-medium);
+    font-style:var(--font-display);
+    margin-bottom:8px;
+
+}

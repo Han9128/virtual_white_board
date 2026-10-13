@@ -1,30 +1,34 @@
 
 import { useState, useCallback} from "react";
 import authContext from "./auth-context";
-import { authenticateLogin, registerUser } from "../services/authApi"
+import { authenticateLogin, registerUser } from "../services/authApi";
 
 
 
 function AuthProvider({ children }) {
-    const token = localStorage.getItem("token");
-    const [isLoggedIn, setIsLogin] = useState(!!token);
-
+    const [token,setToken] = useState(()=>localStorage.getItem("token") );
+    const isLoggedIn = !!token; 
+    const [authMessage, setAuthMessage] = useState(null);
     const register = async (payload) => {
             const data = await registerUser(payload);
             return data;
     }
 
     const login = async (payload) => {
-            const token = await authenticateLogin(payload);
-            localStorage.setItem("token", token);
-            setIsLogin(true);
+            const t = await authenticateLogin(payload);
+            localStorage.setItem("token", t);
+            setToken(t)
     }
 
-    const logout = useCallback(() => {
+    const logout = useCallback((reason) => {
         localStorage.removeItem('token');
-        setIsLogin(false);
+        setAuthMessage(reason?? null)
+        setToken(null);
     }
     ,[])
+
+    const clearAuthMessage = useCallback(()=> setAuthMessage(null),[])
+
 
     const authContextValues = {
         isLoggedIn,
@@ -32,7 +36,8 @@ function AuthProvider({ children }) {
         register,
         token,
         logout,
-        setIsLogin
+        authMessage,
+        clearAuthMessage
     }
 
     return (

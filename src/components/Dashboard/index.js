@@ -9,7 +9,7 @@ import Canvas from "./Canvas";
 import PageLoader from "../../components/PageLoader/index";
 import Modal from "../common/Modal";
 import { useNavigate } from "react-router";
-import { DELETE_TEXT } from "../../constants/constants";
+import { DELETE_TEXT,SESSION_EXPIRED } from "../../constants/constants";
 // import loginClasses from "../Login/index.module.css";
 
 function Dashboard() {
@@ -39,7 +39,7 @@ function Dashboard() {
 
             } catch (err) {
                 if (err.status === 401) {
-                    logout();
+                    return logout(SESSION_EXPIRED);
                 }
                 console.error(err);
             } finally {
@@ -71,7 +71,7 @@ function Dashboard() {
         } catch (err) {
             console.error(err);
             if (err.status === 401) {
-                logout();
+                return logout(SESSION_EXPIRED);
             }
             alert(err.status ? err.message : "Can't reach the server. Check your connection.");
         } finally {
@@ -92,7 +92,9 @@ function Dashboard() {
             setIsDelete(false);
             return data;
         } catch (err) {
-            if (err.status === 401) logout();
+            if (err.status === 401) {
+                return logout(SESSION_EXPIRED);
+            }
             const errMessage = err.status ? err.message : "Can't reach the server. Check your connection."
             setFieldMessage({ message: errMessage, ok: false });
             console.error(err);
@@ -140,7 +142,9 @@ function Dashboard() {
             setFieldMessage({ message: res.message, ok: true });
             return res;
         } catch (err) {
-            if (err.status === 401) logout();
+            if (err.status === 401){
+                return logout(SESSION_EXPIRED);
+            }
             const errMessage = err.status ? err.message : "Can't reach the server. Check your connection."
             setFieldMessage({ message: errMessage, ok: false });
             console.error(err);

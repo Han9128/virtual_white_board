@@ -60,7 +60,6 @@ function App() {
         <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
       </Routes>
     </div>
-
   );
 }
 
