@@ -1,14 +1,14 @@
-import { useEffect, useLayoutEffect, useRef, useContext, useState,useCallback } from "react";
+import { useEffect, useLayoutEffect, useRef, useContext, useState, useCallback } from "react";
 import rough from "roughjs";
 import boardContext from "../../store/board-context";
 import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
 import authContext from "../../store/auth-context";
 import PageLoader from "../../components/PageLoader"
-import { TOOLS } from "../../constants/constants";
+import { TOOLS,SESSION_EXPIRED } from "../../constants/constants";
 import classes from "./index.module.css";
 import { updateCanvas, loadCanvas } from "../../services/canvasApi";
-import { useParams } from "react-router"
+import { useParams} from "react-router"
 
 
 
@@ -30,35 +30,37 @@ function Board() {
     loadCanvasHandler } = useContext(boardContext);
   const { toolConfigState } = useContext(toolConfigContext);
   const { activeToolItem } = useContext(toolBarContext);
-  const { token, logout} = useContext(authContext);
+  const { token, logout } = useContext(authContext);
 
   const { canvasId } = useParams();
 
-  const latest = useRef({token,canvasId,elements});
+  const latest = useRef({ token, canvasId, elements });
   const dirty = useRef(false);
 
   useEffect(() => {
     const fetchCanvas = async () => {
 
       setLoader(true);
-      try{
+      try {
 
         const data = await loadCanvas(token, canvasId);
         loadCanvasHandler(data?.canvas?.elements);
         return data;
-      }catch(err){
-        console.log("error:",err.status);
-        if(err.status === 401){
-          logout();
+      } catch (err) {
+        console.error(err);
+        // const errMessage = err.status?err.message:"Can't reach the server. Check your connection.";
+        // alert(errMessage);
+        if (err.status === 401) {
+          return logout(SESSION_EXPIRED);
         } else loadCanvasHandler([]);
         console.error(err.message);
-      }finally{
+      } finally {
         setLoader(false);
       }
     }
 
     fetchCanvas();
-  }, [canvasId, token, logout,loadCanvasHandler])
+  }, [canvasId, token, logout, loadCanvasHandler])
 
 
   // Initialize the canvas dimensions before drawing.
@@ -73,17 +75,20 @@ function Board() {
   }, []);
 
 
-   
 
 
-  const saveCanvas = async (token, id, elements) => {
+
+  const saveCanvas = useCallback(async (token, id, elements) => {
     try {
       const data = await updateCanvas(token, id, elements);
       return data;
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
+       if (err.status === 401) {
+        return logout(SESSION_EXPIRED);
+      }
     }
-  }
+  },[logout])
 
 
 
@@ -112,7 +117,7 @@ function Board() {
       }
     })
 
-  
+
     return () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
     }
@@ -132,9 +137,9 @@ function Board() {
     if (version === 0) return;
 
     if (!canvasId || !token) return;
-    
+
     dirty.current = true;
-    latest.current = {token,canvasId,elements};
+    latest.current = { token, canvasId, elements };
     const timer = setTimeout(() => {
       dirty.current = false;
       saveCanvas(token, canvasId, elements);
@@ -150,21 +155,21 @@ function Board() {
   // then every render create these from scratch changing the reference which cause infinte 
   // rendering issue, thus we use useCallback, it preserves the function's identity 
   // across renders;
- const flush = useCallback(()=>{
-   if(!dirty.current) return;
-   const {token,canvasId,elements} = latest.current;
-   if (!canvasId || !token) return;
-   dirty.current = false;
-   saveCanvas(token,canvasId,elements);
- },[]);
+  const flush = useCallback(() => {
+    if (!dirty.current) return;
+    const { token, canvasId, elements } = latest.current;
+    if (!canvasId || !token) return;
+    dirty.current = false;
+    saveCanvas(token, canvasId, elements);
+  }, [saveCanvas]);
 
-   useEffect(()=>{
-    const handlePageHide = ()=>{
-       flush();
+  useEffect(() => {
+    const handlePageHide = () => {
+      flush();
     }
 
-    const handleVisibility = ()=>{
-      if(document.hidden){
+    const handleVisibility = () => {
+      if (document.hidden) {
         flush();
       }
     }
@@ -172,12 +177,12 @@ function Board() {
     window.addEventListener('pagehide', handlePageHide);
     document.addEventListener('visibilitychange', handleVisibility);
 
-    return ()=>{
+    return () => {
       window.removeEventListener('pagehide', handlePageHide);
-      document.removeEventListener('visibilitychange',handleVisibility);
+      document.removeEventListener('visibilitychange', handleVisibility);
       flush();
     }
-  },[flush])
+  }, [flush])
 
   useEffect(() => {
 
@@ -222,7 +227,7 @@ function Board() {
 
   return (
     <>
-     {loader && <PageLoader/>}
+      {loader && <PageLoader />}
       {isWriting && (<textarea
         className={classes.textElementBox}
         type="text"

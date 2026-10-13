@@ -1,44 +1,47 @@
 
-import React, { useState } from "react";
+import { useState,useEffect } from "react";
 import authContext from "../../store/auth-context";
 import classes from "./index.module.css";
-import { Presentation,Mail,Lock } from 'lucide-react';
-import {ReactComponent as Google} from "../../assets/icons/google.svg";
-import {ReactComponent as Doodle} from "../../assets/icons/doodle.svg";
+import { Presentation, Mail, Lock } from 'lucide-react';
+import { ReactComponent as Google } from "../../assets/icons/google.svg";
+import { ReactComponent as Doodle } from "../../assets/icons/doodle.svg";
 import { useContext } from "react";
-import {Link} from "react-router";
+import { Link} from "react-router";
 
 function Login() {
-    const { login} = useContext(authContext);
+    const { login,authMessage,clearAuthMessage } = useContext(authContext);
     const [loginError, setLoginError] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("")
+    const [password, setPassword] = useState("");
+
+
+    useEffect(()=> clearAuthMessage,[clearAuthMessage]);
 
     const isValidEmail = (email) => {
         const account = email.split('@').length - 1;
         // make sure only one @ is present and some value is present before and after @
-        if(account!==1){
+        if (account !== 1) {
             return false;
         }
-        if(email.includes(' ')){
+        if (email.includes(' ')) {
             return false;
         }
 
         const [beforeAt, afterAt] = email.split('@');
-       
-        if(beforeAt.length === 0 || afterAt.length === 0) return false;
+
+        if (beforeAt.length === 0 || afterAt.length === 0) return false;
 
 
         // there must be a dot in string after @
-        if(!afterAt.includes('.')){
+        if (!afterAt.includes('.')) {
             return false;
         }
 
         const dotIndex = afterAt.indexOf('.');
 
         // there must be some string after dot
-        if(dotIndex === afterAt.length-1){
+        if (dotIndex === afterAt.length - 1) {
             return false;
         }
 
@@ -47,13 +50,13 @@ function Login() {
 
     const validate = () => {
         const errors = {};
-        if(!email){
+        if (!email) {
             errors.email = "Please enter an email id";
-        }else if(!isValidEmail(email)){
+        } else if (!isValidEmail(email)) {
             errors.email = "Please enter a valid email address"
         }
 
-        if(!password){
+        if (!password) {
             errors.password = "Enter your password"
         }
 
@@ -65,7 +68,7 @@ function Login() {
 
         const errors = validate();
         setFieldErrors(errors);
-        if(Object.keys(errors).length>0) return;
+        if (Object.keys(errors).length > 0) return;
         const payload = {
             email,
             password
@@ -73,27 +76,29 @@ function Login() {
 
         try {
             await login(payload);
-           
+
         } catch (err) {
-             if(err.status === 401){
+            if (err.status === 401) {
                 setLoginError("Invalid email or password");
                 return;
             }
 
-            else if(!err.status){
+            else if (!err.status) {
                 setLoginError("Unable to connect. Check your internet and try again.")
                 return;
-            }else {
+            } else {
                 setLoginError("Something went wrong. Please try again.")
             }
-            
+
             console.error(err.message);
         }
     }
 
     return (
         <div className={classes.loginBackground}>
+      
             <div className={classes.loginContainer}>
+             
                 <div className={classes.leftSection}>
                     <div className={classes.top}>
                         <div className={classes.brandMark}>
@@ -114,6 +119,10 @@ function Login() {
                 </div>
 
                 <div className={classes.rightSection}>
+                  {authMessage &&
+                    <div className={classes.alert}>
+                        {authMessage}
+                    </div>}
                     <div className={classes.authHead}>
                         <h1>Welcome back</h1>
                         <p>Login to pickup right where you left off.</p>
@@ -124,7 +133,7 @@ function Login() {
                             <div className={classes.field}>
                                 <label htmlFor="email">Email:</label>
                                 <div className={classes.inputWrap}>
-                                    <Mail className={classes.inputIcon}/>
+                                    <Mail className={classes.inputIcon} />
                                     <input
                                         type="email"
                                         name="email"
@@ -139,7 +148,7 @@ function Login() {
                             <div className={classes.field}>
                                 <label htmlFor="password">Password:</label>
                                 <div className={classes.inputWrap}>
-                                    <Lock className={classes.inputIcon}/>
+                                    <Lock className={classes.inputIcon} />
                                     <input
                                         type="password"
                                         name="password"
@@ -163,10 +172,10 @@ function Login() {
                         Google
                     </button>
                     <p className={classes.register}>
-                        Don't have an account?   
-                        <Link to ="/register">
+                        Don't have an account?
+                        <Link to="/register">
                             <span className={classes.registerLink}>
-                                 Create one
+                                Create one
                             </span>
                         </Link></p>
                 </div>
