@@ -200,6 +200,8 @@ function Board() {
   const handleMouseDown = (event) => {
     if (activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
     if (activeToolItem === TOOLS.TEXT) {
+      if(isWriting) return;
+      event.preventDefault();
       setIsWriting(true);
       boardMouseDownHandler(event, toolConfigState, isWriting);
 
@@ -215,7 +217,6 @@ function Board() {
   }
 
   const handleMouseUp = () => {
-    setIsWriting(false);
     if (isDrawing.current) {
       boardMouseUpHandler();
       isDrawing.current = false;
@@ -239,7 +240,7 @@ function Board() {
           color: elements[elements.length - 1].color,
         }}
 
-        onBlur={(event) => { textAreaBlurHandler(event.target.value) }}
+        onBlur={(event) => {setIsWriting(false); textAreaBlurHandler(event.target.value) }}
       >
       </textarea>)}
       <div className="board" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
