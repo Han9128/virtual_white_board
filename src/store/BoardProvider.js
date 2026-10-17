@@ -266,6 +266,8 @@ function BoardProvider({ children }) {
     }
 
     function textAreaBlurHandler(value) {
+        const idx = boardState.elements.length - 1;
+        if(idx<0) return boardState;
         dispatchBoardState({
             type: BOARD_ACTIONS.CHANGE_TEXT,
             payload: {

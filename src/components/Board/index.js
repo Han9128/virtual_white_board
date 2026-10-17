@@ -185,7 +185,7 @@ function Board() {
   }, [flush])
 
   useEffect(() => {
-
+    if(isWriting) return;
     const handleKeyDown = (e) => {
       if (e.ctrlKey && e.key === 'z') {
         undoHandler();
@@ -195,7 +195,7 @@ function Board() {
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [undoHandler, redoHandler])
+  }, [undoHandler, redoHandler,isWriting])
 
   const handleMouseDown = (event) => {
     if (activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
@@ -225,7 +225,6 @@ function Board() {
   }
 
 
-
   return (
     <>
       {loader && <PageLoader />}
@@ -234,10 +233,10 @@ function Board() {
         type="text"
         ref={textAreaRef}
         style={{
-          top: elements[elements.length - 1].y1,
-          left: elements[elements.length - 1].x1,
-          fontSize: `${elements[elements.length - 1].size}px`,
-          color: elements[elements.length - 1].color,
+          top: elements[elements.length - 1]?.y1,
+          left: elements[elements.length - 1]?.x1,
+          fontSize: `${elements[elements.length - 1]?.size}px`,
+          color: elements[elements.length - 1]?.color,
         }}
 
         onBlur={(event) => {setIsWriting(false); textAreaBlurHandler(event.target.value) }}
