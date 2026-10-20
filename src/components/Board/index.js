@@ -5,10 +5,10 @@ import toolConfigContext from "../../store/toolConfig-context";
 import toolBarContext from "../../store/toolBar-context";
 import authContext from "../../store/auth-context";
 import PageLoader from "../../components/PageLoader"
-import { TOOLS,SESSION_EXPIRED } from "../../constants/constants";
+import { TOOLS, SESSION_EXPIRED } from "../../constants/constants";
 import classes from "./index.module.css";
 import { updateCanvas, loadCanvas } from "../../services/canvasApi";
-import { useParams} from "react-router"
+import { useParams } from "react-router"
 
 
 
@@ -84,11 +84,11 @@ function Board() {
       return data;
     } catch (err) {
       console.error(err);
-       if (err.status === 401) {
+      if (err.status === 401) {
         return logout(SESSION_EXPIRED);
       }
     }
-  },[logout])
+  }, [logout])
 
 
 
@@ -185,7 +185,7 @@ function Board() {
   }, [flush])
 
   useEffect(() => {
-    if(isWriting) return;
+    if (isWriting) return;
     const handleKeyDown = (e) => {
       if (e.ctrlKey && e.key === 'z') {
         undoHandler();
@@ -195,12 +195,12 @@ function Board() {
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [undoHandler, redoHandler,isWriting])
+  }, [undoHandler, redoHandler, isWriting])
 
   const handleMouseDown = (event) => {
     if (activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
     if (activeToolItem === TOOLS.TEXT) {
-      if(isWriting) return;
+      if (isWriting) return;
       event.preventDefault();
       setIsWriting(true);
       boardMouseDownHandler(event, toolConfigState, isWriting);
@@ -239,10 +239,16 @@ function Board() {
           color: elements[elements.length - 1]?.color,
         }}
 
-        onBlur={(event) => {setIsWriting(false); textAreaBlurHandler(event.target.value) }}
+        onBlur={(event) => { setIsWriting(false); textAreaBlurHandler(event.target.value) }}
       >
       </textarea>)}
-      <div className="board" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+      <div
+        className="board"
+        onPointerDown={handleMouseDown}
+        onPointerMove={handleMouseMove}
+        onPointerUp={handleMouseUp}
+        onPointerLeave={handleMouseUp}
+      >
         <canvas id="canvas" ref={canvasRef}>
           This is canvas area
         </canvas>
