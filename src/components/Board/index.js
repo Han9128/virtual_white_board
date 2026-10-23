@@ -198,6 +198,8 @@ function Board() {
   }, [undoHandler, redoHandler, isWriting])
 
   const handleMouseDown = (event) => {
+    // Lock pointer to this element so dragging doesn't break if the cursor moves too fast or encounter edge of browser it only stops when pointer is left
+    event.currentTarget.setPointerCapture(event.pointerId);
     if (activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
     if (activeToolItem === TOOLS.TEXT) {
       if (isWriting) return;
@@ -224,6 +226,10 @@ function Board() {
 
   }
 
+  const handlePointerCancel = ()=>{
+    isDrawing.current = false;
+  }
+
 
   return (
     <>
@@ -243,11 +249,12 @@ function Board() {
       >
       </textarea>)}
       <div
-        className="board"
+        className={classes.board}
         onPointerDown={handleMouseDown}
         onPointerMove={handleMouseMove}
         onPointerUp={handleMouseUp}
         onPointerLeave={handleMouseUp}
+        onPointerCancel={handlePointerCancel}
       >
         <canvas id="canvas" ref={canvasRef}>
           This is canvas area
