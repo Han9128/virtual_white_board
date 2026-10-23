@@ -15,3 +15,11 @@
   line-height: inherit;
   font-family: "Caveat";
 }
+
+ .board, .board canvas{
+  touch-action:none;
+  user-select:none;
+  /* for ios devices some css is not directly applied so we have to write it by adding -webkit- prefix */
+  -webkit-touch-callout:none;
+  -webkit-user-select: none 
+} 
