@@ -16,7 +16,7 @@ function ToolConfigBox() {
     const size = toolConfigState[activeToolItem]?.stroke;
     return (
         <>
-            {TOOL_CONFIG_BOX.includes(activeToolItem) && <div className={classes.toolConfigBox}>
+            {TOOL_CONFIG_BOX.includes(activeToolItem) && <div className={`floating-panel ${classes.toolConfigBox}`}>
 
                 {/* show stroke color picker */}
 

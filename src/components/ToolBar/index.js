@@ -37,7 +37,7 @@ function ToolBar() {
         }
     }
     return (
-        <div className={classes.container}>
+        <div className={`floating-panel ${classes.container}`}>
             {TOOL_ITEMS.map((tool) => {
                 const Icon = tool.icon
                 return (
