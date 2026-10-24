@@ -1,19 +1,26 @@
-
-
-.container{
-    @apply absolute left-1/2 top-5 px-3 py-2 border border-gray-400 rounded flex; 
-    transform:translateX(-50%);
-    box-shadow: 1px 0 10px rgba(0,0,0,0.2);
+.container {
+    @apply absolute left-1/2 top-5 px-3 py-2 flex;
+    transform: translateX(-50%);
+    box-shadow: 1px 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.toolItem{
-    @apply flex justify-center items-center text-xl p-3 text-black mr-5 last:mr-0
+.toolItem {
+    @apply flex justify-center items-center text-xl p-2 text-black mr-5 last:mr-0
 }
 
-.toolItem:hover{
+.toolItem:hover {
     @apply bg-blue-50 text-gray-700 rounded
 }
 
-.toolItem.active{
+.toolItem.active {
     @apply bg-blue-200 text-gray-700 rounded
+}
+
+@media (max-width:600px) {
+    .container {
+        @apply bottom-5 top-auto px-2;
+    }
+    .toolItem {
+        @apply text-sm p-1 text-black mr-2;
+    }
 }
