@@ -3,14 +3,19 @@ import React, { useContext } from "react";
 import classes from "./index.module.css";
 import { TOOL_ITEMS, FEATURES, TOOLS } from "../../constants/constants"
 import toolBarContext from "../../store/toolBar-context";
-import boardContext from "../../store/board-context"
+import boardContext from "../../store/board-context";
+import toolConfigContext from "../../store/toolConfig-context";
 
 
 
 
 function ToolBar() {
     const { activeToolItem, handleItemToolClick } = useContext(toolBarContext);
-    const { undoHandler, redoHandler, downloadHandler } = useContext(boardContext);
+    const { undoHandler,
+        redoHandler,
+        downloadHandler,
+    } = useContext(boardContext);
+    const {setShowToolConfig} = useContext(toolConfigContext)
 
     function handleClick(feat) {
         switch (feat) {
@@ -44,7 +49,7 @@ function ToolBar() {
                     <div
                         key={tool.id}
                         className={`${classes.toolItem} ${activeToolItem === tool.id ? classes.active : ""}`}
-                        onClick={() => handleItemToolClick(tool.id)}>
+                        onClick={() => {setShowToolConfig(true); handleItemToolClick(tool.id) }}>
                         <Icon />
                     </div>)
             })}

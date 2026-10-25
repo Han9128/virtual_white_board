@@ -7,15 +7,19 @@ import { useContext } from "react";
 import { TOOL_CONFIG_BOX } from "../../constants/constants"
 
 function ToolConfigBox() {
-    const { toolConfigState, changeStrokeColorHandler, changeFillColorHandler, changeSizeHandler } = useContext(toolConfigContext);
+    const { toolConfigState,
+        changeStrokeColorHandler,
+        changeFillColorHandler,
+        changeSizeHandler,
+        showToolConfig
+    } = useContext(toolConfigContext);
     const { activeToolItem } = useContext(toolBarContext);
-
 
     const strokeColor = toolConfigState[activeToolItem]?.color;
     const fillColor = toolConfigState[activeToolItem]?.fill;
     const size = toolConfigState[activeToolItem]?.stroke;
     return (
-        <>
+        showToolConfig && <>
             {TOOL_CONFIG_BOX.includes(activeToolItem) && <div className={`floating-panel ${classes.toolConfigBox}`}>
 
                 {/* show stroke color picker */}

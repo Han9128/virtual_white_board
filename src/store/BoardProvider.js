@@ -176,7 +176,7 @@ const initialBoardState = {
 
 function BoardProvider({ children }) {
     const [boardState, dispatchBoardState] = useReducer(boardReducer, initialBoardState);
-    const [canvasId, setCanvasId] = useState(null)
+    const [canvasId, setCanvasId] = useState(null);
     const { activeToolItem } = useContext(toolBarContext);
 
 
@@ -322,7 +322,6 @@ function BoardProvider({ children }) {
         canvasId,
         setCanvasId,
         loadCanvasHandler,
-        
     }
 
     return (

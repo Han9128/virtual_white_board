@@ -27,8 +27,9 @@ function Board() {
     undoHandler,
     redoHandler,
     version,
-    loadCanvasHandler } = useContext(boardContext);
-  const { toolConfigState } = useContext(toolConfigContext);
+    loadCanvasHandler,
+  } = useContext(boardContext);
+  const { toolConfigState, setShowToolConfig} = useContext(toolConfigContext);
   const { activeToolItem } = useContext(toolBarContext);
   const { token, logout } = useContext(authContext);
 
@@ -200,6 +201,7 @@ function Board() {
   const handleMouseDown = (event) => {
     // Lock pointer to this element so dragging doesn't break if the cursor moves too fast or encounter edge of browser it only stops when pointer is left
     event.currentTarget.setPointerCapture(event.pointerId);
+    setShowToolConfig(false)
     if (activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
     if (activeToolItem === TOOLS.TEXT) {
       if (isWriting) return;
@@ -226,7 +228,7 @@ function Board() {
 
   }
 
-  const handlePointerCancel = ()=>{
+  const handlePointerCancel = () => {
     isDrawing.current = false;
   }
 
@@ -256,7 +258,7 @@ function Board() {
         onPointerLeave={handleMouseUp}
         onPointerCancel={handlePointerCancel}
       >
-        <canvas id="canvas" ref={canvasRef}>
+        <canvas id="canvas" ref={canvasRef} >
           This is canvas area
         </canvas>
       </div>

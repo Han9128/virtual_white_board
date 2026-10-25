@@ -1,7 +1,7 @@
 
 
 .toolConfigBox{
-    @apply absolute top-1/2 left-5 px-3 py-2 flex; 
+    @apply absolute top-1/2 left-5 px-2 py-2 flex; 
     box-shadow: 1px 0 10px rgba(0,0,0,0.2);
     flex-direction:column;
 }
@@ -22,14 +22,14 @@
     align-items:center;
 }
 .colorsBox{
-    width:30px;
-    height:30px;
-    margin-left:4px;
+    width:28px;
+    height:28px;
+    margin-left:6px;
     border-radius: 4px;
 }
 
 .active{
-    padding:1px;
+    padding:0.5px;
     border:1px solid gray;
     box-shadow: 0 0 0 1px #4a47b1;
 }
@@ -37,8 +37,8 @@
 
 
 .noFill{
-    width:30px;
-    height:30px;
+    width:28px;
+    height:28px;
     margin-left:4px;
     border-radius: 4px;
     border:0.5px solid gray;
@@ -60,13 +60,23 @@
 }
 
 .colorPicker{
-    width:40px;
-    height:40px;
+    width:30px;
+    height:30px;
     margin-left:4px;
     margin-right:12px;
-    border-radius: 4px;
+    border-radius: 1px;
     border:1px solid gray;
     box-shadow: 0 0 0 1px #4a47b1;
+}
+
+
+@media (max-width:600px){
+    
+    .toolConfigBox{
+    @apply  top-auto left-5 px-2 py-2 flex; 
+    /* 40px is the height of toolBar currently so take account of that when its height changes */
+    bottom: calc(28px + 40px + env(safe-area-inset-bottom))
+}
 }
 
 
