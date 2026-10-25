@@ -1,7 +1,7 @@
 
 import boardContext from "./board-context";
 import { useReducer, useState, useContext,useCallback} from "react";
-import { TOOLS,BOARD_ACTIONS } from "../constants/constants"
+import { TOOLS,BOARD_ACTIONS,BRUSH_STROKE } from "../constants/constants"
 import generateRoughEle from "../utils/generateRoughEle"
 import getStroke from "perfect-freehand";
 import { getSvgPathFromStroke, isNearPointElement } from "../utils/generateRoughEle"
@@ -37,7 +37,7 @@ const boardReducer = (state, action) => {
                     if (updatedElements[idx].points) {
                         updatedElements[idx].points = [...updatedElements[idx].points, { x: clientX, y: clientY }];
                         // generate thick brush like stroke with getStroke(points), convert into svg then convert into browser path object to render
-                        updatedElements[idx].path = new Path2D(getSvgPathFromStroke(getStroke(updatedElements[idx].points)));
+                        updatedElements[idx].path = new Path2D(getSvgPathFromStroke(getStroke(updatedElements[idx].points,BRUSH_STROKE)));
                     }
                     return {
                         ...state,
@@ -148,7 +148,7 @@ const boardReducer = (state, action) => {
                     if(element.type===TOOLS.BRUSH){
                         return {
                             ...element,
-                            path:new Path2D(getSvgPathFromStroke(getStroke(element.points)))
+                            path:new Path2D(getSvgPathFromStroke(getStroke(element.points,BRUSH_STROKE)))
                         }
                     }
 

@@ -97,7 +97,7 @@ export const BOARD_ACTIONS = {
 }
 
 
-
+export const BRUSH_STROKE = {size:4,thinning:0}
 export const ERASE_THRESHOLD = 0.1;
 export const DELETE_TEXT = "CANVAS"
 export const SESSION_EXPIRED = "Your session expired, Please login again.";
