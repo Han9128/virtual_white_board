@@ -1,4 +1,4 @@
-import { TOOLS } from "../constants/constants"
+import { TOOLS,BRUSH_STROKE } from "../constants/constants"
 import rough from "roughjs/bin/rough"
 import getArrowCoOrdinates, { distance } from "../utils/math"
 import getStroke from "perfect-freehand";
@@ -34,7 +34,7 @@ const generateRoughEle = (idx, x1, y1, x2, y2, tool_type, stroke, fill, size) =>
         case TOOLS.BRUSH: {
             const brushElement = {
                 points: [{ x: x1, y: y1 }],
-                path: new Path2D(getSvgPathFromStroke(getStroke([{ x: x1, y: y1 }]))),
+                path: new Path2D(getSvgPathFromStroke(getStroke([{ x: x1, y: y1 }],BRUSH_STROKE))),
                 type: tool_type,
                 color: stroke,
             }
