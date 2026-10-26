@@ -18,7 +18,8 @@
 
 @media (max-width:600px) {
     .container {
-        @apply bottom-5 top-auto px-2;
+        @apply top-auto px-2;
+        bottom: calc(20px + env(safe-area-inset-bottom));
     }
     .toolItem {
         @apply text-sm p-1 text-black mr-2;

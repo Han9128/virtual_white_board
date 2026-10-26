@@ -27,8 +27,9 @@ function Board() {
     undoHandler,
     redoHandler,
     version,
-    loadCanvasHandler } = useContext(boardContext);
-  const { toolConfigState } = useContext(toolConfigContext);
+    loadCanvasHandler,
+  } = useContext(boardContext);
+  const { toolConfigState, setShowToolConfig } = useContext(toolConfigContext);
   const { activeToolItem } = useContext(toolBarContext);
   const { token, logout } = useContext(authContext);
 
@@ -36,6 +37,7 @@ function Board() {
 
   const latest = useRef({ token, canvasId, elements });
   const dirty = useRef(false);
+
 
   useEffect(() => {
     const fetchCanvas = async () => {
@@ -62,39 +64,7 @@ function Board() {
     fetchCanvas();
   }, [canvasId, token, logout, loadCanvasHandler])
 
-
-  // Initialize the canvas dimensions before drawing.
-  // Changing the canvas width or height resets its drawing buffer.
-  // Previously, this ran in useEffect after the loaded elements were drawn
-  // in useLayoutEffect, which cleared the loaded canvas.
-  // Using useLayoutEffect ensures the canvas is sized before the elements are drawn. 
-  useLayoutEffect(() => {
-    const canvas = canvasRef.current;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }, []);
-
-
-
-
-
-  const saveCanvas = useCallback(async (token, id, elements) => {
-    try {
-      const data = await updateCanvas(token, id, elements);
-      return data;
-    } catch (err) {
-      console.error(err);
-      if (err.status === 401) {
-        return logout(SESSION_EXPIRED);
-      }
-    }
-  }, [logout])
-
-
-
-  // when we are just dealing with dom and want to run side effects with dom update synchronously then the best hook is useLayoutEffect,
-  // and for calling third party apis, communicating with network we use useEffect.
-  useLayoutEffect(() => {
+  const paintCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.save();
@@ -116,12 +86,72 @@ function Board() {
         roughCanvas.draw(element.roughElement);
       }
     })
+  }, [elements])
+
+  // Initialize the canvas dimensions before drawing.
+  // Changing the canvas width or height resets its drawing buffer.
+  // Previously, this ran in useEffect after the loaded elements were drawn
+  // in useLayoutEffect, which cleared the loaded canvas.
+  // Using useLayoutEffect ensures the canvas is sized before the elements are drawn. 
+  const paintRef = useRef(paintCanvas);
+  useLayoutEffect(() => {
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    let frame = 0;
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      paintRef.current()
+    }
+
+    const onResize = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(handleResize);
+    }
+
+    // call it for first time when board mounts
+    handleResize();
+    window.addEventListener('resize', onResize);
 
 
     return () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize',onResize);
     }
-  }, [elements])
+  }, []);
+
+
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    paintRef.current = paintCanvas;
+    paintCanvas();
+  }, [paintCanvas])
+
+
+
+
+
+
+
+
+
+  const saveCanvas = useCallback(async (token, id, elements) => {
+    try {
+      const data = await updateCanvas(token, id, elements);
+      return data;
+    } catch (err) {
+      console.error(err);
+      if (err.status === 401) {
+        return logout(SESSION_EXPIRED);
+      }
+    }
+  }, [logout])
+
+
+
 
   useEffect(() => {
 
@@ -200,6 +230,7 @@ function Board() {
   const handleMouseDown = (event) => {
     // Lock pointer to this element so dragging doesn't break if the cursor moves too fast or encounter edge of browser it only stops when pointer is left
     event.currentTarget.setPointerCapture(event.pointerId);
+    setShowToolConfig(false)
     if (activeToolItem === TOOLS.UNDO || activeToolItem === TOOLS.REDO || activeToolItem === TOOLS.DOWNLOAD) return;
     if (activeToolItem === TOOLS.TEXT) {
       if (isWriting) return;
@@ -226,7 +257,7 @@ function Board() {
 
   }
 
-  const handlePointerCancel = ()=>{
+  const handlePointerCancel = () => {
     isDrawing.current = false;
   }
 
@@ -256,7 +287,7 @@ function Board() {
         onPointerLeave={handleMouseUp}
         onPointerCancel={handlePointerCancel}
       >
-        <canvas id="canvas" ref={canvasRef}>
+        <canvas id="canvas" ref={canvasRef} >
           This is canvas area
         </canvas>
       </div>

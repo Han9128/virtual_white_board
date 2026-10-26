@@ -1,6 +1,6 @@
 import toolConfigContext from "./toolConfig-context";
 import toolBarContext from "./toolBar-context"
-import { useReducer, useContext } from "react";
+import { useReducer, useContext,useState } from "react";
 import { TOOLS } from "../constants/constants";
 import { COLORS } from "../constants/constants";
 
@@ -71,6 +71,7 @@ function ToolConfigProvider({ children }) {
     const [toolConfigState, dispatchToolConfigState] = useReducer(toolConfigReducer, initialToolConfigState);
 
     const { activeToolItem } = useContext(toolBarContext);
+    const [showToolConfig,setShowToolConfig] = useState(true);
 
     const changeStrokeColorHandler = (strokeColor) => {
         const tool = activeToolItem;
@@ -108,6 +109,8 @@ function ToolConfigProvider({ children }) {
         changeStrokeColorHandler,
         changeFillColorHandler,
         changeSizeHandler,
+        showToolConfig,
+        setShowToolConfig
     }
     return (
         <toolConfigContext.Provider value={toolConfigContextValues}>
