@@ -1,7 +1,7 @@
 
 
 .toolConfigBox{
-    @apply absolute top-1/2 left-5 px-2 py-2 flex; 
+    @apply fixed top-1/2 left-5 px-2 py-2 flex; 
     box-shadow: 1px 0 10px rgba(0,0,0,0.2);
     flex-direction:column;
 }

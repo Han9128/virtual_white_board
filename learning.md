@@ -481,3 +481,79 @@ To force a real reset when just a param changes, give the component a `key`:
 In-app navigation keeps everything mounted above the route. A browser **refresh** destroys the whole JavaScript runtime and rebuilds every provider from its initial state. Only what lives outside React survives: `localStorage`, the server, or the URL itself.
 
 ---
+
+## Window, Viewport and Document
+
+### Three different rectangles
+
+| | What it is |
+|---|---|
+| **Window** | The browser window, including its chrome — tabs, address bar, borders |
+| **Viewport** | The area the page is laid out in: the window minus the chrome |
+| **Document** | The page content itself, which can be taller or wider than the viewport — that's what creates scrollbars |
+
+> **Mental model:** the viewport is the window you look through, the document is the sheet of paper behind it, and `scrollY` is how far the paper has slid.
+
+The word "viewport" gets used loosely — sometimes for the screen, sometimes for the page's layout area. The measurable values are unambiguous, so anchor on those.
+
+---
+
+### How to measure each
+
+```js
+window.outerWidth                      // window, including chrome
+window.innerWidth                      // viewport, INCLUDING the scrollbar
+document.documentElement.clientWidth   // viewport, EXCLUDING the scrollbar  ← lay out against this
+window.visualViewport.width            // what is actually visible (zoom, mobile keyboard)
+document.documentElement.scrollWidth   // the document
+```
+
+`outerWidth ≥ innerWidth ≥ clientWidth` always holds, and `scrollWidth` can exceed all of them.
+
+**The ~15px trap:** `innerWidth` includes the scrollbar, `clientWidth` doesn't. Size an element to `innerWidth` while a vertical scrollbar exists and it overflows horizontally — producing a second scrollbar, which then changes the height, and so on. Lay out against `clientWidth` (or a container's `clientWidth`) to avoid the feedback loop.
+
+---
+
+### `position: absolute` vs `position: fixed`
+
+They differ in **which coordinate space** the offsets are measured in:
+
+| | Positioned against | Scrolls with the page? |
+|---|---|---|
+| `absolute` (no positioned ancestor) | the **initial containing block** — viewport-sized, but pinned to the document's origin | yes |
+| `absolute` (inside a positioned ancestor) | that ancestor's padding box | yes |
+| `fixed` | the **viewport** | no |
+
+So with `absolute`, `bottom: 20px` means "20px above the bottom edge of a box one viewport-height below the document's top". That looks like the bottom of the screen *only* while the page isn't scrolled and the document is no taller than the viewport. The moment either is false, the element is somewhere else entirely.
+
+With `fixed`, `bottom: 20px` means "20px above the bottom of what the user is looking at", always.
+
+> **Key insight:** floating controls (toolbars, panels, modals, FABs) belong in the viewport's space — use `fixed`. Things that belong to the content use `absolute`.
+
+`env(safe-area-inset-*)` values are viewport-relative too, so they only behave as intended on `fixed` elements (and need `viewport-fit=cover` on the viewport meta tag).
+
+---
+
+### Event coordinates follow the same split
+
+```js
+event.clientX, event.clientY   // viewport-relative
+event.pageX,   event.pageY     // document-relative (includes scroll offset)
+```
+
+Neither is element-relative. For anything that must map a pointer onto an element — a canvas especially — measure against the element itself, so the result survives scrolling, zoom, and any change in layout:
+
+```js
+const rect = el.getBoundingClientRect();
+const x = event.clientX - rect.left;
+const y = event.clientY - rect.top;
+```
+
+---
+
+### Two more gotchas
+
+- **`<canvas>`, `<img>` and `<video>` are `display: inline` by default**, so they sit on a text baseline and leave a few pixels of line-height beneath them. A full-height inline element therefore makes the document taller than the viewport and produces a scrollbar out of nowhere. `display: block` removes it.
+- **`100vh` on mobile** means the *largest* viewport, so content jumps when the address bar hides. `100dvh` tracks the current one.
+
+---
